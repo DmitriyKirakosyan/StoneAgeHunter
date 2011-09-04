@@ -1,4 +1,5 @@
 package game{
+	import flash.display.BitmapData;
 	import flash.events.MouseEvent;
 	import game.hunters.HuntersController;
 	import game.animals.AnimalsController;
@@ -17,6 +18,7 @@ package game{
 			_container = container;
 			_container.x = 50;
 			_container.y = 50;
+			var b:BitmapData;
 			drawGameRect();
 			initControllers();
 			addStageListeners();
