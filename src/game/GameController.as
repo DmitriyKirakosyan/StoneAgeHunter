@@ -13,12 +13,12 @@ package game{
 		public static const GAME_WIDTH:Number = 300;
 		public static const GAME_HEIGHT:Number = 300;
 		
-		public function GameController(container:Sprite):void {
+		public function GameController(mainSprite:Sprite):void {
 			super();
-			_container = container;
-			_container.x = 50;
-			_container.y = 50;
-			var b:BitmapData;
+			_container = new Sprite();
+			mainSprite.addChild(_container);
+			_container.x = -150;
+			_container.y = -150;
 			drawGameRect();
 			initControllers();
 			addStageListeners();

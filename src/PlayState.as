@@ -1,4 +1,5 @@
 package {
+	import org.flixel.FlxCamera;
 	import flash.display.MovieClip;
 	import mx.core.BitmapAsset;
 	import flash.text.engine.GraphicElement;
@@ -14,17 +15,8 @@ package {
 
 	public class PlayState extends FlxState {
 		override public function create():void {
-			
-			var shape:BitmapData;
-			var bamView:BamView = new BamView();
-			shape = new BitmapData(bamView.width, bamView.height);
-			shape.draw(bamView, bamView.transform.matrix, bamView.transform.colorTransform);
-			var flxSprite:FlxSprite = new FlxSprite(10,10);
-			flxSprite.alpha = .3;
-			flxSprite.pixels = shape;
-			add(flxSprite);
-			
-			//new GameController();
+			var camera:FlxCamera = FlxG.cameras[0];
+			new GameController(camera.getContainerSprite());
 		}
 	}
 }
