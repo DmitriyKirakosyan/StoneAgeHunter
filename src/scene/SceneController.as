@@ -5,6 +5,8 @@ package scene {
 		
 		private var _sceneList:Vector.<IScene>;
 		
+		private var _currentScene:IScene;
+		
 		public function SceneController() {
 			super();
 			_sceneList = new Vector.<IScene>();
@@ -12,24 +14,36 @@ package scene {
 		
 		/* API */
 		
-		public function addScene(scene:IScene):void {
-			if (_sceneList.indexOf(scene) == -1) {
-				_sceneList.push(scene);
-				addListenersFor(scene);
+		public function addScene(scn:IScene, andOpen:Boolean = false):void {
+			if (_sceneList.indexOf(scn) == -1) {
+				_sceneList.push(scn);
+				addListenersFor(scn);
 			}
+			if (andOpen) {
+				openScene(scn);
+			}
+		}
+		
+		public function openScene(scn:IScene):void {
+			if (_currentScene) {
+				_currentScene.close();
+			}
+			scn.open();
+			_currentScene = scn;
 		}
 		
 		/* Internal functions */
 		
-		private function addListenersFor(scene:IScene):void {
-			scene.addEventListener(SceneEvent.SWITCH_ME, onSceneWantSwitch);
+		private function addListenersFor(scn:IScene):void {
+			scn.addEventListener(SceneEvent.SWITCH_ME, onSceneWantSwitch);
 		}
 		
 		// event handlers
 		
 		private function onSceneWantSwitch(event:SceneEvent):void {
-			event.scene.close();
+			event.targetScene.close();
 			event.sceneForOpen.open();
+			_currentScene = event.sceneForOpen;
 		}
 	}
 }
