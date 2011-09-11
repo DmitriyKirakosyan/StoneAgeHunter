@@ -1,5 +1,7 @@
 package tilemap {
 	
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Loader;
@@ -20,7 +22,7 @@ package tilemap {
 		
 		private static const THREADS:uint = 3;
 		private static const MAX_ATTEMPTS:uint = 3;
-		private static const CACHE:Dictionary = new Dictionary();
+		private const CACHE:Dictionary = new Dictionary();
 		private static const LOADER_CONTEXT:LoaderContext = new LoaderContext(true);
 		
 		private static var _instance:SharedBitmapHolder;
@@ -53,7 +55,7 @@ package tilemap {
 		}
 		
 		public static function existInCache(url:String):Boolean {
-			return CACHE[url] != undefined;
+			return instance.CACHE[url] != undefined;
 		}
 		
 		public static function existInQueue(url:String):Boolean {
@@ -67,11 +69,46 @@ package tilemap {
 			return false;
 		}
 		
-		public static function getTextureByURL(url:String):TextureVO {
-			return CACHE[url] as TextureVO;
+		private function getValueByKey(key:String, xml:XML):int{
+			for (var i:int = 0; i < xml.integer.length(); i++){
+				if(xml.key[i] == key){
+					return xml.integer[i]; 
+				}
+			}
+			return 0;
 		}
 		
-		public static function clearCache():void {
+		private function getTileRectangle(xml:XML):Rectangle{
+			return new Rectangle(getValueByKey("x", xml),
+								 getValueByKey("y", xml),
+								 getValueByKey("width", xml),
+								 getValueByKey("height", xml));
+		}
+		
+		private function getTileDataByName(texture:String, name:String):XML{
+			var xml:XML = CACHE[texture].textureXML;
+			for(var i:int = 0; i<xml.dict.dict[1].key.length(); i++){
+				if(xml.dict.dict[1].key[i] == name){
+					return xml.dict.dict[1].dict[i];
+				}
+			}
+			return null;
+		}
+		
+		public function getTileByName(textureUrl:String, name:String):BitmapData {
+			const tileXML:XML = getTileDataByName(textureUrl, name);
+			const rect:Rectangle = getTileRectangle(tileXML);
+			const texture:TextureVO = CACHE[textureUrl];
+			const result:BitmapData = new BitmapData(rect.width, rect.height, true, 0);
+			result.copyPixels(texture.textureBitmap, rect, new Point(0,0), null, null, true);
+			return result;
+		}
+		
+		public static function getTextureByURL(url:String):TextureVO {
+			return instance.CACHE[url] as TextureVO;
+		}
+		
+		public function clearCache():void {
 			for each (var q:QueueItem in instance.currentQueues) {
 				if (q.loader) {
 					try {

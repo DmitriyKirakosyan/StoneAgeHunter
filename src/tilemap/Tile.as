@@ -1,15 +1,13 @@
-package tilemap
-{
+package tilemap {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.filters.ColorMatrixFilter;
-	import flash.geom.Point;
-	import flash.geom.Rectangle;
 	
 	public class Tile extends Sprite {
-		private var _textureVO:TextureVO;
+		private var _textureUrl:String;
+		private var _tileName:String;
 		
 		private var canvas:Bitmap;
 		
@@ -21,10 +19,10 @@ package tilemap
 			0, 0, 1.3, 0, 0,
 			0, 0, 0, 1, 0]);
 		
-		public function Tile(textureVO:TextureVO)
-		{
+		public function Tile(tileName:String, textureUrl:String) {
 			super();
-			_textureVO = textureVO;
+			_tileName = tileName;
+			_textureUrl = textureUrl;
 			init();
 		}
 		
@@ -34,11 +32,8 @@ package tilemap
 		}
 		
 		private function init():void{
-			var spritesheet:BitmapData = _textureVO.textureBitmap;
-			var tempBtm:BitmapData = new BitmapData(spritesheet.width, spritesheet.height);
-			tempBtm.copyPixels(spritesheet, new Rectangle(0, 0, spritesheet.width, spritesheet.height),
-																										new Point(0,0));
-			canvas = new Bitmap(tempBtm);
+			var tileBitmapData:BitmapData = SharedBitmapHolder.instance.getTileByName(_textureUrl, _tileName);
+			canvas = new Bitmap(tileBitmapData);
 			addChild(canvas);
 			addEventListener(MouseEvent.ROLL_OUT, dontGlow);
 			addEventListener(MouseEvent.ROLL_OVER, glow);

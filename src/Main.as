@@ -1,6 +1,5 @@
 ﻿package {
-	import tilemap.TextureHolderEvent;
-	import tilemap.SharedBitmapHolder;
+	import tilemap.TileMap;
 	import flash.events.Event;
 	import game.GameScene;
 	import game.MenuScene;
@@ -13,17 +12,13 @@
 		}
 		
 		private function onAddedToStage(event:Event):void {
+			const tileMap:TileMap = new TileMap("PrototypeTexture");
+
 			const sceneController:SceneController = new SceneController();
 			sceneController.addScene(new MenuScene(this));
-			sceneController.addScene(new GameScene(this), true);
+			sceneController.addScene(new GameScene(this, tileMap), true);
 
-			SharedBitmapHolder.instance.addEventListener(TextureHolderEvent.TEXTURE_LOADED, onTextureLoad);
-			SharedBitmapHolder.load("PrototypeTexture");
 		}
 
-		private function onTextureLoad(event:TextureHolderEvent):void{
-			trace("textures loaded");
-		}
-		
 	}
 }
