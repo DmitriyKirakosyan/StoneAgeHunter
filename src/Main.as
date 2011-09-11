@@ -15,8 +15,11 @@
 			const tileMap:TileMap = new TileMap("PrototypeTexture");
 
 			const sceneController:SceneController = new SceneController();
-			sceneController.addScene(new MenuScene(this));
-			sceneController.addScene(new GameScene(this, tileMap), true);
+			const menuScene:MenuScene = new MenuScene(this);
+			const gameScene:GameScene = new GameScene(this, tileMap);
+			sceneController.addScene(menuScene, true);
+			sceneController.addScene(gameScene);
+			sceneController.addSceneDependence(menuScene, gameScene, true);
 
 		}
 
