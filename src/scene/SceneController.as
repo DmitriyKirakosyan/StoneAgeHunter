@@ -5,11 +5,14 @@ package scene {
 		
 		private var _sceneList:Vector.<IScene>;
 		
+		private var _sceneDepending:Vector.<SceneDependence>;
+		
 		private var _currentScene:IScene;
 		
 		public function SceneController() {
 			super();
 			_sceneList = new Vector.<IScene>();
+			_sceneDepending = new Vector.<SceneDependence>();
 		}
 		
 		/* API */
@@ -22,6 +25,10 @@ package scene {
 			if (andOpen) {
 				openScene(scn);
 			}
+		}
+		
+		public function addSceneDependence(from:IScene, to:IScene, bilateral:Boolean = false):void {
+			_sceneDepending.push(new SceneDependence(from, to, bilateral));
 		}
 		
 		public function openScene(scn:IScene):void {
@@ -42,8 +49,28 @@ package scene {
 		
 		private function onSceneWantSwitch(event:SceneEvent):void {
 			event.targetScene.close();
-			event.sceneForOpen.open();
-			_currentScene = event.sceneForOpen;
+			if (event.sceneForOpen) {
+				event.sceneForOpen.open();
+				_currentScene = event.sceneForOpen;
+			} else {
+				var depScene:IScene = findDependenceSceneFor(event.targetScene);
+				if (depScene) {
+					depScene.open();
+					_currentScene = depScene;
+				}
+			}
+		}
+		
+		private function findDependenceSceneFor(scn:IScene):IScene {
+			for each (var sceneDependence:SceneDependence in _sceneDepending) {
+				if (sceneDependence.sceneFrom == scn) {
+					return sceneDependence.sceneTo;
+				} else if (sceneDependence.sceneTo == scn &&
+										sceneDependence.bilateral) {
+					return sceneDependence.sceneFrom;
+										}
+			}
+			return null;
 		}
 	}
 }

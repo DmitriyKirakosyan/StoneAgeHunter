@@ -34,7 +34,7 @@ package tilemap {
 		private function onTextureLoad(event:TextureHolderEvent):void{
 			_ready = true;
 			dispatchEvent(new TextureHolderEvent(TextureHolderEvent.TEXTURE_LOADED, event.url));
-			const mapData:Array = [[1,1,0], [1,0,1], [0,1,1]];
+			const mapData:Array = [[0,0,0], [0,0,0], [0,0,0]];
 			createByMatrixArray(mapData, 3, 3);
 		}
 		
