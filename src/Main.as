@@ -20,7 +20,6 @@
 			sceneController.addScene(menuScene, true);
 			sceneController.addScene(gameScene);
 			sceneController.addSceneDependence(menuScene, gameScene, true);
-
 		}
 
 	}

@@ -21,6 +21,7 @@ package game {
 			_menuText.text = "Menu";
 			_menuText.x = 150;
 			_menuText.y = 100;
+			_menuText.selectable = false;
 			_container.addChild(_menuText);
 			addListeners();
 		}
