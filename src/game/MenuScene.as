@@ -14,14 +14,14 @@ package game {
 		public function MenuScene(container:Sprite):void {
 			super();
 			_container = container;
-		}
-		
-		public function open() : void {
 			_menuText = new TextField();
 			_menuText.text = "Menu";
 			_menuText.x = 150;
 			_menuText.y = 100;
 			_menuText.selectable = false;
+		}
+		
+		public function open() : void {
 			_container.addChild(_menuText);
 			addListeners();
 		}

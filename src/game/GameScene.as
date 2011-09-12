@@ -1,7 +1,5 @@
 package game {
-	import com.greensock.easing.Linear;
-	import com.greensock.TweenLite;
-	import com.greensock.TweenMax;
+	import scene.SceneEvent;
 	import com.bit101.components.PushButton;
 	import flash.geom.Point;
 	import flash.events.MouseEvent;
@@ -18,6 +16,7 @@ package game {
 		
 		private var _goBtn:PushButton;
 		private var _clearBtn:PushButton;
+		private var _goMenuBtn:PushButton;
 		
 		private var _drawingContainer:Sprite;
 		private var _drawing:Boolean;
@@ -69,7 +68,8 @@ package game {
 		}
 		
 		private function removeListeners():void {
-			
+			_hunter.removeEventListener(MouseEvent.CLICK, onHunterClick);
+			_tileMap.removeEventListener(MouseEvent.CLICK, onTileMapClick);
 		}
 		
 		private function onHunterClick(event:MouseEvent):void {
@@ -95,38 +95,33 @@ package game {
 			_hunterPath.push(point);
 		}
 		
-		private function followPath():void {
-			if (_hunterPath && _hunterPath.length > 0) {
-				if (!_moving) { _moving = true; }
-				TweenLite.to(_hunter, .5, {x : _hunterPath[0].x-_hunter.width/2, y : _hunterPath[0].y-_hunter.height/2,
-																			 ease : Linear.easeNone, onComplete : function():void {
-																			 		_hunterPath.shift();
-																			 		followPath();
-																			 }});
-			} else {
-				_moving = false;
-			}
-		}
-		
+		//TODO bad memory managment here, forgot remove listeners
 		private function addButtons():void {
 			_goBtn = new PushButton(_container, 300, 50, "lets go", onButtonGoClick);
 			_clearBtn = new PushButton(_container, 300, 70, "clear", onButtonClearClick);
+			_goMenuBtn = new PushButton(_container, 300, 90, "go to menu", onButtonMenuClick);
 		}
 		
 		private function removeButtons():void {
 			if (_container.contains(_goBtn)) { _container.removeChild(_goBtn); }
 			if (_container.contains(_clearBtn)) { _container.removeChild(_clearBtn); }
+			if (_container.contains(_goMenuBtn)) { _container.removeChild(_goMenuBtn); }
 		}
 		
 		private function onButtonGoClick(event:MouseEvent):void {
 			if (_moving) { return; }
 			_drawing = false;
-			followPath();
+			_hunter.followPath(_hunterPath);
 		}
 		
 		private function onButtonClearClick(event:MouseEvent):void {
 			_drawingContainer.graphics.clear();
 			_drawing = false;
+		}
+		
+		private function onButtonMenuClick(event:MouseEvent):void {
+			event.stopPropagation();
+			dispatchEvent(new SceneEvent(SceneEvent.SWITCH_ME, this));
 		}
 		
 	}
