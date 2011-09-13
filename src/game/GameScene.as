@@ -104,20 +104,26 @@ package game {
 				_drawing = true;
 				_selectedHunter = hunter;
 				hunter.filters = [new GlowFilter()];
-				drawHunterExistingPath();
+				drawHunterExistingPath(_selectedHunter);
 			}
 		}
 		
-		private function drawHunterExistingPath():void {
-			if (!_selectedHunter) { return; }
+		private function drawHunterExistingPath(hunter:Hunter):void {
+			if (!hunter) { return; }
 			_drawingContainer.graphics.lineStyle(3, 0xffaabb);
-			_drawingContainer.graphics.moveTo(_selectedHunter.x + _selectedHunter.width/2,
-																					_selectedHunter.y + _selectedHunter.height/2);
-			if (_selectedHunter.path &&
-					_selectedHunter.path.length > 0) {
-				for each (var point:Point in _selectedHunter.path) {
+			_drawingContainer.graphics.moveTo(hunter.x + hunter.width/2,
+																					hunter.y + hunter.height/2);
+			if (hunter.path &&
+					hunter.path.length > 0) {
+				for each (var point:Point in hunter.path) {
 					_drawingContainer.graphics.lineTo(point.x, point.y);
 				}
+			}
+		}
+		
+		private function drawPaths():void {
+			for each (var hunter:Hunter in _hunters) {
+				drawHunterExistingPath(hunter);
 			}
 		}
 		
@@ -163,12 +169,14 @@ package game {
 			for each (var hunter:Hunter in _hunters) {
 				hunter.move();
 			}
+			_drawingContainer.graphics.clear();
 		}
 		
 		private function onButtonPauseClick(event:MouseEvent):void {
 			for each (var hunter:Hunter in _hunters) {
 				hunter.pauseMove();
 			}
+			drawPaths();
 		}
 		
 		private function onButtonClearClick(event:MouseEvent):void {
