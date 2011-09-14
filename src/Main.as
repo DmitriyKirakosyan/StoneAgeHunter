@@ -12,7 +12,7 @@
 		}
 		
 		private function onAddedToStage(event:Event):void {
-			const tileMap:TileMap = new TileMap("PrototypeTexture");
+			const tileMap:TileMap = new TileMap("tiles/texture");
 
 			const sceneController:SceneController = new SceneController();
 			const menuScene:MenuScene = new MenuScene(this);

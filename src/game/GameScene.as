@@ -151,10 +151,10 @@ package game {
 		
 		//TODO bad memory managment here, forgot remove listeners
 		private function addButtons():void {
-			_goBtn = new PushButton(_container, 300, 50, "lets go", onButtonGoClick);
-			_pauseBtn = new PushButton(_container, 300, 70, "pause", onButtonPauseClick);
-			_clearBtn = new PushButton(_container, 300, 90, "clear", onButtonClearClick);
-			_goMenuBtn = new PushButton(_container, 300, 110, "go to menu", onButtonMenuClick);
+			_goBtn = new PushButton(_container, 400, 50, "lets go", onButtonGoClick);
+			_pauseBtn = new PushButton(_container, 400, 70, "pause", onButtonPauseClick);
+			_clearBtn = new PushButton(_container, 400, 90, "clear", onButtonClearClick);
+			_goMenuBtn = new PushButton(_container, 400, 110, "go to menu", onButtonMenuClick);
 		}
 		
 		private function removeButtons():void {

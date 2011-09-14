@@ -86,7 +86,7 @@ package tilemap {
 		}
 		
 		private function getTileDataByName(texture:String, name:String):XML{
-			var xml:XML = CACHE[texture].textureXML;
+			var xml:XML = CACHE[texture]["textureXML"];
 			for(var i:int = 0; i<xml.dict.dict[1].key.length(); i++){
 				if(xml.dict.dict[1].key[i] == name){
 					return xml.dict.dict[1].dict[i];
@@ -198,6 +198,7 @@ package tilemap {
 			const textureVo:TextureVO = new TextureVO();
 			textureVo.textureBitmap = bmd;
 			const xml:XML = new XML(urll.data);
+			trace(xml.toString());
 			textureVo.textureXML = xml;
 			CACHE[queueItem.url] = textureVo;
 			loaders.push(li.loader);

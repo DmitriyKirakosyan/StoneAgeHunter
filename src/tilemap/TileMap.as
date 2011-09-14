@@ -25,6 +25,16 @@ package tilemap {
 					_tiles[i].push(tile);
 					tile.x = i * tile.width;
 					tile.y = j * tile.height;
+					if (i == 0 && j < height-1) {
+						tile.x += tile.width;
+						tile.rotation = 90;
+					}
+					if (i > 0 && j == 0) {
+						tile.rotation = 180;
+						tile.x += tile.width;
+						tile.y += tile.height
+					}
+					if (i == width-1 && j > 0) { tile.rotation = 270; tile.y += tile.height}
 					this.addChild(tile);
 				}
 			}
@@ -34,8 +44,13 @@ package tilemap {
 		private function onTextureLoad(event:TextureHolderEvent):void{
 			_ready = true;
 			dispatchEvent(new TextureHolderEvent(TextureHolderEvent.TEXTURE_LOADED, event.url));
-			const mapData:Array = [[0,0,0], [0,0,0], [0,0,0]];
-			createByMatrixArray(mapData, 3, 3);
+			const mapData:Array = [[10,9,9,9,9,10],
+														[9,0,0,0,0,9],
+														[9,0,0,0,0,9],
+														[9,0,0,0,0,9],
+														[9,0,0,0,0,9],
+														[10,9,9,9,9,10]];
+			createByMatrixArray(mapData, 6, 6);
 		}
 		
 	}
