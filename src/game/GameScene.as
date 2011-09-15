@@ -11,7 +11,8 @@ package game {
 	import scene.IScene;
 
 	public class GameScene extends EventDispatcher implements IScene {
-		private var _container:Sprite;
+		private var _mapContainer:Sprite;
+		private var _gameContainer:Sprite;
 		private var _tileMap:TileMap;
 		private var _hunters:Vector.<Hunter>;
 		
@@ -27,7 +28,10 @@ package game {
 		
 		public function GameScene(container:Sprite, tileMap:TileMap):void {
 			super();
-			_container = container;
+			_mapContainer = new Sprite();
+			_gameContainer = new Sprite();
+			container.addChild(_mapContainer);
+			container.addChild(_gameContainer);
 			_tileMap = tileMap;
 			_drawingContainer = new Sprite();
 		}
@@ -35,18 +39,18 @@ package game {
 		public function open():void {
 			_drawing = false;
 			_moving = false;
-			_container.addChild(_tileMap);
+			_mapContainer.addChild(_tileMap);
 			createHunters();
 			addButtons();
-			_container.addChild(_drawingContainer);
+			_mapContainer.addChild(_drawingContainer);
 			addListeners();
 		}
 		public function close():void {
 			removeListeners();
-			_container.removeChild(_tileMap);
+			_mapContainer.removeChild(_tileMap);
 			removeHunters();
 			removeButtons();
-			_container.removeChild(_drawingContainer);
+			_mapContainer.removeChild(_drawingContainer);
 		}
 		
 		/* Internal functions */
@@ -55,7 +59,7 @@ package game {
 			const hunter:Hunter = new Hunter();
 			hunter.x = Math.random() * 250 + 50;
 			hunter.y = Math.random() * 150 + 50;
-			_container.addChild(hunter);
+			_gameContainer.addChild(hunter);
 			addHunterListeners(hunter);
 			return hunter;
 		}
@@ -70,7 +74,7 @@ package game {
 		private function removeHunters():void {
 			for each (var hunter:Hunter in _hunters) {
 				removeHunterListeners(hunter);
-				_container.removeChild(hunter);
+				_gameContainer.removeChild(hunter);
 				hunter.remove();
 			}
 			_hunters = null;
@@ -151,17 +155,17 @@ package game {
 		
 		//TODO bad memory managment here, forgot remove listeners
 		private function addButtons():void {
-			_goBtn = new PushButton(_container, 400, 50, "lets go", onButtonGoClick);
-			_pauseBtn = new PushButton(_container, 400, 70, "pause", onButtonPauseClick);
-			_clearBtn = new PushButton(_container, 400, 90, "clear", onButtonClearClick);
-			_goMenuBtn = new PushButton(_container, 400, 110, "go to menu", onButtonMenuClick);
+			_goBtn = new PushButton(_gameContainer, 400, 50, "lets go", onButtonGoClick);
+			_pauseBtn = new PushButton(_gameContainer, 400, 70, "pause", onButtonPauseClick);
+			_clearBtn = new PushButton(_gameContainer, 400, 90, "clear", onButtonClearClick);
+			_goMenuBtn = new PushButton(_gameContainer, 400, 110, "go to menu", onButtonMenuClick);
 		}
 		
 		private function removeButtons():void {
-			if (_container.contains(_goBtn)) { _container.removeChild(_goBtn); }
-			if (_container.contains(_pauseBtn)) { _container.removeChild(_pauseBtn); }
-			if (_container.contains(_clearBtn)) { _container.removeChild(_clearBtn); }
-			if (_container.contains(_goMenuBtn)) { _container.removeChild(_goMenuBtn); }
+			if (_gameContainer.contains(_goBtn)) { _gameContainer.removeChild(_goBtn); }
+			if (_gameContainer.contains(_pauseBtn)) { _gameContainer.removeChild(_pauseBtn); }
+			if (_gameContainer.contains(_clearBtn)) { _gameContainer.removeChild(_clearBtn); }
+			if (_gameContainer.contains(_goMenuBtn)) { _gameContainer.removeChild(_goMenuBtn); }
 		}
 		
 		private function onButtonGoClick(event:MouseEvent):void {

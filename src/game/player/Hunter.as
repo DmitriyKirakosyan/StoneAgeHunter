@@ -1,4 +1,8 @@
 package game.player {
+	import tilemap.TextureHolderEvent;
+	import flash.display.BitmapData;
+	import flash.display.Bitmap;
+	import tilemap.SharedBitmapHolder;
 	import com.greensock.easing.Linear;
 	import com.greensock.TimelineMax;
 	import flash.geom.Point;
@@ -7,6 +11,7 @@ package game.player {
 
 	public class Hunter extends Sprite {
 		private var _view:Sprite;
+		private const textureUrl:String = "animations/walk/walk";
 		
 		private var _path:Vector.<Point>;
 		private var _pathTimeline:TimelineMax;
@@ -88,8 +93,20 @@ package game.player {
 		}
 		
 		private function addImage():void {
-			_view = new BricksView();
+			_view = new Sprite;
+			if (SharedBitmapHolder.existInCache(textureUrl)) {
+				const bitmap:BitmapData = SharedBitmapHolder.instance.getTileByName(textureUrl, "CaveMan0001.png");
+				_view.addChild(new Bitmap(bitmap));
+			} else {
+				SharedBitmapHolder.instance.addEventListener(TextureHolderEvent.TEXTURE_LOADED, onImgLoaded);
+			}
 			addChild(_view);
+		}
+		
+		private function onImgLoaded(event:TextureHolderEvent):void {
+			if (event.url != textureUrl) { return; }
+				const bitmap:BitmapData = SharedBitmapHolder.instance.getTileByName(textureUrl, "CaveMan0001.png");
+				_view.addChild(new Bitmap(bitmap));
 		}
 	}
 }
