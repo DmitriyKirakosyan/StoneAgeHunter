@@ -14,23 +14,15 @@ package tilemap {
 	import flash.system.LoaderContext;
 	import flash.utils.Dictionary;
 	
-	import ru.beenza.framework.utils.EventJoin;
-	
 	public class SharedBitmapHolder extends EventDispatcher {
 		
 		public static var urlPrefix:String = "";
 		
 		private static const THREADS:uint = 3;
-		private static const MAX_ATTEMPTS:uint = 3;
 		private const CACHE:Dictionary = new Dictionary();
 		private static const LOADER_CONTEXT:LoaderContext = new LoaderContext(true);
 		
 		private static var _instance:SharedBitmapHolder;
-		
-		private var _eventJoin:EventJoin;
-		
-		private var li:LoaderInfo;
-		private var urll:URLLoader;
 		
 		private const loaders:Vector.<Loader> = new Vector.<Loader>();
 		private const urlLoaders:Vector.<URLLoader> = new Vector.<URLLoader>();
@@ -157,103 +149,71 @@ package tilemap {
 		
 		// LOADER EVENTS
 		private function onLoaderComplete(event:Event):void {
-			trace("onLoaderComplete");
-			li = event.target as LoaderInfo;
+			const li:LoaderInfo = event.target as LoaderInfo;
 			if (li.content == null || !(li.content is Bitmap)) {
-				error(li);
 			} else {
-				_eventJoin.join(event);
+				const queueItem:QueueItem = getQueueItemByLoader(li.loader);
+				if (!queueItem) { return; }
+				if (queueItem.numCompletes > 0) {
+					saveToCache(queueItem);
+				} else{
+					queueItem.numCompletes++;
+				}
 			}
 		}
 		
 		private function onURLLoaderComplete(event:Event):void {
-			trace("onURLLoaderComplete");
-			urll = event.target as URLLoader;
+			const urll:URLLoader = event.target as URLLoader;
 			if (urll.data == null) {
-				urlError(urll);
 			} else {
-				_eventJoin.join(event);
+				const queueItem:QueueItem = getQueueItemByURLLoader(urll);
+				if (!queueItem) { return; }
+				if (queueItem.numCompletes > 0) {
+					saveToCache(queueItem);
+				} else {
+					queueItem.numCompletes++;
+				}
 			}
 		}
 		
 		private function onError(event:IOErrorEvent):void {
-			const li:LoaderInfo = event.target as LoaderInfo;
-			error(li);
+			trace("loaderError");
 		}
 		
 		private function onURLError(event:IOErrorEvent):void {
-			urll = event.target as URLLoader;
-			if (li.content == null || !(li.content is Bitmap)) {
-				urlError(urll);
-			} else {
-				_eventJoin.join(event);
-			}
+			trace("URLLoaderError");
 		}
 		
-		private function saveToCache():void{
-			const queueItem:QueueItem = getQueueItemByLoader(li.loader);
-			if (!queueItem) return;
-			
-			const bmd:BitmapData = (li.content as Bitmap).bitmapData;
+		private function saveToCache(queueItem:QueueItem):void{
+			const bmd:BitmapData = (queueItem.loader.content as Bitmap).bitmapData;
 			const textureVo:TextureVO = new TextureVO();
 			textureVo.textureBitmap = bmd;
-			const xml:XML = new XML(urll.data);
-			trace(xml.toString());
+			const xml:XML = new XML(queueItem.urlLoader.data);
 			textureVo.textureXML = xml;
 			CACHE[queueItem.url] = textureVo;
-			loaders.push(li.loader);
-			urlLoaders.push(urll);
+			loaders.push(queueItem.loader);
+			urlLoaders.push(queueItem.urlLoader);
 			currentQueues.splice(currentQueues.indexOf(queueItem), 1);
 			dispatchEvent(new TextureHolderEvent(TextureHolderEvent.TEXTURE_LOADED, queueItem.url));
 			loadNext();
 		}
 		
-		// ERROR
-		private function error(li:LoaderInfo):void {
-			const queueItem:QueueItem = getQueueItemByLoader(li.loader);
-			queueItem.attempt++;
-			if (queueItem.attempt == MAX_ATTEMPTS) {
-				currentQueues.splice(currentQueues.indexOf(queueItem), 1);
-				queues.push(queueItem);
-				loaders.push(li.loader);
-				loadNext();
-			} else {
-				li.loader.load(new URLRequest(urlPrefix + queueItem.url + ".png"), LOADER_CONTEXT);
-			}
-		}
-		
-		private function urlError(urll:URLLoader):void {
-			const queueItem:QueueItem = getQueueItemByURLLoader(urll);
-			queueItem.attempt++;
-			if (queueItem.attempt == MAX_ATTEMPTS) {
-				currentQueues.splice(currentQueues.indexOf(queueItem), 1);
-				queues.push(queueItem);
-				urlLoaders.push(urll);
-				loadNext();
-			} else {
-				urll.load(new URLRequest(urlPrefix + queueItem.url + ".plist"));
-			}
-		}
-		
 		// LOAD NEXT
 		private function loadNext():void {
 			if (queues.length == 0 || loaders.length == 0) return;
-			
 			const queueItem:QueueItem = queues.shift();
-			
 			if (!existInCache(queueItem.url) && !getQueueItemByURL(queueItem.url)) {
 				currentQueues.push(queueItem);
 				const l:Loader = loaders.shift();
 				const ul:URLLoader = urlLoaders.shift();
-				queueItem.attempt = 0;
 				queueItem.loader = l;
 				queueItem.urlLoader = ul;
 				l.load(new URLRequest(urlPrefix + queueItem.url + ".png"), LOADER_CONTEXT);
 				ul.load(new URLRequest(urlPrefix + queueItem.url + ".plist"));
-				_eventJoin = new EventJoin(2, saveToCache);
 			}
 			
 			if (loaders.length > 0) loadNext();
+			
 		}
 		
 		// LOAD
@@ -293,7 +253,7 @@ import flash.net.URLLoader;
 class QueueItem {
 	
 	public var url:String;
-	public var attempt:uint;
+	public var numCompletes:uint = 0;
 	public var loader:Loader;
 	public var urlLoader:URLLoader;
 	

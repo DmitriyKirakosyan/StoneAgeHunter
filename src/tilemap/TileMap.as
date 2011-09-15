@@ -32,9 +32,9 @@ package tilemap {
 					if (i > 0 && j == 0) {
 						tile.rotation = 180;
 						tile.x += tile.width;
-						tile.y += tile.height
+						tile.y += tile.height;
 					}
-					if (i == width-1 && j > 0) { tile.rotation = 270; tile.y += tile.height}
+					if (i == width-1 && j > 0) { tile.rotation = 270; tile.y += tile.height; }
 					this.addChild(tile);
 				}
 			}
@@ -42,6 +42,7 @@ package tilemap {
 
 		/* Tests functions */
 		private function onTextureLoad(event:TextureHolderEvent):void{
+			if (event.url != _textureName) { return; }
 			_ready = true;
 			dispatchEvent(new TextureHolderEvent(TextureHolderEvent.TEXTURE_LOADED, event.url));
 			const mapData:Array = [[10,9,9,9,9,10],
