@@ -1,4 +1,5 @@
 package game.player {
+	import animation.IcSprite;
 	import tilemap.TextureHolderEvent;
 	import flash.display.BitmapData;
 	import flash.display.Bitmap;
@@ -9,7 +10,7 @@ package game.player {
 	import com.greensock.TweenLite;
 	import flash.display.Sprite;
 
-	public class Hunter extends Sprite {
+	public class Hunter extends IcSprite {
 		private var _view:Sprite;
 		private const textureUrl:String = "animations/walk/walk";
 		
