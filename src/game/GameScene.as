@@ -1,4 +1,5 @@
 package game {
+	import flash.events.Event;
 	import flash.filters.GlowFilter;
 	import scene.SceneEvent;
 	import com.bit101.components.PushButton;
@@ -32,6 +33,7 @@ package game {
 			_gameContainer = new Sprite();
 			container.addChild(_mapContainer);
 			container.addChild(_gameContainer);
+			_gameContainer.addEventListener(Event.ENTER_FRAME, onGameContainerEnterFrame);
 			_tileMap = tileMap;
 			_drawingContainer = new Sprite();
 		}
@@ -55,6 +57,32 @@ package game {
 		
 		/* Internal functions */
 		
+		private function onGameContainerEnterFrame(event:Event):void {
+			for each (var hunter:Hunter in _hunters) {
+				checkWithAll(hunter);
+			}
+		}
+		
+		private function checkWithAll(hunter:Hunter):void {
+			for each (var otherHunter:Hunter in _hunters) {
+				if (hunter != otherHunter &&
+						crossHunters(hunter, otherHunter) && needSwitchHunters(hunter, otherHunter)) {
+					const indexOfOne:int = _gameContainer.getChildIndex(hunter);
+					_gameContainer.setChildIndex(hunter, _gameContainer.getChildIndex(otherHunter));
+					_gameContainer.setChildIndex(otherHunter, indexOfOne);
+				}
+			}
+		}
+		
+		private function needSwitchHunters(one:Hunter, two:Hunter):Boolean {
+			return (one.y > two.y && _gameContainer.getChildIndex(one) < _gameContainer.getChildIndex(two)) ||
+							(one.y < two.y && _gameContainer.getChildIndex(one) > _gameContainer.getChildIndex(two));
+		}
+		
+		private function crossHunters(one:Hunter, two:Hunter):Boolean {
+			return one.hitTestObject(two);
+		}
+		
 		private function createHunter():Hunter {
 			const hunter:Hunter = new Hunter();
 			hunter.x = Math.random() * 250 + 50;
@@ -66,7 +94,7 @@ package game {
 		
 		private function createHunters():void {
 			_hunters = new Vector.<Hunter>();
-			for (var i:int = 0; i < 200; ++i) {
+			for (var i:int = 0; i < 3; ++i) {
 				_hunters.push(createHunter());
 			}
 		}
