@@ -24,6 +24,8 @@ package game.player {
 			super();
 			_moving = false;
 			_view = new Sprite;
+			this.scaleX = .5;
+			this.scaleY = .5;
 			addChild(_view);
 			addFrames();
 			play(ANIMATE_STAY);
