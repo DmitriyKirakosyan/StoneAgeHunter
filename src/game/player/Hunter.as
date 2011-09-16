@@ -42,9 +42,16 @@ package game.player {
 		
 		public function addWayPoint(point:Point):void {
 			if (!_path) { _path = new Vector.<Point>(); }
+			var duration:Number;
+			var prevPoint:Point;
 			if (_path.indexOf(point) == -1) {
+				prevPoint  = _path.length > 0 ? _path[_path.length-1] : 
+																				new Point(this.x, this.y);
+				duration = Math.abs(prevPoint.x * prevPoint.x - point.x * point.x) +
+										Math.abs(prevPoint.y * prevPoint.y - point.y * point.y);
+				duration = Math.sqrt(duration);
 				_path.push(point);
-				addPointToTimeline(point);
+				addPointToTimeline(point, duration/200);
 			}
 		}
 		
@@ -91,12 +98,13 @@ package game.player {
 			addAnimation(ANIMATE_STAY, 0, bitmapList);
 		}
 
-		private function addPointToTimeline(point:Point):void {
+		private function addPointToTimeline(point:Point, duration:Number):void {
 			if (!_pathTimeline) {
 				_pathTimeline = new TimelineMax();
 				_pathTimeline.pause();
 			}
-			_pathTimeline.append(new TweenLite(this, .9, {x : point.x - this.width/2, y : point.y - this.height/2,
+			
+			_pathTimeline.append(new TweenLite(this, duration, {x : point.x - this.width/2, y : point.y - this.height/2,
 																										ease : Linear.easeNone,
 																										onStart : onStartPoint,
 																										onStartParams : [point]}));
