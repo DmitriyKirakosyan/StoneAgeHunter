@@ -58,7 +58,7 @@ package game.player {
 		}
 		
 		public function move():void {
-			if (_pathTimeline) { play(ANIMATE_MOVE); _pathTimeline.play(); }
+			if (_pathTimeline && _path) { trace("path length : ", _path.length); play(ANIMATE_MOVE); _pathTimeline.play(); }
 		}
 		
 		public function pauseMove():void {
@@ -100,6 +100,7 @@ package game.player {
 		}
 		
 		private function stopMove():void {
+			_path = null;
 			play(ANIMATE_STAY);
 		}
 
