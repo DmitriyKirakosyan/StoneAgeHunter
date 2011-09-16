@@ -1,8 +1,6 @@
 package game.player {
 	import animation.IcSprite;
-	import tilemap.TextureHolderEvent;
 	import flash.display.BitmapData;
-	import flash.display.Bitmap;
 	import tilemap.SharedBitmapHolder;
 	import com.greensock.easing.Linear;
 	import com.greensock.TimelineMax;
@@ -12,16 +10,23 @@ package game.player {
 
 	public class Hunter extends IcSprite {
 		private var _view:Sprite;
-		private const textureUrl:String = "animations/walk/walk";
+		private const moveTextureUrl:String = "animations/walk/walk";
+		private const breatheTextureUrl:String = "animations/stay/breathe";
 		
 		private var _path:Vector.<Point>;
 		private var _pathTimeline:TimelineMax;
 		private var _moving:Boolean;
 		
+		private const ANIMATE_MOVE:String = "move";
+		private const ANIMATE_STAY:String = "stay";
+		
 		public function Hunter() {
 			super();
 			_moving = false;
-			addImage();
+			_view = new Sprite;
+			addChild(_view);
+			addFrames();
+			play(ANIMATE_MOVE);
 		}
 		
 		/* API */
@@ -66,6 +71,26 @@ package game.player {
 		
 		/* Internal functions */
 		
+		private function addFrames():void {
+			var bitmapList:Vector.<BitmapData> = new Vector.<BitmapData>();
+			var nulls:String;
+				//_view.addChild(new Bitmap(bitmap));
+			var i:int;
+			for (i = 1; i < 24; ++i) {
+				nulls = i/10 < 1 ? "000" : "00";
+				bitmapList.push(SharedBitmapHolder.instance.getTileByName(moveTextureUrl, "CaveMan"+ nulls + i + ".png"));
+			}
+			//bitmapList.reverse();
+			addAnimation(ANIMATE_MOVE, 0, bitmapList);
+			bitmapList = new Vector.<BitmapData>();
+			for (i = 1; i < 38; ++i) {
+				nulls = i/10 < 1 ? "000" : "00";
+				bitmapList.push(SharedBitmapHolder.instance.getTileByName(breatheTextureUrl, "CaveManBreathe"+ nulls + i + ".png"));
+			}
+			bitmapList.reverse();
+			addAnimation(ANIMATE_STAY, 0, bitmapList);
+		}
+
 		private function addPointToTimeline(point:Point):void {
 			if (!_pathTimeline) {
 				_pathTimeline = new TimelineMax();
@@ -93,21 +118,5 @@ package game.player {
 			}
 		}
 		
-		private function addImage():void {
-			_view = new Sprite;
-			if (SharedBitmapHolder.existInCache(textureUrl)) {
-				const bitmap:BitmapData = SharedBitmapHolder.instance.getTileByName(textureUrl, "CaveMan0001.png");
-				_view.addChild(new Bitmap(bitmap));
-			} else {
-				SharedBitmapHolder.instance.addEventListener(TextureHolderEvent.TEXTURE_LOADED, onImgLoaded);
-			}
-			addChild(_view);
-		}
-		
-		private function onImgLoaded(event:TextureHolderEvent):void {
-			if (event.url != textureUrl) { return; }
-				const bitmap:BitmapData = SharedBitmapHolder.instance.getTileByName(textureUrl, "CaveMan0001.png");
-				_view.addChild(new Bitmap(bitmap));
-		}
 	}
 }
