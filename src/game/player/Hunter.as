@@ -26,7 +26,7 @@ package game.player {
 			_view = new Sprite;
 			addChild(_view);
 			addFrames();
-			play(ANIMATE_MOVE);
+			play(ANIMATE_STAY);
 		}
 		
 		/* API */
@@ -56,11 +56,11 @@ package game.player {
 		}
 		
 		public function move():void {
-			if (_pathTimeline) { _pathTimeline.play(); }
+			if (_pathTimeline) { play(ANIMATE_MOVE); _pathTimeline.play(); }
 		}
 		
 		public function pauseMove():void {
-			if (_pathTimeline) { _pathTimeline.pause(); }
+			if (_pathTimeline) { play(ANIMATE_STAY); _pathTimeline.pause(); }
 		}
 /*		
 		public function followPath(path:Vector.<Point>):void {
@@ -94,13 +94,16 @@ package game.player {
 				nulls = i/10 < 1 ? "000" : "00";
 				bitmapList.push(SharedBitmapHolder.instance.getTileByName(breatheTextureUrl, "CaveManBreathe"+ nulls + i + ".png"));
 			}
-			bitmapList.reverse();
 			addAnimation(ANIMATE_STAY, 0, bitmapList);
+		}
+		
+		private function stopMove():void {
+			play(ANIMATE_STAY);
 		}
 
 		private function addPointToTimeline(point:Point, duration:Number):void {
 			if (!_pathTimeline) {
-				_pathTimeline = new TimelineMax();
+				_pathTimeline = new TimelineMax({onComplete : stopMove });
 				_pathTimeline.pause();
 			}
 			
