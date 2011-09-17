@@ -19,6 +19,7 @@ package game {
 		private var _hunters:Vector.<Hunter>;
 		
 		private var _goBtn:PushButton;
+		private var _attackBtn:PushButton;
 		private var _pauseBtn:PushButton;
 		private var _clearBtn:PushButton;
 		private var _goMenuBtn:PushButton;
@@ -182,16 +183,29 @@ package game {
 			}
 		}
 		
+		private function reFillLastWayPoint():void {
+			if (_selectedHunter) {
+				const point:Point = _selectedHunter.getLastPoint();
+				if (point) {
+					_drawingContainer.graphics.beginFill(0x0fcafb);
+					_drawingContainer.graphics.drawCircle(point.x, point.y, 5);
+					_drawingContainer.graphics.endFill();
+				}
+			}
+		}
+		
 		//TODO bad memory managment here, forgot remove listeners
 		private function addButtons():void {
 			_goBtn = new PushButton(_gameContainer, 400, 50, "lets go", onButtonGoClick);
-			_pauseBtn = new PushButton(_gameContainer, 400, 70, "pause", onButtonPauseClick);
-			_clearBtn = new PushButton(_gameContainer, 400, 90, "clear", onButtonClearClick);
-			_goMenuBtn = new PushButton(_gameContainer, 400, 110, "go to menu", onButtonMenuClick);
+			_attackBtn = new PushButton(_gameContainer, 400, 70, "attack", onButtonAttackClick);
+			_pauseBtn = new PushButton(_gameContainer, 400, 90, "pause", onButtonPauseClick);
+			_clearBtn = new PushButton(_gameContainer, 400, 110, "clear", onButtonClearClick);
+			_goMenuBtn = new PushButton(_gameContainer, 400, 130, "go to menu", onButtonMenuClick);
 		}
 		
 		private function removeButtons():void {
 			if (_gameContainer.contains(_goBtn)) { _gameContainer.removeChild(_goBtn); }
+			if (_gameContainer.contains(_goBtn)) { _gameContainer.removeChild(_attackBtn); }
 			if (_gameContainer.contains(_pauseBtn)) { _gameContainer.removeChild(_pauseBtn); }
 			if (_gameContainer.contains(_clearBtn)) { _gameContainer.removeChild(_clearBtn); }
 			if (_gameContainer.contains(_goMenuBtn)) { _gameContainer.removeChild(_goMenuBtn); }
@@ -203,6 +217,10 @@ package game {
 				hunter.move();
 			}
 			_drawingContainer.graphics.clear();
+		}
+		
+		private function onButtonAttackClick(event:MouseEvent):void {
+			reFillLastWayPoint();
 		}
 		
 		private function onButtonPauseClick(event:MouseEvent):void {

@@ -69,6 +69,13 @@ package game.player {
 			}
 		}
 		
+		public function getLastPoint():Point {
+			if (_path && _path.length > 0) {
+				return _path[_path.length-1];
+			}
+			return null;
+		}
+		
 		public function move():void {
 			if (_pathTimeline && _path) { trace("path length : ", _path.length); play(ANIMATE_MOVE); _pathTimeline.play(); }
 		}
