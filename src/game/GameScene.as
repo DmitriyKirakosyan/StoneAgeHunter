@@ -1,4 +1,5 @@
 package game {
+	import com.bit101.components.Slider;
 	import flash.events.Event;
 	import flash.filters.GlowFilter;
 	import scene.SceneEvent;

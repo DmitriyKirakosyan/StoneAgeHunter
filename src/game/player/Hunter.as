@@ -13,6 +13,8 @@ package game.player {
 		private const moveTextureUrl:String = "animations/walk/walk";
 		private const breatheTextureUrl:String = "animations/stay/breathe";
 		
+		private var _numStones:int;
+		private var _speed:Number;
 		private var _path:Vector.<Point>;
 		private var _pathTimeline:TimelineMax;
 		private var _moving:Boolean;
@@ -22,6 +24,7 @@ package game.player {
 		
 		public function Hunter() {
 			super();
+			_speed = 1;
 			_moving = false;
 			_view = new Sprite;
 			this.scaleX = .5;
@@ -32,6 +35,15 @@ package game.player {
 		}
 		
 		/* API */
+		
+		public function get speed():Number { return _speed; }
+		public function set speed(value:Number):void {
+			_speed = value;
+		}
+		
+		public function castStone():void {
+			_numStones = _numStones > 0 ? _numStones - 1 : 0;
+		}
 		
 		public function get path():Vector.<Point> {
 			return _path;
@@ -110,10 +122,11 @@ package game.player {
 				_pathTimeline.pause();
 			}
 			
-			_pathTimeline.append(new TweenLite(this, duration, {x : point.x - this.width/2, y : point.y - this.height/2,
-																										ease : Linear.easeNone,
-																										onStart : onStartPoint,
-																										onStartParams : [point]}));
+			_pathTimeline.append(new TweenLite(this, duration * _speed,
+																					{x : point.x - this.width/2, y : point.y - this.height/2,
+																						ease : Linear.easeNone,
+																						onStart : onStartPoint,
+																						onStartParams : [point]}));
 		}
 		
 		private function onStartPoint(point:Point):void {
