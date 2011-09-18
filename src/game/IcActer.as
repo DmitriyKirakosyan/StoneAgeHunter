@@ -50,9 +50,6 @@ package game {
 
 		protected function stopMove():void {
 			_path = null;
-			if (_pathTimeline) {
-				_pathTimeline.kill();
-			}
 		}
 
 		public function addWayPoint(point:Point):void {
@@ -62,8 +59,8 @@ package game {
 			if (_path.indexOf(point) == -1) {
 				prevPoint  = _path.length > 0 ? _path[_path.length-1] : 
 																				new Point(this.x, this.y);
-				duration = Math.abs(prevPoint.x * prevPoint.x - point.x * point.x) +
-										Math.abs(prevPoint.y * prevPoint.y - point.y * point.y);
+				duration = Math.abs((prevPoint.x - point.x) * (prevPoint.x - point.x)) +
+										Math.abs((prevPoint.y - point.y) * (prevPoint.y -point.y));
 				duration = Math.sqrt(duration);
 				_path.push(point);
 				addPointToTimeline(point, duration/200);
@@ -81,6 +78,7 @@ package game {
 																						ease : Linear.easeNone,
 																						onStart : onStartPoint,
 																						onStartParams : [point]}));
+			if (_pathTimeline.paused) { trace("paused"); }
 		}
 		
 		private function onStartPoint(point:Point):void {

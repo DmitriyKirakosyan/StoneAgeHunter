@@ -25,15 +25,16 @@ package game.animals {
 		public function addEnemy(enemy:IcSprite):void {
 			if (!_enemies) { _enemies = new Vector.<IcSprite>(); }
 			_enemies.push(enemy);
-			updateTarget();
 		}
 		
 		override protected function stopMove():void {
 			super.stopMove();
+			trace("stop duck move");
+			//pathTimeline = null;
 			updateTarget();
 		}
 		
-		private function updateTarget():void {
+		public function updateTarget():void {
 			var goodEnemy:IcSprite;
 			for each (var enemy:IcSprite in _enemies) {
 				if (!goodEnemy ||
@@ -42,13 +43,11 @@ package game.animals {
 				}
 			}
 			if (_targetEnemy != goodEnemy) {
-				//super.stopMove();
 				_targetEnemy = goodEnemy;
 			}
 			trace("add way point for duck");
-			pathTimeline.kill();
-			pathTimeline = new TimelineMax();
-			addWayPoint(new Point(_targetEnemy.x, _targetEnemy.y));
+			trace("x : " + _targetEnemy.x + ", y : " + _targetEnemy.y);
+			addWayPoint(new Point(_targetEnemy.x + _targetEnemy.width/2, _targetEnemy.y + _targetEnemy.height/2));
 		}
 		
 		/* Internal functions */

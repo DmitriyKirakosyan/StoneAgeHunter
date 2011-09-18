@@ -166,6 +166,7 @@ package game {
 			for each (var hunter:Hunter in _hunters) { _duck.addEnemy(hunter); }
 			_duck.x = Math.random() * 100 + 100;
 			_duck.y = Math.random() * 100 + 100;
+			_duck.updateTarget();
 			_gameContainer.addChild(_duck);
 		}
 		private function removeDuck():void {
