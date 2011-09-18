@@ -1,9 +1,7 @@
 package game {
-	import com.bit101.components.Slider;
 	import flash.events.Event;
 	import flash.filters.GlowFilter;
 	import scene.SceneEvent;
-	import com.bit101.components.PushButton;
 	import flash.geom.Point;
 	import flash.events.MouseEvent;
 	import game.player.Hunter;
@@ -18,11 +16,7 @@ package game {
 		private var _tileMap:TileMap;
 		private var _hunters:Vector.<Hunter>;
 		
-		private var _goBtn:PushButton;
-		private var _attackBtn:PushButton;
-		private var _pauseBtn:PushButton;
-		private var _clearBtn:PushButton;
-		private var _goMenuBtn:PushButton;
+		private var _debugPanel:DebugPanel;
 		
 		private var _drawingContainer:Sprite;
 		private var _drawing:Boolean;
@@ -33,6 +27,7 @@ package game {
 			super();
 			_mapContainer = new Sprite();
 			_gameContainer = new Sprite();
+			_debugPanel = new DebugPanel(_gameContainer, this);
 			container.addChild(_mapContainer);
 			container.addChild(_gameContainer);
 			_gameContainer.addEventListener(Event.ENTER_FRAME, onGameContainerEnterFrame);
@@ -40,21 +35,57 @@ package game {
 			_drawingContainer = new Sprite();
 		}
 		
+		/* functions for debug */
+		
+		public function get hunters():Vector.<Hunter> {
+			return _hunters;
+		}
+		
+		public function set drawing(value:Boolean):void {
+			_drawing = value;
+		}
+		
+		public function get drawingContainer():Sprite {
+			return _drawingContainer;
+		}
+		
+		public function dispatchAboutClose():void {
+			dispatchEvent(new SceneEvent(SceneEvent.SWITCH_ME, this));
+		}
+		
+		public function drawPaths():void {
+			for each (var hunter:Hunter in _hunters) {
+				drawHunterExistingPath(hunter);
+			}
+		}
+		
+		public function reFillLastWayPoint():void {
+			if (_selectedHunter) {
+				const point:Point = _selectedHunter.getLastPoint();
+				if (point) {
+					_drawingContainer.graphics.beginFill(0x0fcafb);
+					_drawingContainer.graphics.drawCircle(point.x, point.y, 5);
+					_drawingContainer.graphics.endFill();
+				}
+			}
+		}
+		
 		public function open():void {
 			_drawing = false;
 			_moving = false;
 			_mapContainer.addChild(_tileMap);
 			createHunters();
-			addButtons();
 			_mapContainer.addChild(_drawingContainer);
 			addListeners();
+			_debugPanel.open();
 		}
 		public function close():void {
+			_debugPanel.close();
 			removeListeners();
 			_mapContainer.removeChild(_tileMap);
 			removeHunters();
-			removeButtons();
 			_mapContainer.removeChild(_drawingContainer);
+			_drawingContainer.graphics.clear();
 		}
 		
 		/* Internal functions */
@@ -155,12 +186,6 @@ package game {
 			}
 		}
 		
-		private function drawPaths():void {
-			for each (var hunter:Hunter in _hunters) {
-				drawHunterExistingPath(hunter);
-			}
-		}
-		
 		private function findClickedHunter(x:Number, y:Number):Hunter {
 			for each (var hunter:Hunter in _hunters) {
 				if (hunter.hitTestPoint(x, y)) { return hunter; }
@@ -181,63 +206,6 @@ package game {
 			if (_selectedHunter) {
 				_selectedHunter.addWayPoint(point);
 			}
-		}
-		
-		private function reFillLastWayPoint():void {
-			if (_selectedHunter) {
-				const point:Point = _selectedHunter.getLastPoint();
-				if (point) {
-					_drawingContainer.graphics.beginFill(0x0fcafb);
-					_drawingContainer.graphics.drawCircle(point.x, point.y, 5);
-					_drawingContainer.graphics.endFill();
-				}
-			}
-		}
-		
-		//TODO bad memory managment here, forgot remove listeners
-		private function addButtons():void {
-			_goBtn = new PushButton(_gameContainer, 400, 50, "lets go", onButtonGoClick);
-			_attackBtn = new PushButton(_gameContainer, 400, 70, "attack", onButtonAttackClick);
-			_pauseBtn = new PushButton(_gameContainer, 400, 90, "pause", onButtonPauseClick);
-			_clearBtn = new PushButton(_gameContainer, 400, 110, "clear", onButtonClearClick);
-			_goMenuBtn = new PushButton(_gameContainer, 400, 130, "go to menu", onButtonMenuClick);
-		}
-		
-		private function removeButtons():void {
-			if (_gameContainer.contains(_goBtn)) { _gameContainer.removeChild(_goBtn); }
-			if (_gameContainer.contains(_goBtn)) { _gameContainer.removeChild(_attackBtn); }
-			if (_gameContainer.contains(_pauseBtn)) { _gameContainer.removeChild(_pauseBtn); }
-			if (_gameContainer.contains(_clearBtn)) { _gameContainer.removeChild(_clearBtn); }
-			if (_gameContainer.contains(_goMenuBtn)) { _gameContainer.removeChild(_goMenuBtn); }
-		}
-		
-		private function onButtonGoClick(event:MouseEvent):void {
-			_drawing = false;
-			for each (var hunter:Hunter in _hunters) {
-				hunter.move();
-			}
-			_drawingContainer.graphics.clear();
-		}
-		
-		private function onButtonAttackClick(event:MouseEvent):void {
-			reFillLastWayPoint();
-		}
-		
-		private function onButtonPauseClick(event:MouseEvent):void {
-			for each (var hunter:Hunter in _hunters) {
-				hunter.pauseMove();
-			}
-			drawPaths();
-		}
-		
-		private function onButtonClearClick(event:MouseEvent):void {
-			_drawingContainer.graphics.clear();
-			_drawing = false;
-		}
-		
-		private function onButtonMenuClick(event:MouseEvent):void {
-			event.stopPropagation();
-			dispatchEvent(new SceneEvent(SceneEvent.SWITCH_ME, this));
 		}
 		
 	}
