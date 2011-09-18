@@ -1,4 +1,6 @@
 package game.animals {
+	import com.greensock.TimelineMax;
+	import flash.text.TextFieldAutoSize;
 	import flash.geom.Point;
 	import game.IcActer;
 	import game.HpLine;
@@ -35,14 +37,17 @@ package game.animals {
 			var goodEnemy:IcSprite;
 			for each (var enemy:IcSprite in _enemies) {
 				if (!goodEnemy ||
-						(goodEnemy.x + goodEnemy.y > enemy.x + enemy.y)) {
+						((goodEnemy.x + goodEnemy.y) > (enemy.x + enemy.y))) {
 					goodEnemy = enemy;
 				}
 			}
 			if (_targetEnemy != goodEnemy) {
-				super.stopMove();
+				//super.stopMove();
 				_targetEnemy = goodEnemy;
 			}
+			trace("add way point for duck");
+			pathTimeline.kill();
+			pathTimeline = new TimelineMax();
 			addWayPoint(new Point(_targetEnemy.x, _targetEnemy.y));
 		}
 		
@@ -56,6 +61,7 @@ package game.animals {
 			textField.text = "Утк";
 			textField.x = 10;
 			textField.y = 25;
+			textField.autoSize = TextFieldAutoSize.LEFT;
 			textField.selectable = false;
 			this.addChild(textField);
 		}

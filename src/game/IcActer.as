@@ -20,6 +20,9 @@ package game {
 		public function get pathTimeline():TimelineMax {
 			return _pathTimeline;
 		}
+		public function set pathTimeline(value:TimelineMax):void {
+			_pathTimeline = value;
+		}
 		
 		public function get speed():Number { return _speed; }
 		public function set speed(value:Number):void {
@@ -49,7 +52,6 @@ package game {
 			_path = null;
 			if (_pathTimeline) {
 				_pathTimeline.kill();
-				_pathTimeline.pause();
 			}
 		}
 
