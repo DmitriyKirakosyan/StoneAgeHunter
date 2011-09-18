@@ -1,4 +1,5 @@
 package game.player {
+	import game.HpLine;
 	import animation.IcSprite;
 	import flash.display.BitmapData;
 	import tilemap.SharedBitmapHolder;
@@ -19,6 +20,8 @@ package game.player {
 		private var _pathTimeline:TimelineMax;
 		private var _moving:Boolean;
 		
+		private var _hp:HpLine;
+		
 		private const ANIMATE_MOVE:String = "move";
 		private const ANIMATE_STAY:String = "stay";
 		
@@ -30,6 +33,9 @@ package game.player {
 			this.scaleX = .5;
 			this.scaleY = .5;
 			addChild(_view);
+			_hp = new HpLine(2);
+			_hp.y = -20;
+			addChild(_hp);
 			addFrames();
 			play(ANIMATE_STAY);
 		}
@@ -77,7 +83,7 @@ package game.player {
 		}
 		
 		public function move():void {
-			if (_pathTimeline && _path) { trace("path length : ", _path.length); play(ANIMATE_MOVE); _pathTimeline.play(); }
+			if (_pathTimeline && _path) { play(ANIMATE_MOVE); _pathTimeline.play(); }
 		}
 		
 		public function pauseMove():void {

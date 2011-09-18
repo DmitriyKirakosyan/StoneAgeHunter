@@ -58,7 +58,7 @@ package game {
 			_animalSpeedSlider = new Slider("horizontal", _container, 400, 220, onAnimalSlider);
 			_animalSpeedSlider.maximum = 2;
 			_animalSpeedSlider.minimum = .1;
-			_animalSpeedSlider.value = 1;
+			_animalSpeedSlider.value = .5;
 		}
 		
 		private function onHunterSlider(event:Event):void {

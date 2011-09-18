@@ -1,11 +1,25 @@
 package game.animals {
+	import game.HpLine;
 	import flash.text.TextField;
 	import animation.IcSprite;
 
 	public class Duck extends IcSprite {
+		private var _enemies:Vector.<IcSprite>;
+		
+		private var _hp:HpLine;
+		
 		public function Duck() {
 			super();
 			drawDuck();
+			_hp = new HpLine(5);
+			_hp.y = -20;
+			_hp.x = -20;
+			this.addChild(_hp);
+		}
+		
+		public function addEnemy(enemy:IcSprite):void {
+			if (!_enemies) { _enemies = new Vector.<IcSprite>(); }
+			_enemies.push(enemy);
 		}
 		
 		/* Internal functions */

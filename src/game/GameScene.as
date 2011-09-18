@@ -147,6 +147,7 @@ package game {
 		
 		private function createDuck():void {
 			_duck = new Duck();
+			for each (var hunter:Hunter in _hunters) { _duck.addEnemy(hunter); }
 			_duck.x = Math.random() * 100 + 100;
 			_duck.y = Math.random() * 100 + 100;
 			_gameContainer.addChild(_duck);
