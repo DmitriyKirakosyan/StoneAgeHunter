@@ -55,12 +55,6 @@ package game {
 			dispatchEvent(new SceneEvent(SceneEvent.SWITCH_ME, this));
 		}
 		
-		public function drawPaths():void {
-			for each (var hunter:Hunter in _hunters) {
-				drawHunterExistingPath(hunter);
-			}
-		}
-		
 		public function reFillLastWayPoint():void {
 			if (_selectedHunter) {
 				const point:Point = _selectedHunter.getLastPoint();
@@ -92,7 +86,30 @@ package game {
 			_drawingContainer.graphics.clear();
 		}
 		
+		public function play():void {
+			_drawing = false;
+			for each (var hunter:Hunter in _hunters) {
+				hunter.move();
+			}
+			_duck.move();
+			_drawingContainer.graphics.clear();
+		}
+		
+		public function pause():void {
+			for each (var hunter:Hunter in _hunters) {
+				hunter.pauseMove();
+			}
+			_duck.pauseMove();
+			drawPaths();
+		}
+		
 		/* Internal functions */
+		
+		public function drawPaths():void {
+			for each (var hunter:Hunter in _hunters) {
+				drawHunterExistingPath(hunter);
+			}
+		}
 		
 		private function onGameContainerEnterFrame(event:Event):void {
 			for each (var hunter:Hunter in _hunters) {

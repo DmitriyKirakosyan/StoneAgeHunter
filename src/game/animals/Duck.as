@@ -1,4 +1,5 @@
 package game.animals {
+	import flash.geom.Point;
 	import game.IcActer;
 	import game.HpLine;
 	import flash.text.TextField;
@@ -6,6 +7,7 @@ package game.animals {
 
 	public class Duck extends IcActer {
 		private var _enemies:Vector.<IcSprite>;
+		private var _targetEnemy:IcSprite;
 		
 		private var _hp:HpLine;
 		
@@ -21,6 +23,27 @@ package game.animals {
 		public function addEnemy(enemy:IcSprite):void {
 			if (!_enemies) { _enemies = new Vector.<IcSprite>(); }
 			_enemies.push(enemy);
+			updateTarget();
+		}
+		
+		override protected function stopMove():void {
+			super.stopMove();
+			updateTarget();
+		}
+		
+		private function updateTarget():void {
+			var goodEnemy:IcSprite;
+			for each (var enemy:IcSprite in _enemies) {
+				if (!goodEnemy ||
+						(goodEnemy.x + goodEnemy.y > enemy.x + enemy.y)) {
+					goodEnemy = enemy;
+				}
+			}
+			if (_targetEnemy != goodEnemy) {
+				super.stopMove();
+				_targetEnemy = goodEnemy;
+			}
+			addWayPoint(new Point(_targetEnemy.x, _targetEnemy.y));
 		}
 		
 		/* Internal functions */

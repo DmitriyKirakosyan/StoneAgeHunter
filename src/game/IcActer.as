@@ -47,6 +47,10 @@ package game {
 
 		protected function stopMove():void {
 			_path = null;
+			if (_pathTimeline) {
+				_pathTimeline.kill();
+				_pathTimeline.pause();
+			}
 		}
 
 		public function addWayPoint(point:Point):void {
@@ -81,7 +85,7 @@ package game {
 			if (_path && _path.length > 0) {
 				removePreviousePoint(point);
 			} else {
-				trace("[Hunter.onStartPoint] somthing wrong");
+				trace("[IcActer.onStartPoint] somthing wrong");
 			}
 		}
 		

@@ -1,7 +1,6 @@
 package game {
 	import flash.events.Event;
 	import com.bit101.components.Slider;
-	import game.player.Hunter;
 	import flash.events.MouseEvent;
 	import flash.display.Sprite;
 	import com.bit101.components.PushButton;
@@ -80,11 +79,7 @@ package game {
 		}
 		
 		private function onButtonGoClick(event:MouseEvent):void {
-			_gameScene.drawing = false;
-			for each (var hunter:Hunter in _gameScene.hunters) {
-				hunter.move();
-			}
-			_gameScene.drawingContainer.graphics.clear();
+			_gameScene.play();
 		}
 		
 		private function onButtonAttackClick(event:MouseEvent):void {
@@ -92,10 +87,7 @@ package game {
 		}
 		
 		private function onButtonPauseClick(event:MouseEvent):void {
-			for each (var hunter:Hunter in _gameScene.hunters) {
-				hunter.pauseMove();
-			}
-			_gameScene.drawPaths();
+			_gameScene.pause();
 		}
 		
 		private function onButtonClearClick(event:MouseEvent):void {
