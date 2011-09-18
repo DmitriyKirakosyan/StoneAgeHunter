@@ -1,4 +1,6 @@
 package game {
+	import flash.events.Event;
+	import com.bit101.components.Slider;
 	import game.player.Hunter;
 	import flash.events.MouseEvent;
 	import flash.display.Sprite;
@@ -13,6 +15,9 @@ package game {
 		private var _pauseBtn:PushButton;
 		private var _clearBtn:PushButton;
 		private var _goMenuBtn:PushButton;
+		
+		private var _huntersSpeedSlider:Slider;
+		private var _animalSpeedSlider:Slider;
 		
 		public function DebugPanel(container:Sprite, gameScene:GameScene):void {
 			super();
@@ -40,6 +45,28 @@ package game {
 			_pauseBtn = new PushButton(_container, 400, 90, "pause", onButtonPauseClick);
 			_clearBtn = new PushButton(_container, 400, 110, "clear", onButtonClearClick);
 			_goMenuBtn = new PushButton(_container, 400, 130, "go to menu", onButtonMenuClick);
+			
+			createSliders();
+		}
+		
+		private function createSliders():void {
+			_huntersSpeedSlider = new Slider("horizontal", _container, 400, 200, onHunterSlider);
+			_huntersSpeedSlider.maximum = 2;
+			_huntersSpeedSlider.minimum = .1;
+			_huntersSpeedSlider.value = 1;
+
+			_animalSpeedSlider = new Slider("horizontal", _container, 400, 220, onAnimalSlider);
+			_animalSpeedSlider.maximum = 2;
+			_animalSpeedSlider.minimum = .1;
+			_animalSpeedSlider.value = 1;
+		}
+		
+		private function onHunterSlider(event:Event):void {
+			trace(_huntersSpeedSlider.value);
+		}
+		
+		private function onAnimalSlider(event:Event):void {
+			
 		}
 		
 		private function addButtons():void {

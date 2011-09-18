@@ -1,4 +1,5 @@
 package game {
+	import game.animals.Duck;
 	import flash.events.Event;
 	import flash.filters.GlowFilter;
 	import scene.SceneEvent;
@@ -15,6 +16,7 @@ package game {
 		private var _gameContainer:Sprite;
 		private var _tileMap:TileMap;
 		private var _hunters:Vector.<Hunter>;
+		private var _duck:Duck;
 		
 		private var _debugPanel:DebugPanel;
 		
@@ -75,6 +77,7 @@ package game {
 			_moving = false;
 			_mapContainer.addChild(_tileMap);
 			createHunters();
+			createDuck();
 			_mapContainer.addChild(_drawingContainer);
 			addListeners();
 			_debugPanel.open();
@@ -83,6 +86,7 @@ package game {
 			_debugPanel.close();
 			removeListeners();
 			_mapContainer.removeChild(_tileMap);
+			removeDuck();
 			removeHunters();
 			_mapContainer.removeChild(_drawingContainer);
 			_drawingContainer.graphics.clear();
@@ -139,6 +143,16 @@ package game {
 				hunter.remove();
 			}
 			_hunters = null;
+		}
+		
+		private function createDuck():void {
+			_duck = new Duck();
+			_duck.x = Math.random() * 100 + 100;
+			_duck.y = Math.random() * 100 + 100;
+			_gameContainer.addChild(_duck);
+		}
+		private function removeDuck():void {
+			_gameContainer.removeChild(_duck);
 		}
 		
 		private function addHunterListeners(hunter:Hunter):void {
