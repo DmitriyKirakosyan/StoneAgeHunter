@@ -1,9 +1,10 @@
 package game.animals {
+	import game.IcActer;
 	import game.HpLine;
 	import flash.text.TextField;
 	import animation.IcSprite;
 
-	public class Duck extends IcSprite {
+	public class Duck extends IcActer {
 		private var _enemies:Vector.<IcSprite>;
 		
 		private var _hp:HpLine;

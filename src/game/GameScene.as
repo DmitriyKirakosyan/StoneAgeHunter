@@ -140,7 +140,6 @@ package game {
 			for each (var hunter:Hunter in _hunters) {
 				removeHunterListeners(hunter);
 				_gameContainer.removeChild(hunter);
-				hunter.remove();
 			}
 			_hunters = null;
 		}
