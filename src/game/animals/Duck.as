@@ -33,6 +33,11 @@ package game.animals {
 			this.addChild(_hp);
 		}
 		
+		public function get hp():Number { return _hp.value; }
+		public function set hp(value:Number):void {
+			_hp.value = value;
+		}
+		
 		public function addEnemy(enemy:IcSprite):void {
 			if (!_enemies) { _enemies = new Vector.<IcSprite>(); }
 			_enemies.push(enemy);

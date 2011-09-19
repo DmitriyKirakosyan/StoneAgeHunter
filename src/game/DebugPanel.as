@@ -20,6 +20,8 @@ package game {
 		
 		private var _huntersSpeedSlider:Slider;
 		private var _animalSpeedSlider:Slider;
+		private var _huntersHpSlider:Slider;
+		private var _animalHpSlider:Slider;
 		
 		public function DebugPanel(container:Sprite, gameScene:GameScene):void {
 			super();
@@ -52,8 +54,10 @@ package game {
 		}
 		
 		private function createSliders():void {
-			_huntersSpeedSlider = createSlider(400, 200, onHunterSlider, .1, 2, 1, "Hunters speed");
-			_animalSpeedSlider = createSlider(400, 260, onAnimalSlider, .1, 2, .5, "Duck speed");
+			_huntersSpeedSlider = createSlider(400, 200, onHunterSpeedSlider, .1, 2, 1, "Hunters speed");
+			_animalSpeedSlider = createSlider(400, 240, onAnimalSpeedSlider, .1, 2, .5, "Duck speed");
+			_huntersHpSlider = createSlider(400, 280, onHunterHpSlider, 1, 5, 3, "Hunters hp");
+			_animalHpSlider = createSlider(400, 320, onAnimalHpSlider, 1, 8, 5, "Duck hp");
 		}
 		
 		private function createSlider(x:Number, y:Number, handler:Function, minValue:Number, 
@@ -76,14 +80,22 @@ package game {
 			_container.addChild(tf1);
 		}
 		
-		private function onHunterSlider(event:Event):void {
+		private function onHunterSpeedSlider(event:Event):void {
 			for each (var hunter:Hunter in _gameScene.hunters) {
 				hunter.speed = _huntersSpeedSlider.value;
 			}
 		}
-		
-		private function onAnimalSlider(event:Event):void {
+		private function onAnimalSpeedSlider(event:Event):void {
 			_gameScene.duck.speed = _animalSpeedSlider.value;
+		}
+		
+		private function onHunterHpSlider(event:Event):void {
+			for each (var hunter:Hunter in _gameScene.hunters) {
+				hunter.hp = _huntersHpSlider.value;
+			}
+		}
+		private function onAnimalHpSlider(event:Event):void {
+			_gameScene.duck.hp = _animalHpSlider.value;
 		}
 		
 		private function addButtons():void {

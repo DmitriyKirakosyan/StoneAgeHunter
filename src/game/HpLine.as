@@ -13,7 +13,12 @@ package game {
 			updateView();
 		}
 		
-		public function value():Number { return _value; }
+		public function get value():Number { return _value; }
+		public function set value(value:Number):void {
+			_value = value;
+			if (_value < 0) { _value = 0; }
+			updateView();
+		}
 		
 		public function damage(value:Number):void {
 			_value -= value;

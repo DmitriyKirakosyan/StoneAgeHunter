@@ -28,6 +28,11 @@ package game.player {
 		
 		/* API */
 		
+		public function get hp():Number { return _hp.value; }
+		public function set hp(value:Number):void {
+			_hp.value = value;
+		}
+		
 		public function castStone():void {
 			_numStones = _numStones > 0 ? _numStones - 1 : 0;
 		}
