@@ -43,6 +43,8 @@ package game {
 			return _hunters;
 		}
 		
+		public function get duck():Duck { return _duck; }
+		
 		public function set drawing(value:Boolean):void {
 			_drawing = value;
 		}

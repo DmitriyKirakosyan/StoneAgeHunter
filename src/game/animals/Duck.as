@@ -77,7 +77,7 @@ package game.animals {
 			trace("x : " + _targetEnemy.x + ", y : " + _targetEnemy.y);
 			const targetPoint:Point =  new Point(_targetEnemy.x + _targetEnemy.width/2,
 																						_targetEnemy.y + _targetEnemy.height/2);
-			_currentTween = new TweenLite(this, computeDuration(new Point(this.x, this.y), targetPoint) * speed, 
+			_currentTween = new TweenLite(this, computeDuration(new Point(this.x, this.y), targetPoint) / speed, 
 																										{x : targetPoint.x, y : targetPoint.y,
 																											onComplete : onTweenComplete});
 			if (_paused) { _currentTween.pause(); }

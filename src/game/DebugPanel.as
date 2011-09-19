@@ -1,4 +1,7 @@
 package game {
+	import flash.text.TextFieldAutoSize;
+	import flash.text.TextField;
+	import game.player.Hunter;
 	import flash.events.Event;
 	import com.bit101.components.Slider;
 	import flash.events.MouseEvent;
@@ -49,23 +52,37 @@ package game {
 		}
 		
 		private function createSliders():void {
-			_huntersSpeedSlider = new Slider("horizontal", _container, 400, 200, onHunterSlider);
+			createSliderLabel("Hunters speed", 400, 200);
+			_huntersSpeedSlider = new Slider("horizontal", _container, 400, 220, onHunterSlider);
 			_huntersSpeedSlider.maximum = 2;
 			_huntersSpeedSlider.minimum = .1;
 			_huntersSpeedSlider.value = 1;
 
-			_animalSpeedSlider = new Slider("horizontal", _container, 400, 220, onAnimalSlider);
+			createSliderLabel("Duck speed", 400, 260);
+			_animalSpeedSlider = new Slider("horizontal", _container, 400, 280, onAnimalSlider);
 			_animalSpeedSlider.maximum = 2;
 			_animalSpeedSlider.minimum = .1;
 			_animalSpeedSlider.value = .5;
 		}
 		
+		private function createSliderLabel(text:String, x:Number, y:Number):void {
+			const tf1:TextField = new TextField();
+			tf1.text = text;
+			tf1.selectable = false;
+			tf1.autoSize = TextFieldAutoSize.LEFT;
+			tf1.x = x;
+			tf1.y = y;
+			_container.addChild(tf1);
+		}
+		
 		private function onHunterSlider(event:Event):void {
-			trace(_huntersSpeedSlider.value);
+			for each (var hunter:Hunter in _gameScene.hunters) {
+				hunter.speed = _huntersSpeedSlider.value;
+			}
 		}
 		
 		private function onAnimalSlider(event:Event):void {
-			
+			_gameScene.duck.speed = _animalSpeedSlider.value;
 		}
 		
 		private function addButtons():void {
