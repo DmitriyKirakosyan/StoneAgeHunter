@@ -1,4 +1,5 @@
 package game {
+	import flash.display.StageDisplayState;
 	import flash.text.TextFieldAutoSize;
 	import flash.text.TextField;
 	import game.player.Hunter;
@@ -17,6 +18,7 @@ package game {
 		private var _pauseBtn:PushButton;
 		private var _clearBtn:PushButton;
 		private var _goMenuBtn:PushButton;
+		private var _fullScreenBtn:PushButton;
 		
 		private var _huntersSpeedSlider:Slider;
 		private var _animalSpeedSlider:Slider;
@@ -49,6 +51,8 @@ package game {
 			_pauseBtn = new PushButton(_container, 400, 90, "pause", onButtonPauseClick);
 			_clearBtn = new PushButton(_container, 400, 110, "clear", onButtonClearClick);
 			_goMenuBtn = new PushButton(_container, 400, 130, "go to menu", onButtonMenuClick);
+			
+			_fullScreenBtn = new PushButton(_container, 400, 20, "fullscreen", onFullScreenClick);
 			
 			createSliders();
 		}
@@ -105,6 +109,16 @@ package game {
 		private function removeButtons():void {
 			if (_gameSceneContainer.contains(_container)) {
 				_gameSceneContainer.removeChild(_container);
+			}
+		}
+		
+		private function onFullScreenClick(event:MouseEvent):void {
+			if(_gameSceneContainer.stage){
+				if (_gameSceneContainer.stage.displayState == StageDisplayState.NORMAL) {
+					_gameSceneContainer.stage.displayState=StageDisplayState.FULL_SCREEN;
+				} else {
+					_gameSceneContainer.stage.displayState=StageDisplayState.NORMAL;
+				}
 			}
 		}
 		
