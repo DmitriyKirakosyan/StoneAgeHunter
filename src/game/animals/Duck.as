@@ -55,13 +55,6 @@ package game.animals {
 			_paused = true;
 		}
 		
-		override protected function stopMove():void {
-			super.stopMove();
-			trace("stop duck move");
-			//pathTimeline = null;
-			updateTarget();
-		}
-		
 		public function updateTarget():void {
 			var goodEnemy:IcSprite;
 			for each (var enemy:IcSprite in _enemies) {
@@ -73,15 +66,12 @@ package game.animals {
 			if (_targetEnemy != goodEnemy) {
 				_targetEnemy = goodEnemy;
 			}
-			trace("add way point for duck");
-			trace("x : " + _targetEnemy.x + ", y : " + _targetEnemy.y);
 			const targetPoint:Point =  new Point(_targetEnemy.x + _targetEnemy.width/2,
 																						_targetEnemy.y + _targetEnemy.height/2);
 			_currentTween = new TweenLite(this, computeDuration(new Point(this.x, this.y), targetPoint) / speed, 
 																										{x : targetPoint.x, y : targetPoint.y,
 																											onComplete : onTweenComplete});
 			if (_paused) { _currentTween.pause(); }
-			//addWayPoint(new Point(_targetEnemy.x + _targetEnemy.width/2, _targetEnemy.y + _targetEnemy.height/2));
 		}
 		
 		/* Internal functions */

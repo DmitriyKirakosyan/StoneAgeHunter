@@ -1,4 +1,5 @@
 package game {
+	import game.armor.Stone;
 	import game.animals.Duck;
 	import flash.events.Event;
 	import flash.filters.GlowFilter;
@@ -17,6 +18,7 @@ package game {
 		private var _tileMap:TileMap;
 		private var _hunters:Vector.<Hunter>;
 		private var _duck:Duck;
+		private var _stones:Vector.<Stone>;
 		
 		private var _debugPanel:DebugPanel;
 		
@@ -74,6 +76,7 @@ package game {
 			_mapContainer.addChild(_tileMap);
 			createHunters();
 			createDuck();
+			createStones();
 			_mapContainer.addChild(_drawingContainer);
 			addListeners();
 			_debugPanel.open();
@@ -84,6 +87,7 @@ package game {
 			_mapContainer.removeChild(_tileMap);
 			removeDuck();
 			removeHunters();
+			removeStones();
 			_mapContainer.removeChild(_drawingContainer);
 			_drawingContainer.graphics.clear();
 		}
@@ -112,7 +116,6 @@ package game {
 				drawHunterExistingPath(hunter);
 			}
 		}
-		
 		private function onGameContainerEnterFrame(event:Event):void {
 			for each (var hunter:Hunter in _hunters) {
 				checkWithAll(hunter);
@@ -173,6 +176,25 @@ package game {
 		}
 		private function removeDuck():void {
 			_gameContainer.removeChild(_duck);
+		}
+		
+		private function createStones():void {
+			var stone:Stone;
+			_stones = new Vector.<Stone>();
+			for (var i:int = 0; i < 10; ++i) {
+				stone = new Stone();
+				stone.x = Math.random() * 300;
+				stone.y = Math.random() * 300;
+				_gameContainer.addChild(stone);
+				_stones.push(stone);
+			}
+		}
+		
+		private function removeStones():void {
+			for each (var stone:Stone in _stones) {
+				_gameContainer.removeChild(stone);
+			}
+			_stones = null;
 		}
 		
 		private function addHunterListeners(hunter:Hunter):void {

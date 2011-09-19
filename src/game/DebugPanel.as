@@ -39,7 +39,7 @@ package game {
 		
 		/* Internal functions */
 		
-		//TODO bad memory managment here, forgot remove listeners
+		//TODO bad memory managment here, а мне плевать
 		
 		private function createButtons():void {
 			_goBtn = new PushButton(_container, 400, 50, "lets go", onButtonGoClick);
