@@ -52,17 +52,18 @@ package game {
 		}
 		
 		private function createSliders():void {
-			createSliderLabel("Hunters speed", 400, 200);
-			_huntersSpeedSlider = new Slider("horizontal", _container, 400, 220, onHunterSlider);
-			_huntersSpeedSlider.maximum = 2;
-			_huntersSpeedSlider.minimum = .1;
-			_huntersSpeedSlider.value = 1;
-
-			createSliderLabel("Duck speed", 400, 260);
-			_animalSpeedSlider = new Slider("horizontal", _container, 400, 280, onAnimalSlider);
-			_animalSpeedSlider.maximum = 2;
-			_animalSpeedSlider.minimum = .1;
-			_animalSpeedSlider.value = .5;
+			_huntersSpeedSlider = createSlider(400, 200, onHunterSlider, .1, 2, 1, "Hunters speed");
+			_animalSpeedSlider = createSlider(400, 260, onAnimalSlider, .1, 2, .5, "Duck speed");
+		}
+		
+		private function createSlider(x:Number, y:Number, handler:Function, minValue:Number, 
+																	maxValue:Number, value:Number, name:String):Slider {
+			createSliderLabel(name, x, y);
+			const slider:Slider = new Slider("horizontal", _container, x, y + 20, handler);
+			slider.maximum = maxValue;
+			slider.minimum = minValue;
+			slider.value = value;
+			return slider;
 		}
 		
 		private function createSliderLabel(text:String, x:Number, y:Number):void {
