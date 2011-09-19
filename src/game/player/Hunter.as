@@ -54,22 +54,26 @@ package game.player {
 		/* Internal functions */
 		
 		private function addFrames():void {
-			var bitmapList:Vector.<BitmapData> = new Vector.<BitmapData>();
-			var nulls:String;
-				//_view.addChild(new Bitmap(bitmap));
-			var i:int;
-			for (i = 1; i < 24; ++i) {
-				nulls = i/10 < 1 ? "000" : "00";
-				bitmapList.push(SharedBitmapHolder.instance.getTileByName(moveTextureUrl, "CaveMan"+ nulls + i + ".png"));
+			if (SharedBitmapHolder.existInCache(moveTextureUrl)) {
+				var bitmapList:Vector.<BitmapData> = new Vector.<BitmapData>();
+				var nulls:String;
+					//_view.addChild(new Bitmap(bitmap));
+				var i:int;
+				for (i = 1; i < 24; ++i) {
+					nulls = i/10 < 1 ? "000" : "00";
+					bitmapList.push(SharedBitmapHolder.instance.getTileByName(moveTextureUrl, "CaveMan"+ nulls + i + ".png"));
+				}
+				//bitmapList.reverse();
+				addAnimation(ANIMATE_MOVE, 0, bitmapList);
 			}
-			//bitmapList.reverse();
-			addAnimation(ANIMATE_MOVE, 0, bitmapList);
-			bitmapList = new Vector.<BitmapData>();
-			for (i = 1; i < 38; ++i) {
-				nulls = i/10 < 1 ? "000" : "00";
-				bitmapList.push(SharedBitmapHolder.instance.getTileByName(breatheTextureUrl, "CaveManBreathe"+ nulls + i + ".png"));
+			if (SharedBitmapHolder.existInCache(breatheTextureUrl)) {
+				bitmapList = new Vector.<BitmapData>();
+				for (i = 1; i < 38; ++i) {
+					nulls = i/10 < 1 ? "000" : "00";
+					bitmapList.push(SharedBitmapHolder.instance.getTileByName(breatheTextureUrl, "CaveManBreathe"+ nulls + i + ".png"));
+				}
+				addAnimation(ANIMATE_STAY, 0, bitmapList);
 			}
-			addAnimation(ANIMATE_STAY, 0, bitmapList);
 		}
 		
 		override protected function stopMove():void {
