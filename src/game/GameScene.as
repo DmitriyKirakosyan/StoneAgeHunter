@@ -1,4 +1,6 @@
 package game {
+	import animation.IcSprite;
+	import game.animals.AnimalEvent;
 	import game.armor.Stone;
 	import game.animals.Duck;
 	import flash.events.Event;
@@ -172,9 +174,11 @@ package game {
 			_duck.x = Math.random() * 100 + 100;
 			_duck.y = Math.random() * 100 + 100;
 			_duck.updateTarget();
+			addAnimalListeners(_duck);
 			_gameContainer.addChild(_duck);
 		}
 		private function removeDuck():void {
+			removeAnimalListeners(_duck);
 			_gameContainer.removeChild(_duck);
 		}
 		
@@ -204,6 +208,24 @@ package game {
 			hunter.removeEventListener(MouseEvent.CLICK, onHunterClick);
 		}
 		
+		private function addAnimalListeners(animal:Duck):void {
+			animal.addEventListener(AnimalEvent.TOUCH_ACTOR, onAnimalTouchActor);
+		}
+		private function removeAnimalListeners(animal:Duck):void {
+			animal.removeEventListener(AnimalEvent.TOUCH_ACTOR, onAnimalTouchActor);
+		}
+		
+		private function onAnimalTouchActor(event:AnimalEvent):void {
+			const touchedHunter:IcSprite = event.actor;
+			for each (var hunter:Hunter in _hunters) {
+				if (hunter == touchedHunter) {
+					hunter.damage();
+					hunter.x = Math.random() * 250 + 50;
+					hunter.y = Math.random() * 150 + 50;
+				}
+			}
+		}
+
 		private function addListeners():void {
 			_tileMap.addEventListener(MouseEvent.CLICK, onTileMapClick);
 		}

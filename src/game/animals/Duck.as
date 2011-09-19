@@ -75,7 +75,8 @@ package game.animals {
 																						_targetEnemy.y + _targetEnemy.height/2);
 			_currentTween = new TweenLite(this, computeDuration(new Point(this.x, this.y), targetPoint) / speed, 
 																										{x : targetPoint.x, y : targetPoint.y,
-																											onComplete : onTweenComplete});
+																											onComplete : onTweenComplete,
+																											onUpdate : onTweenUpdate});
 			if (_paused) { _currentTween.pause(); }
 		}
 		
@@ -84,6 +85,14 @@ package game.animals {
 		private function onTweenComplete():void {
 			if (_mode == MODE_BLOODY) {
 				updateTarget();
+			}
+		}
+		
+		private function onTweenUpdate():void {
+			for each (var hunter:IcSprite in _enemies) {
+				if (this.hitTestObject(hunter)) {
+					dispatchEvent(new AnimalEvent(AnimalEvent.TOUCH_ACTOR, hunter));
+				}
 			}
 		}
 		

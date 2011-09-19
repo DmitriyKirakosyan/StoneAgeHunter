@@ -33,6 +33,10 @@ package game.player {
 			_hp.value = value;
 		}
 		
+		public function damage(value:Number = 1):void {
+			_hp.damage(value);
+		}
+		
 		public function castStone():void {
 			_numStones = _numStones > 0 ? _numStones - 1 : 0;
 		}
