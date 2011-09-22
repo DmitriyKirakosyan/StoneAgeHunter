@@ -8,8 +8,6 @@ package game.player {
 		private const moveTextureUrl:String = "animations/walk/walk";
 		private const breatheTextureUrl:String = "animations/stay/breathe";
 		
-		private var _numStones:int;
-		
 		private var _hp:HpLine;
 		
 		private const ANIMATE_MOVE:String = "move";
@@ -38,7 +36,6 @@ package game.player {
 		}
 		
 		public function castStone():void {
-			_numStones = _numStones > 0 ? _numStones - 1 : 0;
 		}
 		
 		override public function move():void {

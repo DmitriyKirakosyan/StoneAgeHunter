@@ -7,7 +7,7 @@ package game {
 
 	public class IcActer extends IcSprite {
 		private var _speed:Number;
-		private var _path:Vector.<Point>;
+		private var _path:Path;
 		private var _pathTimeline:TimelineMax;
 		private var _moving:Boolean;
 
@@ -30,13 +30,13 @@ package game {
 		}
 		
 		public function getLastPoint():Point {
-			if (_path && _path.length > 0) {
-				return _path[_path.length-1];
+			if (_path && _path.points.length > 0) {
+				return _path.points[_path.points.length-1].point;
 			}
 			return null;
 		}
 		
-		public function get path():Vector.<Point> {
+		public function get path():Path {
 			return _path;
 		}
 		
@@ -57,12 +57,11 @@ package game {
 		}
 
 		public function addWayPoint(point:Point):void {
-			if (!_path) { _path = new Vector.<Point>(); }
+			if (!_path) { _path = new Path(); }
 			var prevPoint:Point;
-			if (_path.indexOf(point) == -1) {
-				prevPoint  = _path.length > 0 ? _path[_path.length-1] : 
-																				new Point(this.x, this.y);
-				_path.push(point);
+			if (!_path.exists(point)) {
+				prevPoint  = _path.getLastPoint() || new Point(this.x, this.y);
+				_path.addPoint(point);
 				addPointToTimeline(point, computeDuration(prevPoint, point));
 			}
 		}
@@ -82,18 +81,10 @@ package game {
 		}
 		
 		private function onStartPoint(point:Point):void {
-			if (_path && _path.length > 0) {
-				removePreviousePoint(point);
-			} else {
-				trace("[IcActer.onStartPoint] somthing wrong");
-			}
-		}
-		
-		private function removePreviousePoint(point:Point):void {
-			const index:int = _path.indexOf(point);
-			var iter:int = index-1;
-			if (index != -1) {
-				while (iter >= 0) { _path.shift(); iter--; }
+			const prevPoint:KeyPoint = _path.getPreviouseKeyPoint(point);
+			if (prevPoint) {
+				dispatchEvent(new KeyPointEvent(KeyPointEvent.REMOVE_ME, prevPoint));
+				_path.removePreviouseKeyPoint(point);
 			}
 		}
 		

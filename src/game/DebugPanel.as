@@ -127,7 +127,7 @@ package game {
 		}
 		
 		private function onButtonAttackClick(event:MouseEvent):void {
-			_gameScene.reFillLastWayPoint();
+			// attack here
 		}
 		
 		private function onButtonPauseClick(event:MouseEvent):void {

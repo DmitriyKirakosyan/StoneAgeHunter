@@ -61,17 +61,6 @@ package game {
 			dispatchEvent(new SceneEvent(SceneEvent.SWITCH_ME, this));
 		}
 		
-		public function reFillLastWayPoint():void {
-			if (_selectedHunter) {
-				const point:Point = _selectedHunter.getLastPoint();
-				if (point) {
-					_drawingContainer.graphics.beginFill(0x0fcafb);
-					_drawingContainer.graphics.drawCircle(point.x, point.y, 5);
-					_drawingContainer.graphics.endFill();
-				}
-			}
-		}
-		
 		public function open():void {
 			_drawing = false;
 			_moving = false;
@@ -100,6 +89,11 @@ package game {
 				hunter.move();
 			}
 			_duck.move();
+			if (_selectedHunter) {
+				for each (var keyPoint:KeyPoint in _selectedHunter.path.points) {
+					_drawingContainer.removeChild(keyPoint);
+				}
+			}
 			_drawingContainer.graphics.clear();
 		}
 		
@@ -203,9 +197,11 @@ package game {
 		
 		private function addHunterListeners(hunter:Hunter):void {
 			hunter.addEventListener(MouseEvent.CLICK, onHunterClick);
+			hunter.addEventListener(KeyPointEvent.REMOVE_ME, onkeyPointRemoveRequest);
 		}
 		private function removeHunterListeners(hunter:Hunter):void {
 			hunter.removeEventListener(MouseEvent.CLICK, onHunterClick);
+			hunter.addEventListener(KeyPointEvent.REMOVE_ME, onkeyPointRemoveRequest);
 		}
 		
 		private function addAnimalListeners(animal:Duck):void {
@@ -240,8 +236,16 @@ package game {
 			}
 		}
 		
+		private function removeCurrentPathFromStage():void {
+			for each (var keyPoint:KeyPoint in _selectedHunter.path.points) {
+				_drawingContainer.removeChild(keyPoint);
+			}
+			_drawingContainer.graphics.clear();
+		}
+		
 		private function onHunterClick(event:MouseEvent):void {
 			unClickAll();
+			if (_selectedHunter) { removeCurrentPathFromStage(); }
 			const hunter:Hunter = findClickedHunter(event.stageX, event.stageY);
 			if (hunter) {
 				_drawing = true;
@@ -251,15 +255,19 @@ package game {
 			}
 		}
 		
+		private function onkeyPointRemoveRequest(event:KeyPointEvent):void {
+			_drawingContainer.removeChild(event.keyPoint);
+		}
+		
 		private function drawHunterExistingPath(hunter:Hunter):void {
 			if (!hunter) { return; }
 			_drawingContainer.graphics.lineStyle(3, 0xffaabb);
 			_drawingContainer.graphics.moveTo(hunter.x + hunter.width/2,
 																					hunter.y + hunter.height/2);
-			if (hunter.path &&
-					hunter.path.length > 0) {
-				for each (var point:Point in hunter.path) {
+			if (hunter.path) {
+				for each (var point:KeyPoint in hunter.path.points) {
 					_drawingContainer.graphics.lineTo(point.x, point.y);
+					_drawingContainer.addChild(point);
 				}
 			}
 		}
@@ -271,18 +279,39 @@ package game {
 			return null;
 		}
 		
+		private function addKeyPointListener(keyPoint:KeyPoint):void {
+			keyPoint.addEventListener(KeyPointEvent.CLICK, onKeyPointClick);
+		}
+		
+		private function onKeyPointClick(event:KeyPointEvent):void {
+			unselectAllKeyPoints();
+			event.keyPoint.select();
+		}
+		
+		private function unselectAllKeyPoints():void {
+			for each (var keyPoint:KeyPoint in _selectedHunter.path.points) {
+				keyPoint.unselect();
+			}
+		}
+		
 		private function onTileMapClick(event:MouseEvent):void {
 			if (_drawing) {
 				if (findClickedHunter(event.stageX, event.stageY) == null) {
 					_drawingContainer.graphics.lineTo(event.stageX, event.stageY);
-					addToPath(new Point(event.stageX, event.stageY));
+					const point:Point = new Point(event.stageX, event.stageY);
+					if (_selectedHunter) {
+						_selectedHunter.addWayPoint(point);
+						addKeyPoint();
+					}
 				}
 			}
 		}
 		
-		private function addToPath(point:Point):void {
-			if (_selectedHunter) {
-				_selectedHunter.addWayPoint(point);
+		private function addKeyPoint():void {
+			const keyPoint:KeyPoint = _selectedHunter.path.getLastKeyPoint();
+			if (keyPoint) {
+				_drawingContainer.addChild(keyPoint);
+				addKeyPointListener(keyPoint);
 			}
 		}
 		
