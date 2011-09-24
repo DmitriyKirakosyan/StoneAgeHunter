@@ -73,7 +73,7 @@ package game {
 			TweenMax.to(_alterContainer, 2, {blurFilter:{blurX:0, streight : 5}, alpha : 1});
 			TweenMax.to(_gameContainer, 2, {blurFilter:{blurX:40, streight : 5}, alpha : 0,
 																			onComplete : removeFromParent, onCompleteParams : [_gameContainer]});
-			TweenMax.to(_mapContainer, 2, {blurFilter:{blurX:40, streight : 5}, aplha : 0,
+			TweenMax.to(_mapContainer, 2, {blurFilter:{blurX:40, streight : 5}, alpha : 0,
 																			onComplete : removeFromParent, onCompleteParams : [_mapContainer]});
 		}
 		
