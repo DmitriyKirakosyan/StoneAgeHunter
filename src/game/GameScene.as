@@ -29,6 +29,8 @@ package game {
 		private var _moving:Boolean;
 		private var _selectedHunter:Hunter;
 		
+		private var _dreamChanger:DreamChanger;
+		
 		public function GameScene(container:Sprite, tileMap:TileMap):void {
 			super();
 			_mapContainer = new Sprite();
@@ -39,9 +41,18 @@ package game {
 			_gameContainer.addEventListener(Event.ENTER_FRAME, onGameContainerEnterFrame);
 			_tileMap = tileMap;
 			_drawingContainer = new Sprite();
+			_dreamChanger = new DreamChanger(this, container);
 		}
 		
 		/* functions for debug */
+		
+		public function dreamModeOn():void {
+			_dreamChanger.dreamOn();
+		}
+		
+		public function dreamModeOff():void {
+			_dreamChanger.dreamOff();
+		}
 		
 		public function get hunters():Vector.<Hunter> {
 			return _hunters;
@@ -55,6 +66,12 @@ package game {
 		
 		public function get drawingContainer():Sprite {
 			return _drawingContainer;
+		}
+		public function get gameContainer():Sprite {
+			return _gameContainer;
+		}
+		public function get mapContainer():Sprite {
+			return _mapContainer;
 		}
 		
 		public function dispatchAboutClose():void {
@@ -82,6 +99,16 @@ package game {
 			_mapContainer.removeChild(_drawingContainer);
 			_drawingContainer.graphics.clear();
 		}
+		
+		public function getDreamingObjects():Vector.<Sprite> {
+			const result:Vector.<Sprite> = new Vector.<Sprite>();
+			for each (var hunter:Hunter in _hunters) { result.push(hunter); }
+			result.push(_duck);
+			
+			return result;
+		}
+		
+		public function get tileMap():TileMap { return _tileMap; }
 		
 		public function play():void {
 			_drawing = false;

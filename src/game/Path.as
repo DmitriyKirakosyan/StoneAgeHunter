@@ -49,7 +49,7 @@ package game {
 			const keyPoint:KeyPoint = getKeyPoint(point);
 			if (!keyPoint) { return null; }
 			const index:int = _keyPoints.indexOf(keyPoint);
-			if (index != -1) {
+			if (index-1 >= 0) {
 				return _keyPoints[index-1];
 			}
 			return null;

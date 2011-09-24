@@ -123,6 +123,7 @@ package game {
 		}
 		
 		private function onButtonGoClick(event:MouseEvent):void {
+			_gameScene.dreamModeOff();
 			_gameScene.play();
 		}
 		
@@ -131,6 +132,7 @@ package game {
 		}
 		
 		private function onButtonPauseClick(event:MouseEvent):void {
+			_gameScene.dreamModeOn();
 			_gameScene.pause();
 		}
 		

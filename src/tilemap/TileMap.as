@@ -39,6 +39,14 @@ package tilemap {
 				}
 			}
 		}
+		
+		public function getAlternativeCopy():Sprite {
+			const res:Sprite = new Sprite();
+			res.graphics.beginFill(0xdfdfdf);
+			res.graphics.drawRect(0, 0, this.width, this.height);
+			res.graphics.endFill();
+			return res;
+		}
 
 		/* Tests functions */
 		private function onTextureLoad(event:TextureHolderEvent):void{

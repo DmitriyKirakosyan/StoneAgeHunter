@@ -1,4 +1,5 @@
 package game.player {
+	import animation.IcSprite;
 	import game.IcActer;
 	import game.HpLine;
 	import flash.display.BitmapData;
@@ -36,6 +37,17 @@ package game.player {
 		}
 		
 		public function castStone():void {
+		}
+		
+		override public function getAlternativeCopy(copyName:String=""):IcSprite {
+			if (copyName == "") {
+				const res:IcSprite = new IcSprite();
+				res.graphics.beginFill(0xafafaf);
+				res.graphics.drawRect(this.x, this.y, this.width, this.height);
+				res.graphics.endFill();
+				return res;
+			}
+			return this;
 		}
 		
 		override public function move():void {

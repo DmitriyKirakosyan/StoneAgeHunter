@@ -19,6 +19,15 @@ package animation {
 		
 		/* API */
 		
+		public function get currentBitmap():Bitmap { return _currentBitmap;}
+		
+		/**
+		 * override this if need
+		 */
+		public function getAlternativeCopy(copyName:String = ""):IcSprite {
+			return copyName == "" ? this : null;
+		}
+		
 		public function addAnimation(name:String, duration:Number, frames:Vector.<BitmapData>):void {
 			if (!_animations) { _animations = new Vector.<IcAnimation>(); }
 			_animations.push(new IcAnimation(name, duration, frames));
