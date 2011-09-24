@@ -112,6 +112,7 @@ package game {
 		
 		public function play():void {
 			_drawing = false;
+			unClickAll();
 			for each (var hunter:Hunter in _hunters) {
 				hunter.move();
 			}
