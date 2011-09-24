@@ -35,7 +35,7 @@ package game {
 			super();
 			_mapContainer = new Sprite();
 			_gameContainer = new Sprite();
-			_debugPanel = new DebugPanel(_gameContainer, this);
+			_debugPanel = new DebugPanel(container, this);
 			container.addChild(_mapContainer);
 			container.addChild(_gameContainer);
 			_gameContainer.addEventListener(Event.ENTER_FRAME, onGameContainerEnterFrame);
