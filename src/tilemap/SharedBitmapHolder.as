@@ -61,10 +61,19 @@ package tilemap {
 			return false;
 		}
 		
-		private function getValueByKey(key:String, xml:XML):int{
-			for (var i:int = 0; i < xml.integer.length(); i++){
-				if(xml.key[i] == key){
-					return xml.integer[i]; 
+		private function getValueByKey(key:String, xml:XML):Number{
+			const integerList:XMLList = xml.child("integer");
+			const realList:XMLList = xml.child("real");
+			const keyList:XMLList = xml.child("key");
+
+			for (var i:int = 0; i < keyList.length(); i++){
+				if(keyList[i] == key){
+					if (key == "offsetX" || key == "offsetY") {
+						return realList[i - integerList.length() + 2];
+					} else if (key == "originalWidth" || key == "originalHeight") {
+						return integerList[i - 2];
+					}
+					return integerList[i]; 
 				}
 			}
 			return 0;
@@ -90,9 +99,14 @@ package tilemap {
 		public function getTileByName(textureUrl:String, name:String):BitmapData {
 			const tileXML:XML = getTileDataByName(textureUrl, name);
 			const rect:Rectangle = getTileRectangle(tileXML);
+			const xOffset:Number = getValueByKey("offsetX", tileXML);
+			const yOffset:Number = getValueByKey("offsetY", tileXML);
+			const originalWidth:int = getValueByKey("originalWidth", tileXML);
+			const originalHeight:int = getValueByKey("originalHeight", tileXML);
+			trace("xOffset : " + xOffset + ", yOffset : " + yOffset);
 			const texture:TextureVO = CACHE[textureUrl];
-			const result:BitmapData = new BitmapData(rect.width, rect.height, true, 0);
-			result.copyPixels(texture.textureBitmap, rect, new Point(0,0), null, null, true);
+			const result:BitmapData = new BitmapData(originalWidth, originalHeight, true, 0);
+			result.copyPixels(texture.textureBitmap, rect, new Point(-xOffset, -yOffset));
 			return result;
 		}
 		

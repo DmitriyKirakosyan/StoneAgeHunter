@@ -9,8 +9,8 @@ package tilemap {
 			super();
 			_textureName = textureName;
 			_ready = false;
-			SharedBitmapHolder.instance.addEventListener(TextureHolderEvent.TEXTURE_LOADED, onTextureLoad);
-			SharedBitmapHolder.load(textureName);
+			//SharedBitmapHolder.instance.addEventListener(TextureHolderEvent.TEXTURE_LOADED, onTextureLoad);
+			//SharedBitmapHolder.load(textureName);
 		}
 		
 		public function ready():Boolean { return _ready; }

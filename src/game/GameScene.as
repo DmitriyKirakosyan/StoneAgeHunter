@@ -177,7 +177,7 @@ package game {
 		
 		private function createHunters():void {
 			_hunters = new Vector.<Hunter>();
-			for (var i:int = 0; i < 3; ++i) {
+			for (var i:int = 0; i < 1; ++i) {
 				_hunters.push(createHunter());
 			}
 		}

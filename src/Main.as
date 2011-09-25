@@ -19,7 +19,7 @@
 		private function onAddedToStage(event:Event):void {
 			_tileMap = new TileMap("tiles/texture");
 			onActersLoaded();
-			const eventJoin:EventJoin = new EventJoin(5, onActersLoaded);
+			const eventJoin:EventJoin = new EventJoin(4, onActersLoaded);
 			SharedBitmapHolder.instance.addEventListener(TextureHolderEvent.TEXTURE_LOADED, eventJoin.join);
 			SharedBitmapHolder.load("animations/walk/walk");
 			SharedBitmapHolder.load("animations/stay/breathe");
