@@ -1,4 +1,5 @@
 package animation {
+	import flash.display.Bitmap;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.display.BitmapData;
@@ -6,6 +7,9 @@ package animation {
 		public var frames:Vector.<BitmapData>;
 		public var duration:Number; //in frames
 		public var name:String;
+		
+		//debug only
+		private var _bitmap:Bitmap;
 		
 		private var _maxFrames:uint;
 		private var _currentFrame:uint;
@@ -36,6 +40,12 @@ package animation {
 			frames.push(frame);
 		}
 		
+		/* debug only */
+		
+		public function setBitmap(value:Bitmap):void {
+			_bitmap = value;
+		}
+		
 		/* Internal functions */
 		
 		private function initBitmap():void {
@@ -48,6 +58,8 @@ package animation {
 		
 		private function updateBitmapData():void {
 			const frame:BitmapData = frames[_currentFrame];
+			//if (_bitmap) { _bitmap.bitmapData = frame; }
+			//_bitmapData = frame;
 			_bitmapData.copyPixels(frame, new Rectangle(0,0,frame.width, frame.height), new Point(0,0));
 		}
 	}

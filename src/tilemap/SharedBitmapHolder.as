@@ -96,7 +96,7 @@ package tilemap {
 			return null;
 		}
 		
-		public function getTileByName(textureUrl:String, name:String):BitmapData {
+		public function getTileByName(textureUrl:String, name:String, debug:Boolean = false):BitmapData {
 			const tileXML:XML = getTileDataByName(textureUrl, name);
 			const rect:Rectangle = getTileRectangle(tileXML);
 			const xOffset:Number = getValueByKey("offsetX", tileXML);
@@ -104,9 +104,11 @@ package tilemap {
 			const originalWidth:int = getValueByKey("originalWidth", tileXML);
 			const originalHeight:int = getValueByKey("originalHeight", tileXML);
 			trace("xOffset : " + xOffset + ", yOffset : " + yOffset);
+			trace("width : " + rect.width + ", height : " + rect.height);
 			const texture:TextureVO = CACHE[textureUrl];
 			const result:BitmapData = new BitmapData(originalWidth, originalHeight, true, 0);
-			result.copyPixels(texture.textureBitmap, rect, new Point(-xOffset, -yOffset));
+			const point:Point = debug ? new Point(originalWidth/2+xOffset, -yOffset*2) : new Point(0, 0);
+			result.copyPixels(texture.textureBitmap, rect, point);
 			return result;
 		}
 		

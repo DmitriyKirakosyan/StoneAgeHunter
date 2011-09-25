@@ -53,6 +53,7 @@ package animation {
 			}
 			_currentAnimation = icAnimation;
 			_currentBitmap = new Bitmap(_currentAnimation.bitmapData);
+			//_currentAnimation.setBitmap(_currentBitmap);
 			this.addChild(_currentBitmap);
 			_framesCounter = 0;
 			_animating = true;

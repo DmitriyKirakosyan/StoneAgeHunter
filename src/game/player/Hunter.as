@@ -11,11 +11,14 @@ package game.player {
 		
 		private var _hp:HpLine;
 		
+		private var _debug:Boolean;
+		
 		private const ANIMATE_MOVE:String = "move";
 		private const ANIMATE_STAY:String = "stay";
 		
-		public function Hunter() {
+		public function Hunter(debug:Boolean) {
 			super();
+			_debug = debug;
 			//this.scaleX = .5;
 			//this.scaleY = .5;
 			_hp = new HpLine(2);
@@ -79,7 +82,7 @@ package game.player {
 				bitmapList = new Vector.<BitmapData>();
 				for (i = 1; i < 38; ++i) {
 					nulls = i/10 < 1 ? "000" : "00";
-					bitmapList.push(SharedBitmapHolder.instance.getTileByName(breatheTextureUrl, "CaveManBreathe"+ nulls + i + ".png"));
+					bitmapList.push(SharedBitmapHolder.instance.getTileByName(breatheTextureUrl, "CaveManBreathe"+ nulls + i + ".png", _debug));
 				}
 				addAnimation(ANIMATE_STAY, 0, bitmapList);
 			}

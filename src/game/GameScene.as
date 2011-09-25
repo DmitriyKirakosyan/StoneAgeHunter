@@ -83,8 +83,8 @@ package game {
 			_moving = false;
 			_mapContainer.addChild(_tileMap);
 			createHunters();
-			createDuck();
-			createStones();
+			//createDuck();
+			//createStones();
 			_mapContainer.addChild(_drawingContainer);
 			addListeners();
 			_debugPanel.open();
@@ -93,9 +93,9 @@ package game {
 			_debugPanel.close();
 			removeListeners();
 			_mapContainer.removeChild(_tileMap);
-			removeDuck();
+			//removeDuck();
 			removeHunters();
-			removeStones();
+			//removeStones();
 			_mapContainer.removeChild(_drawingContainer);
 			_drawingContainer.graphics.clear();
 		}
@@ -166,10 +166,10 @@ package game {
 			return one.hitTestObject(two);
 		}
 		
-		private function createHunter():Hunter {
-			const hunter:Hunter = new Hunter();
-			hunter.x = Math.random() * 250 + 50;
-			hunter.y = Math.random() * 150 + 50;
+		private function createHunter(debug:Boolean):Hunter {
+			const hunter:Hunter = new Hunter(debug);
+			//hunter.x = Math.random() * 250 + 50;
+			//hunter.y = Math.random() * 150 + 50;
 			_gameContainer.addChild(hunter);
 			addHunterListeners(hunter);
 			return hunter;
@@ -177,8 +177,12 @@ package game {
 		
 		private function createHunters():void {
 			_hunters = new Vector.<Hunter>();
-			for (var i:int = 0; i < 1; ++i) {
-				_hunters.push(createHunter());
+			var hunter:Hunter;
+			for (var i:int = 0; i < 2; ++i) {
+				hunter = createHunter(i == 1);
+				hunter.x = 100;
+				hunter.y = 100 - i*25;
+				_hunters.push(hunter);
 			}
 		}
 		
