@@ -265,6 +265,7 @@ package game {
 		}
 		
 		private function removeCurrentPathFromStage():void {
+			if (!_selectedHunter.path) { return; }
 			for each (var keyPoint:KeyPoint in _selectedHunter.path.points) {
 				_drawingContainer.removeChild(keyPoint);
 			}
