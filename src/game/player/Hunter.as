@@ -19,8 +19,8 @@ package game.player {
 		public function Hunter(debug:Boolean) {
 			super();
 			_debug = debug;
-			//this.scaleX = .5;
-			//this.scaleY = .5;
+			this.scaleX = .5;
+			this.scaleY = .5;
 			_hp = new HpLine(2);
 			_hp.y = -20;
 			addChild(_hp);

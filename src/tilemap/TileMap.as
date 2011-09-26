@@ -9,8 +9,8 @@ package tilemap {
 			super();
 			_textureName = textureName;
 			_ready = false;
-			//SharedBitmapHolder.instance.addEventListener(TextureHolderEvent.TEXTURE_LOADED, onTextureLoad);
-			//SharedBitmapHolder.load(textureName);
+			SharedBitmapHolder.instance.addEventListener(TextureHolderEvent.TEXTURE_LOADED, onTextureLoad);
+			SharedBitmapHolder.load(textureName);
 		}
 		
 		public function ready():Boolean { return _ready; }
@@ -23,18 +23,8 @@ package tilemap {
 				for (var j:int = 0; j < height; ++j) {
 					tile = new Tile(TileTypes.tiles[matrix[i][j]], _textureName);
 					_tiles[i].push(tile);
-					tile.x = i * tile.width;
-					tile.y = j * tile.height;
-					if (i == 0 && j < height-1) {
-						tile.x += tile.width;
-						tile.rotation = 90;
-					}
-					if (i > 0 && j == 0) {
-						tile.rotation = 180;
-						tile.x += tile.width;
-						tile.y += tile.height;
-					}
-					if (i == width-1 && j > 0) { tile.rotation = 270; tile.y += tile.height; }
+					setTilePosition(tile, i, j);
+					//rotateTileIfNeed(tile, i, j);
 					this.addChild(tile);
 				}
 			}
@@ -49,6 +39,25 @@ package tilemap {
 		}
 
 		/* Tests functions */
+		
+		private function setTilePosition(tile:Tile, i:int, j:int):void {
+			tile.x = i * (50) - 160;
+			tile.y = j * (50) - 60;
+		}
+		
+		private function rotateTileIfNeed(tile:Tile, i:int, j:int):void {
+			if (i == 0 && j < height-1) {
+				tile.x += tile.width;
+				tile.rotation = 90;
+			}
+			if (i > 0 && j == 0) {
+				tile.rotation = 180;
+				tile.x += tile.width;
+				tile.y += tile.height;
+			}
+			if (i == width-1 && j > 0) { tile.rotation = 270; tile.y += tile.height; }
+		}
+		
 		private function onTextureLoad(event:TextureHolderEvent):void{
 			if (event.url != _textureName) { return; }
 			_ready = true;

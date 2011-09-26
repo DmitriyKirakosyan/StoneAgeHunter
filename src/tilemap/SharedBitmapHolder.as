@@ -103,11 +103,9 @@ package tilemap {
 			const yOffset:Number = getValueByKey("offsetY", tileXML);
 			const originalWidth:int = getValueByKey("originalWidth", tileXML);
 			const originalHeight:int = getValueByKey("originalHeight", tileXML);
-			trace("xOffset : " + xOffset + ", yOffset : " + yOffset);
-			trace("width : " + rect.width + ", height : " + rect.height);
 			const texture:TextureVO = CACHE[textureUrl];
 			const result:BitmapData = new BitmapData(originalWidth, originalHeight, true, 0);
-			const point:Point = debug ? new Point(originalWidth/2+xOffset, -yOffset*2) : new Point(0, 0);
+			const point:Point = !debug ? new Point(originalWidth/2+xOffset, -yOffset*2) : new Point(0, 0);
 			result.copyPixels(texture.textureBitmap, rect, point);
 			return result;
 		}
