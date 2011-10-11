@@ -4,8 +4,6 @@ package game.animals {
 	import com.greensock.TweenLite;
 	
 	import flash.geom.Point;
-	import flash.text.TextField;
-	import flash.text.TextFieldAutoSize;
 	
 	import game.HpLine;
 	import game.IcActer;
@@ -26,6 +24,8 @@ package game.animals {
 		
 		public function Duck() {
 			super();
+			this.scaleX = .4;
+			this.scaleY = .4;
 			_mode = MODE_BLOODY;
 			_paused = true;
 			speed = .5;

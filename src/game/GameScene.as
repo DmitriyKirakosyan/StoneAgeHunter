@@ -297,8 +297,7 @@ package game {
 		private function drawHunterExistingPath(hunter:Hunter):void {
 			if (!hunter) { return; }
 			_drawingContainer.graphics.lineStyle(3, 0xffaabb);
-			_drawingContainer.graphics.moveTo(hunter.x + hunter.width/2,
-																					hunter.y + hunter.height/2);
+			_drawingContainer.graphics.moveTo(hunter.x, hunter.y);
 			if (hunter.path) {
 				for each (var point:KeyPoint in hunter.path.points) {
 					_drawingContainer.graphics.lineTo(point.x, point.y);
