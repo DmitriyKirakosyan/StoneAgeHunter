@@ -2,6 +2,7 @@ package game {
 	import flash.geom.Point;
 	public class Path {
 		private var _keyPoints:Vector.<KeyPoint>;
+		private var _links:Vector.<LinkToPoint>;
 		
 		public function Path():void {
 			super();
