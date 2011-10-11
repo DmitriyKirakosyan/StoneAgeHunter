@@ -1,14 +1,12 @@
 package game.player {
 	import animation.IcSprite;
-	import game.IcActer;
-	import game.HpLine;
+	
 	import flash.display.BitmapData;
-	import tilemap.SharedBitmapHolder;
+	
+	import game.HpLine;
+	import game.IcActer;
 
 	public class Hunter extends IcActer {
-		private const moveTextureUrl:String = "animations/walk/walk";
-		private const breatheTextureUrl:String = "animations/stay/breathe";
-		
 		private var _hp:HpLine;
 		
 		private var _debug:Boolean;
@@ -19,12 +17,12 @@ package game.player {
 		public function Hunter(debug:Boolean) {
 			super();
 			_debug = debug;
-			this.scaleX = .5;
-			this.scaleY = .5;
+			this.scaleX = .3;
+			this.scaleY = .3;
 			_hp = new HpLine(2);
 			_hp.y = -20;
 			addChild(_hp);
-			addFrames();
+			addChild(new ManStayD());
 			play(ANIMATE_STAY);
 		}
 		
@@ -64,29 +62,6 @@ package game.player {
 		}
 		
 		/* Internal functions */
-		
-		private function addFrames():void {
-			if (SharedBitmapHolder.existInCache(moveTextureUrl)) {
-				var bitmapList:Vector.<BitmapData> = new Vector.<BitmapData>();
-				var nulls:String;
-					//_view.addChild(new Bitmap(bitmap));
-				var i:int;
-				for (i = 1; i < 24; ++i) {
-					nulls = i/10 < 1 ? "000" : "00";
-					bitmapList.push(SharedBitmapHolder.instance.getTileByName(moveTextureUrl, "CaveMan"+ nulls + i + ".png"));
-				}
-				//bitmapList.reverse();
-				addAnimation(ANIMATE_MOVE, 0, bitmapList);
-			}
-			if (SharedBitmapHolder.existInCache(breatheTextureUrl)) {
-				bitmapList = new Vector.<BitmapData>();
-				for (i = 1; i < 38; ++i) {
-					nulls = i/10 < 1 ? "000" : "00";
-					bitmapList.push(SharedBitmapHolder.instance.getTileByName(breatheTextureUrl, "CaveManBreathe"+ nulls + i + ".png", _debug));
-				}
-				addAnimation(ANIMATE_STAY, 0, bitmapList);
-			}
-		}
 		
 		override protected function stopMove():void {
 			super.stopMove();

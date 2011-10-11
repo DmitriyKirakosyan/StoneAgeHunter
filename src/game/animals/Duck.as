@@ -1,11 +1,14 @@
 package game.animals {
-	import com.greensock.TweenLite;
-	import flash.text.TextFieldAutoSize;
-	import flash.geom.Point;
-	import game.IcActer;
-	import game.HpLine;
-	import flash.text.TextField;
 	import animation.IcSprite;
+	
+	import com.greensock.TweenLite;
+	
+	import flash.geom.Point;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	
+	import game.HpLine;
+	import game.IcActer;
 
 	public class Duck extends IcActer {
 		private var _enemies:Vector.<IcSprite>;
@@ -97,16 +100,7 @@ package game.animals {
 		}
 		
 		private function drawDuck():void {
-			this.graphics.beginFill(0x0fac00);
-			this.graphics.drawEllipse(0, 0, 40, 60);
-			this.graphics.endFill();
-			var textField:TextField = new TextField();
-			textField.text = "Утк";
-			textField.x = 10;
-			textField.y = 25;
-			textField.autoSize = TextFieldAutoSize.LEFT;
-			textField.selectable = false;
-			this.addChild(textField);
+			addChild(new DuckStayD());
 		}
 	}
 }

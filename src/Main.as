@@ -1,7 +1,6 @@
 ﻿package {
 	import tilemap.TextureHolderEvent;
 	import ru.beenza.framework.utils.EventJoin;
-	import tilemap.SharedBitmapHolder;
 	import tilemap.TileMap;
 	import flash.events.Event;
 	import game.GameScene;
@@ -17,17 +16,11 @@
 		}
 		
 		private function onAddedToStage(event:Event):void {
-			_tileMap = new TileMap("tiles/texture");
-			onActersLoaded();
-			const eventJoin:EventJoin = new EventJoin(5, onActersLoaded);
-			SharedBitmapHolder.instance.addEventListener(TextureHolderEvent.TEXTURE_LOADED, eventJoin.join);
-			SharedBitmapHolder.load("animations/walk/walk");
-			SharedBitmapHolder.load("animations/stay/breathe");
-			SharedBitmapHolder.load("animations/stay/head_rotate");
-			SharedBitmapHolder.load("animations/stay/butt_scratch");
+			_tileMap = new TileMap();
+			start();
 		}
 		
-		private function onActersLoaded():void {
+		private function start():void {
 			const sceneController:SceneController = new SceneController();
 			const menuScene:MenuScene = new MenuScene(this);
 			const gameScene:GameScene = new GameScene(this, _tileMap);

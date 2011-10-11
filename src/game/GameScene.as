@@ -287,7 +287,11 @@ package game {
 		}
 		
 		private function onkeyPointRemoveRequest(event:KeyPointEvent):void {
-			_drawingContainer.removeChild(event.keyPoint);
+			if (_drawingContainer.contains(event.keyPoint)) {
+				_drawingContainer.removeChild(event.keyPoint);
+			} else {
+				trace("[GameScene.onkeyPointRemoveRequest] WARNING keyPoint dont contants on scene");
+			}
 		}
 		
 		private function drawHunterExistingPath(hunter:Hunter):void {

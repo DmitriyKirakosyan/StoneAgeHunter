@@ -5,12 +5,9 @@ package tilemap {
 		private var _textureName:String;
 		private var _ready:Boolean;
 		
-		public function TileMap(textureName:String):void {
+		public function TileMap():void {
 			super();
-			_textureName = textureName;
-			_ready = false;
-			SharedBitmapHolder.instance.addEventListener(TextureHolderEvent.TEXTURE_LOADED, onTextureLoad);
-			SharedBitmapHolder.load(textureName);
+			createTextures();
 		}
 		
 		public function ready():Boolean { return _ready; }
@@ -21,7 +18,7 @@ package tilemap {
 			for (var i:int = 0; i < width; ++i) {
 				_tiles[i] = new Vector.<Tile>();
 				for (var j:int = 0; j < height; ++j) {
-					tile = new Tile(TileTypes.tiles[matrix[i][j]], _textureName);
+					tile = new Tile();
 					_tiles[i].push(tile);
 					setTilePosition(tile, i, j);
 					//rotateTileIfNeed(tile, i, j);
@@ -41,8 +38,8 @@ package tilemap {
 		/* Tests functions */
 		
 		private function setTilePosition(tile:Tile, i:int, j:int):void {
-			tile.x = i * (50) - 160;
-			tile.y = j * (50) - 60;
+			tile.x = i * tile.width;
+			tile.y = j * tile.height;
 		}
 		
 		private function rotateTileIfNeed(tile:Tile, i:int, j:int):void {
@@ -58,10 +55,8 @@ package tilemap {
 			if (i == width-1 && j > 0) { tile.rotation = 270; tile.y += tile.height; }
 		}
 		
-		private function onTextureLoad(event:TextureHolderEvent):void{
-			if (event.url != _textureName) { return; }
+		private function createTextures():void{
 			_ready = true;
-			dispatchEvent(new TextureHolderEvent(TextureHolderEvent.TEXTURE_LOADED, event.url));
 			const mapData:Array = [[10,9,9,9,9,10],
 														[9,0,0,0,0,9],
 														[9,0,0,0,0,9],

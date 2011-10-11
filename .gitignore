@@ -1,2 +1,6 @@
+.actionScriptProperties
+.idea/
+StoneAgeHunter.iml
+bin-debug/
 .project
 .settings/
