@@ -7,9 +7,9 @@ package game {
 		
 		public function LinkToPoint(from:KeyPoint, to:KeyPoint) {
 			super();
-			drawLink();
 			_from = from;
 			_to = to;
+			drawLink();
 		}
 		
 		private function drawLink():void {

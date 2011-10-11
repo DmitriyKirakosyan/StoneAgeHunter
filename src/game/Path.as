@@ -1,6 +1,7 @@
 package game {
 	import flash.geom.Point;
 	public class Path {
+		private var _startPoint:KeyPoint;
 		private var _keyPoints:Vector.<KeyPoint>;
 		private var _links:Vector.<LinkToPoint>;
 		
@@ -9,10 +10,21 @@ package game {
 		}
 		
 		public function get points():Vector.<KeyPoint> { return _keyPoints; }
+		public function get links():Vector.<LinkToPoint> { return _links; }
+
+		public function startPath(point:Point):void {
+			_startPoint = new KeyPoint(point);
+		}
 		
 		public function addPoint(point:Point):void {
+			var keyPoint:KeyPoint = new KeyPoint(point);
 			if (!_keyPoints) { _keyPoints = new Vector.<KeyPoint>(); }
-			_keyPoints.push(new KeyPoint(point));
+			if (_keyPoints.length == 0 && _startPoint) {
+				addLink(_startPoint, keyPoint);
+			} else if (_keyPoints.length > 0) {
+				addLink(_keyPoints[_keyPoints.length-1], keyPoint);
+			}
+			_keyPoints.push(keyPoint);
 		}
 		
 		public function exists(point:Point):Boolean {
@@ -25,6 +37,13 @@ package game {
 		public function getLastPoint():Point {
 			if (_keyPoints && _keyPoints.length > 0) {
 				return _keyPoints[_keyPoints.length - 1].point;
+			}
+			return null;
+		}
+		
+		public function getLastLinkToPoint():LinkToPoint {
+			if (_links && _links.length > 0) {
+				return _links[_links.length-1];
 			}
 			return null;
 		}
@@ -54,6 +73,11 @@ package game {
 				return _keyPoints[index-1];
 			}
 			return null;
+		}
+		
+		private function addLink(from:KeyPoint, to:KeyPoint):void {
+			if (!_links) { _links = new Vector.<LinkToPoint>(); }
+			_links.push(new LinkToPoint(from, to));
 		}
 		
 		private function getKeyPoint(point:Point):KeyPoint {

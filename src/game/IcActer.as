@@ -55,6 +55,11 @@ package game {
 		public function computeDuration(one:Point, two:Point):Number {
 			return Point.distance(one, two) / 200;
 		}
+		
+		public function startPath(point:Point):void {
+			if (!_path) { _path = new Path(); }
+			_path.startPath(point);
+		}
 
 		public function addWayPoint(point:Point):void {
 			if (!_path) { _path = new Path(); }

@@ -266,17 +266,6 @@ package game {
 			}
 		}
 		
-		private function hideCurrentPath():void {
-			if (!_selectedHunter.path) { return; }
-			_drawingContainer.graphics.lineStyle(3, 0xff11bb, .4);
-			_drawingContainer.graphics.moveTo(_selectedHunter.x, _selectedHunter.y);
-			for each (var keyPoint:KeyPoint in _selectedHunter.path.points) {
-				keyPoint.alpha = .4;
-				_drawingContainer.graphics.lineTo(keyPoint.x, keyPoint.y);
-				//_drawingContainer.removeChild(keyPoint);
-			}
-		}
-		
 		private function onHunterClick(event:MouseEvent):void {
 			unClickAll();
 			if (_selectedHunter) { hideCurrentPath(); }
@@ -284,6 +273,7 @@ package game {
 			if (hunter) {
 				_drawing = true;
 				_selectedHunter = hunter;
+				hunter.startPath(new Point(hunter.x, hunter.y));
 				hunter.filters = [new GlowFilter()];
 				showHunterExistingPath(_selectedHunter);
 			}
@@ -299,14 +289,20 @@ package game {
 		
 		private function showHunterExistingPath(hunter:Hunter):void {
 			if (!hunter) { return; }
-			_drawingContainer.graphics.lineStyle(3, 0xff11bb, 1);
-			_drawingContainer.graphics.moveTo(hunter.x, hunter.y);
 			if (hunter.path) {
 				for each (var point:KeyPoint in hunter.path.points) {
-					_drawingContainer.graphics.lineTo(point.x, point.y);
 					point.alpha = 1;
 				}
 			}
+			if (hunter.path.links) { hunter.path.links.forEach(function(item:LinkToPoint, ..._):void { item.alpha = 1; }); }
+		}
+		
+		private function hideCurrentPath():void {
+			if (!_selectedHunter.path) { return; }
+			for each (var keyPoint:KeyPoint in _selectedHunter.path.points) {
+				keyPoint.alpha = .4;
+			}
+			if (_selectedHunter.path.links) { _selectedHunter.path.links.forEach(function(item:LinkToPoint, ..._):void { item.alpha = .4; }); }
 		}
 		
 		private function findClickedHunter(x:Number, y:Number):Hunter {
@@ -334,7 +330,6 @@ package game {
 		private function onTileMapClick(event:MouseEvent):void {
 			if (_drawing) {
 				if (findClickedHunter(event.stageX, event.stageY) == null) {
-					_drawingContainer.graphics.lineTo(event.stageX, event.stageY);
 					const point:Point = new Point(event.stageX, event.stageY);
 					if (_selectedHunter) {
 						_selectedHunter.addWayPoint(point);
@@ -346,8 +341,10 @@ package game {
 		
 		private function addKeyPoint():void {
 			const keyPoint:KeyPoint = _selectedHunter.path.getLastKeyPoint();
+			const link:LinkToPoint = _selectedHunter.path.getLastLinkToPoint();
 			if (keyPoint) {
 				_drawingContainer.addChild(keyPoint);
+				if (link) { _drawingContainer.addChild(link); }
 				addKeyPointListener(keyPoint);
 			}
 		}
