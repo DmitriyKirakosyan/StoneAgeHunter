@@ -37,6 +37,7 @@ package game {
 		}
 		
 		public function get path():Path {
+			if (!_path) { _path = new Path(); }
 			return _path;
 		}
 		
