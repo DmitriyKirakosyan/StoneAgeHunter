@@ -2,6 +2,8 @@ package game.player {
 	import animation.IcSprite;
 	
 	import flash.display.BitmapData;
+	import flash.filters.GlowFilter;
+	import flash.geom.Point;
 	
 	import game.HpLine;
 	import game.IcActer;
@@ -65,7 +67,13 @@ package game.player {
 			if (pathTimeline) { play(ANIMATE_STAY);}
 		}
 		
-		
+		public function onClick():void {
+			startPath(new Point(this.x, this.y));
+			filters = [new GlowFilter(_baseColor)];
+		}
+		public function unselect():void {
+			filters = [];
+		}
 		
 		/* Internal functions */
 		

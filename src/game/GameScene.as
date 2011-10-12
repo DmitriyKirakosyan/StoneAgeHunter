@@ -262,7 +262,7 @@ package game {
 		
 		private function unClickAll():void {
 			for each (var hunter:Hunter in _hunters) {
-				hunter.filters = [];
+				hunter.unselect();
 			}
 		}
 		
@@ -273,8 +273,7 @@ package game {
 			if (hunter) {
 				_drawing = true;
 				_selectedHunter = hunter;
-				hunter.startPath(new Point(hunter.x, hunter.y));
-				hunter.filters = [new GlowFilter()];
+				hunter.onClick();
 				showHunterExistingPath(_selectedHunter);
 			}
 		}
