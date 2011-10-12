@@ -1,4 +1,5 @@
 package game.animals {
+	import flash.filters.GlowFilter;
 	import animation.IcSprite;
 	
 	import com.greensock.TweenLite;
@@ -39,6 +40,13 @@ package game.animals {
 		public function get hp():Number { return _hp.value; }
 		public function set hp(value:Number):void {
 			_hp.value = value;
+		}
+		
+		public function mouseOver():void {
+			filters = [new GlowFilter(0xffaa33)];
+		}
+		public function mouseOut():void {
+			filters = [];
 		}
 		
 		public function addEnemy(enemy:IcSprite):void {

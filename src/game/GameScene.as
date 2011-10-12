@@ -140,9 +140,6 @@ package game {
 		/* Internal functions */
 		
 		public function drawPaths():void {
-			for each (var hunter:Hunter in _hunters) {
-				//drawHunterExistingPath(hunter);
-			}
 		}
 		private function onGameContainerEnterFrame(event:Event):void {
 			for each (var hunter:Hunter in _hunters) {
@@ -221,9 +218,15 @@ package game {
 		
 		private function addAnimalListeners(animal:Duck):void {
 			animal.addEventListener(AnimalEvent.TOUCH_ACTOR, onAnimalTouchActor);
+			animal.addEventListener(MouseEvent.CLICK, onAnimalClick);
+			animal.addEventListener(MouseEvent.MOUSE_OVER, onAnimalMouseOver);
+			animal.addEventListener(MouseEvent.MOUSE_OUT, onAnimalMouseOut);
 		}
 		private function removeAnimalListeners(animal:Duck):void {
 			animal.removeEventListener(AnimalEvent.TOUCH_ACTOR, onAnimalTouchActor);
+			animal.removeEventListener(MouseEvent.CLICK, onAnimalClick);
+			animal.removeEventListener(MouseEvent.MOUSE_OVER, onAnimalMouseOver);
+			animal.removeEventListener(MouseEvent.MOUSE_OUT, onAnimalMouseOut);
 		}
 		
 		private function onAnimalTouchActor(event:AnimalEvent):void {
@@ -235,6 +238,21 @@ package game {
 					hunter.y = Math.random() * 150 + 50;
 				}
 			}
+		}
+		
+		private function onAnimalClick(event:MouseEvent):void {
+			if (_selectedHunter && _selectedHunter.path) {
+				_selectedHunter.path.setAttackPoint();
+			}
+		}
+		
+		private function onAnimalMouseOver(event:MouseEvent):void {
+			if (_selectedHunter && _selectedHunter.path) {
+				_duck.mouseOver();
+			}
+		}
+		private function onAnimalMouseOut(event:MouseEvent):void {
+			_duck.mouseOut();
 		}
 
 		private function addListeners():void {

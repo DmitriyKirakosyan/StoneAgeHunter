@@ -84,6 +84,21 @@ package game.gameActor {
 			return null;
 		}
 		
+		public function setAttackPoint():void {
+			for each (var keyPoint:KeyPoint in _keyPoints) {
+				if (keyPoint.selected) {
+					keyPoint.attack = false;
+					return;
+				}
+			}
+			if (_keyPoints.length > 0) {
+				_keyPoints[_keyPoints.length-1].attack = true;
+			}
+		}
+		public function unsetAttackPoint():void {
+			
+		}
+		
 		/* Internal functions */
 		
 		private function addLink(from:KeyPoint, to:KeyPoint):void {
