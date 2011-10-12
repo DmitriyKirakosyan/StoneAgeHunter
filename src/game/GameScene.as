@@ -23,7 +23,7 @@ package game {
 		private var _tileMap:TileMap;
 		private var _hunters:Vector.<Hunter>;
 		private var _duck:Duck;
-		private var _stones:Vector.<Stone>;
+		private var _stonesController:StonesController;
 		
 		private var _debugPanel:DebugPanel;
 		
@@ -38,6 +38,7 @@ package game {
 			super();
 			_mapContainer = new Sprite();
 			_gameContainer = new Sprite();
+			_stonesController = new StonesController(_gameContainer);
 			_debugPanel = new DebugPanel(container, this);
 			container.addChild(_mapContainer);
 			container.addChild(_gameContainer);
@@ -87,7 +88,7 @@ package game {
 			_mapContainer.addChild(_tileMap);
 			createHunters();
 			createDuck();
-			createStones();
+			_stonesController.createStones();
 			_mapContainer.addChild(_drawingContainer);
 			addListeners();
 			_debugPanel.open();
@@ -98,7 +99,7 @@ package game {
 			_mapContainer.removeChild(_tileMap);
 			removeDuck();
 			removeHunters();
-			removeStones();
+			_stonesController.removeStones();
 			_mapContainer.removeChild(_drawingContainer);
 			_drawingContainer.graphics.clear();
 		}
@@ -207,25 +208,6 @@ package game {
 		private function removeDuck():void {
 			removeAnimalListeners(_duck);
 			_gameContainer.removeChild(_duck);
-		}
-		
-		private function createStones():void {
-			var stone:Stone;
-			_stones = new Vector.<Stone>();
-			for (var i:int = 0; i < 10; ++i) {
-				stone = new Stone();
-				stone.x = Math.random() * 300;
-				stone.y = Math.random() * 300;
-				_gameContainer.addChild(stone);
-				_stones.push(stone);
-			}
-		}
-		
-		private function removeStones():void {
-			for each (var stone:Stone in _stones) {
-				_gameContainer.removeChild(stone);
-			}
-			_stones = null;
 		}
 		
 		private function addHunterListeners(hunter:Hunter):void {
