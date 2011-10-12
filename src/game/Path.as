@@ -5,12 +5,21 @@ package game {
 		private var _keyPoints:Vector.<KeyPoint>;
 		private var _links:Vector.<LinkToPoint>;
 		
+		private var _linksColor:uint;
+		
 		public function Path():void {
 			super();
+			_linksColor = 0xff11bb;
 		}
+		
+		/* API */
 		
 		public function get points():Vector.<KeyPoint> { return _keyPoints; }
 		public function get links():Vector.<LinkToPoint> { return _links; }
+		
+		public function setLinksColor(color:uint):void {
+			_linksColor = color;
+		}
 
 		public function startPath(point:Point):void {
 			_startPoint = new KeyPoint(point);
@@ -75,9 +84,11 @@ package game {
 			return null;
 		}
 		
+		/* Internal functions */
+		
 		private function addLink(from:KeyPoint, to:KeyPoint):void {
 			if (!_links) { _links = new Vector.<LinkToPoint>(); }
-			_links.push(new LinkToPoint(from, to));
+			_links.push(new LinkToPoint(from, to, _linksColor));
 		}
 		
 		private function getKeyPoint(point:Point):KeyPoint {

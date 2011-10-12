@@ -9,6 +9,8 @@ package game.player {
 	public class Hunter extends IcActer {
 		private var _hp:HpLine;
 		
+		private var _baseColor:uint;
+		
 		private var _debug:Boolean;
 		
 		private const ANIMATE_MOVE:String = "move";
@@ -17,6 +19,8 @@ package game.player {
 		public function Hunter(debug:Boolean) {
 			super();
 			_debug = debug;
+			_baseColor = Math.random() * 0xffffff;
+			path.setLinksColor(_baseColor);
 			this.scaleX = .3;
 			this.scaleY = .3;
 			_hp = new HpLine(2);
@@ -60,6 +64,8 @@ package game.player {
 			super.pauseMove();
 			if (pathTimeline) { play(ANIMATE_STAY);}
 		}
+		
+		
 		
 		/* Internal functions */
 		
