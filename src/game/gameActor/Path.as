@@ -87,7 +87,7 @@ package game.gameActor {
 		public function setAttackPoint():void {
 			for each (var keyPoint:KeyPoint in _keyPoints) {
 				if (keyPoint.selected) {
-					keyPoint.attack = false;
+					keyPoint.attack = true;
 					return;
 				}
 			}

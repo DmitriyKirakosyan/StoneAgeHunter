@@ -1,4 +1,5 @@
 package game.gameActor {
+	import utils.TwistingDot;
 	import flash.filters.GlowFilter;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -8,6 +9,8 @@ package game.gameActor {
 		
 		private var _selected:Boolean;
 		private var _attack:Boolean;
+		
+		private var _attackView:TwistingDot;
 		
 		private const NORMAL_COLOR:uint = 0xafafaa;
 		private const SELECTED_COLOR:uint = 0xac61fa;
@@ -26,7 +29,8 @@ package game.gameActor {
 		
 		public function get point():Point { return _point; }
 		
-		public function set attack(value:Boolean):void { _attack = value; }
+		public function set attack(value:Boolean):void { _attack = value; updateAttackView(); }
+		
 		public function get attack():Boolean { return _attack; }
 		
 		public function select():void {
@@ -38,6 +42,16 @@ package game.gameActor {
 			draw(NORMAL_COLOR);
 			filters = [];
 			_selected = false;
+		}
+		
+		private function updateAttackView():void {
+			if (!_attack) {
+				if (_attackView && this.contains(_attackView)) { _attackView.stop(); this.removeChild(_attackView); }
+			} else {
+				if (!_attackView) { _attackView = new TwistingDot(); }
+				this.addChild(_attackView);
+				_attackView.start();
+			}
 		}
 		
 		private function draw(lineColor:uint):void {
