@@ -13,6 +13,9 @@ package game {
 	import flash.display.Sprite;
 	import flash.events.EventDispatcher;
 	import scene.IScene;
+	import game.gameActor.KeyPoint;
+	import game.gameActor.KeyPointEvent;
+	import game.gameActor.LinkToPoint;
 
 	public class GameScene extends EventDispatcher implements IScene {
 		private var _mapContainer:Sprite;

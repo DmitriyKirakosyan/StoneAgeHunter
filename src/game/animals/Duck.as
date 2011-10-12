@@ -6,7 +6,7 @@ package game.animals {
 	import flash.geom.Point;
 	
 	import game.HpLine;
-	import game.IcActer;
+	import game.gameActor.IcActer;
 
 	public class Duck extends IcActer {
 		private var _enemies:Vector.<IcSprite>;

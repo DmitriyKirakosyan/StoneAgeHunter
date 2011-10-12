@@ -1,4 +1,4 @@
-package game {
+package game.gameActor {
 	import flash.events.Event;
 
 	public class KeyPointEvent extends Event {

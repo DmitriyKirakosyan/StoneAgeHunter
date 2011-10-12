@@ -1,4 +1,4 @@
-package game {
+package game.gameActor {
 	import flash.display.Sprite;
 
 	public class LinkToPoint extends Sprite {

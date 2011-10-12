@@ -1,4 +1,4 @@
-package game {
+package game.gameActor {
 	import flash.geom.Point;
 	public class Path {
 		private var _startPoint:KeyPoint;

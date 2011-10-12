@@ -6,7 +6,7 @@ package game.player {
 	import flash.geom.Point;
 	
 	import game.HpLine;
-	import game.IcActer;
+	import game.gameActor.IcActer;
 
 	public class Hunter extends IcActer {
 		private var _hp:HpLine;

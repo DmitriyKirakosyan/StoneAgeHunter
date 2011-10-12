@@ -1,4 +1,4 @@
-package game {
+package game.gameActor {
 	import com.greensock.easing.Linear;
 	import com.greensock.TweenLite;
 	import com.greensock.TimelineMax;

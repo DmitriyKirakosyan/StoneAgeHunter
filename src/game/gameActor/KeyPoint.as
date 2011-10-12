@@ -1,4 +1,4 @@
-package game {
+package game.gameActor {
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	import flash.display.Sprite;
