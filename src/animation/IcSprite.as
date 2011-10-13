@@ -44,7 +44,7 @@ package animation {
 		
 		private function playAnimation(icAnimation:IcAnimation):void {
 			if (_currentAnimation) {
-				if (this.contains(_currentAnimation.movieClip)) { this.removeChild(_currentAnimation.movieClip); }
+				if (this.contains(_currentAnimation.movieClip)) { this.removeChild(_currentAnimation.movieClip);}
 			}
 			_currentAnimation = icAnimation;
 			this.addChild(icAnimation.movieClip);

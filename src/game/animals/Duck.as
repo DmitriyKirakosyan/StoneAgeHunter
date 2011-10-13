@@ -97,14 +97,12 @@ package game.animals {
 		
 		override public function pauseMove():void {
 			play(ANIMATE_STAY);
-			//if (_currentTween) { _currentTween.pause(); }
 			_paused = true;
 		}
 		
 		/* Internal functions */
 
 		private function tweenPatrolPath():void {
-			trace("tweeNPatrolPath");
 			var prevPoint:Point;
 			
 			_timelineMax = new TimelineMax({ repeat : -1 });
@@ -120,7 +118,6 @@ package game.animals {
 				_timelineMax.append(createTweenToPoint(_patrolPath[0], _patrolPath[_patrolPath.length-1]));
 			}
 			_timelineMax.play();
-			//if (_paused) { _currentTween.pause(); }
 		}
 		
 		private function tweenToStartPatrolPath():void {
@@ -132,10 +129,8 @@ package game.animals {
 		private function createTweenToPoint(point:Point, prevPoint:Point, onComplete:Function = null):TweenMax {
 			var duration:Number = computeDuration(prevPoint, point.clone()) / speed;
 			var duck:Duck = this;
-			return new TweenMax(duck, duration, { x : point.x, y : point.y, ease:Linear.easeNone, onStart : onTweenStart, onComplete : onComplete});
+			return new TweenMax(duck, duration, { x : point.x, y : point.y, ease:Linear.easeNone, onComplete : onComplete});
 		}
-		
-		private function onTweenStart():void { trace("tween start, tweens number : ", _timelineMax ? _timelineMax.getTweensOf(this).length : 0); }
 		
 		private function addAnimations():void {
 			addAnimation(ANIMATE_STAY, new DuckStayD());
