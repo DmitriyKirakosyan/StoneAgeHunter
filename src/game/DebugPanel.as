@@ -29,8 +29,11 @@ package game {
 			super();
 			_gameSceneContainer = container;
 			_container = new Sprite();
+			_container.visible = false;
 			_gameScene = gameScene;
 			createButtons();
+			
+			_gameSceneContainer.addEventListener(MouseEvent.CLICK, onKeyDown);
 		}
 		
 		public function open():void {
@@ -42,6 +45,12 @@ package game {
 		}
 		
 		/* Internal functions */
+		
+		private function onKeyDown(event:MouseEvent):void {
+			if (event.ctrlKey) {
+				_container.visible = !_container.visible;
+			}
+		}
 		
 		//TODO bad memory managment here, а мне плевать
 		

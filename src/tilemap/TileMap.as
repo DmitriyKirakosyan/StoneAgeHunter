@@ -57,13 +57,13 @@ package tilemap {
 		
 		private function createTextures():void{
 			_ready = true;
-			const mapData:Array = [[10,9,9,9,9,10],
-														[9,0,0,0,0,9],
-														[9,0,0,0,0,9],
-														[9,0,0,0,0,9],
-														[9,0,0,0,0,9],
-														[10,9,9,9,9,10]];
-			createByMatrixArray(mapData, 6, 6);
+			const mapData:Array = [[10,9,9,9,9,9,9,9,10],
+														[9,0,0,0,0,0,0,0,9],
+														[9,0,0,0,0,0,0,0,9],
+														[9,0,0,0,0,0,0,0,9],
+														[9,0,0,0,0,0,0,0,9],
+														[10,9,9,9,9,9,9,9,10]];
+			createByMatrixArray(mapData, 9, 6);
 		}
 		
 	}

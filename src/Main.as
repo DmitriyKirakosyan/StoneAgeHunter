@@ -1,6 +1,4 @@
 ﻿package {
-	import tilemap.TextureHolderEvent;
-	import ru.beenza.framework.utils.EventJoin;
 	import tilemap.TileMap;
 	import flash.events.Event;
 	import game.GameScene;
@@ -8,6 +6,7 @@
 	import scene.SceneController;
 	import flash.display.Sprite;
 
+	[SWF(width=570, height=380, frameRate=25)]
 	public class Main extends Sprite {
 		private var _tileMap:TileMap;
 		

@@ -41,11 +41,13 @@ package game {
 			stone.addEventListener(MouseEvent.MOUSE_OVER, onStoneMouseOver);
 			stone.addEventListener(MouseEvent.MOUSE_OUT, onStoneMouseOut);
 		}
-		private function removeStoneListeners(stone:Stone):void {
+/*		private function removeStoneListeners(stone:Stone):void {
 			stone.removeEventListener(MouseEvent.CLICK, onStoneClick);
 			stone.removeEventListener(MouseEvent.MOUSE_OVER, onStoneMouseOver);
 			stone.removeEventListener(MouseEvent.MOUSE_OUT, onStoneMouseOut);
 		}
+		 * 
+		 */
 		
 		private function onStoneClick(event:MouseEvent):void {
 			

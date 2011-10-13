@@ -1,10 +1,8 @@
 package game {
 	import animation.IcSprite;
 	import game.animals.AnimalEvent;
-	import game.armor.Stone;
 	import game.animals.Duck;
 	import flash.events.Event;
-	import flash.filters.GlowFilter;
 	import scene.SceneEvent;
 	import flash.geom.Point;
 	import flash.events.MouseEvent;
@@ -195,8 +193,8 @@ package game {
 		
 		private function createDuck():void {
 			_duck = new Duck();
-			var json:String = "[{\"x\" : \"20\", \"y\" : \"50\"}, {\"x\" : \"300\", \"y\" : \"50\"}," +
-								"{\"x\" : \"300\", \"y\" : \"250\"}, {\"x\" : \"20\", \"y\" : \"250\"}," +
+			var json:String = "[{\"x\" : \"20\", \"y\" : \"50\"}, {\"x\" : \"530\", \"y\" : \"50\"}," +
+								"{\"x\" : \"530\", \"y\" : \"340\"}, {\"x\" : \"20\", \"y\" : \"340\"}," +
 								"{\"x\" : \"20\", \"y\" : \"50\"} ]";
 			_duck.setJsonPath(json);
 			_duck.x = Math.random() * 100 + 100;
