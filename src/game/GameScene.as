@@ -195,7 +195,9 @@ package game {
 		
 		private function createDuck():void {
 			_duck = new Duck();
-			var json:String = "[{\"x\" : \"10\", \"y\" : \"10\"}, {\"x\" : \"300\", \"y\" : \"10\"} ] ";
+			var json:String = "[{\"x\" : \"20\", \"y\" : \"50\"}, {\"x\" : \"300\", \"y\" : \"50\"}," +
+								"{\"x\" : \"300\", \"y\" : \"250\"}, {\"x\" : \"20\", \"y\" : \"250\"}," +
+								"{\"x\" : \"20\", \"y\" : \"50\"} ]";
 			_duck.setJsonPath(json);
 			_duck.x = Math.random() * 100 + 100;
 			_duck.y = Math.random() * 100 + 100;

@@ -91,32 +91,46 @@ package game.animals {
 			play(ANIMATE_MOVE);
 			if (_currentTween && _currentTween.paused) {
 				_currentTween.play();
-			} else { tweenPatrolPath(); }
+			} else { tweenToStartPatrolPath(); }
 		}
 		
 		override public function pauseMove():void {
 			play(ANIMATE_STAY);
-			if (_currentTween) { _currentTween.pause(); }
+			//if (_currentTween) { _currentTween.pause(); }
 			_paused = true;
 		}
 		
-		public function tweenPatrolPath():void {
-			_timelineMax = new TimelineMax({repeat : -1, yoyo : true});
-			for each (var point:Point in _patrolPath) {
-				_timelineMax.append( createTweenToPoint(point) );
+		/* Internal functions */
+
+		private function tweenPatrolPath():TimelineMax {
+			trace("tweeNPatrolPath");
+			
+			var resultTimeline:TimelineMax = new TimelineMax({ repeat : -1 });
+			resultTimeline.killTweensOf(this);
+			for (var i:int = 0; i < _patrolPath.length; ++i) {
+				if (i > -1) { resultTimeline.append( createTweenToPoint(_patrolPath[i]) ); }
 			}
 			if (_patrolPath && _patrolPath.length > 0) {
-				_timelineMax.append(createTweenToPoint(_patrolPath[0]));
+				resultTimeline.append(createTweenToPoint(_patrolPath[0]));
 			}
-			if (_paused) { _currentTween.pause(); }
+			return resultTimeline;
+			//if (_paused) { _currentTween.pause(); }
 		}
 		
-		/* Internal functions */
+		private function tweenToStartPatrolPath():void {
+			if (_patrolPath && _patrolPath.length > 0) {
+				_timelineMax = new TimelineMax();
+				_timelineMax.append(createTweenToPoint(_patrolPath[0], tweenPatrolPath));
+				_timelineMax.append(tweenPatrolPath());
+			}
+		}
 		
-		private function createTweenToPoint(point:Point):TweenLite {
+		private function createTweenToPoint(point:Point, onComplete:Function = null):TweenLite {
 			var duration:Number = computeDuration(new Point(this.x, this.y), point) / speed;
-			return new TweenLite(this, duration, {x : point.x, y : point.y, ease:Linear.easeNone});
+			return new TweenLite(this, duration, {x : point.x, y : point.y, ease:Linear.easeNone, onStart : onTweenStart, onComplete : onComplete});
 		}
+		
+		private function onTweenStart():void { trace("tween start, tweens number : ", _timelineMax ? _timelineMax.getTweensOf(this).length : 0); }
 		
 		private function addAnimations():void {
 			addAnimation(ANIMATE_STAY, new DuckStayD());
