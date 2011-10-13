@@ -195,10 +195,10 @@ package game {
 		
 		private function createDuck():void {
 			_duck = new Duck();
-			for each (var hunter:Hunter in _hunters) { _duck.addEnemy(hunter); }
+			var json:String = "[{\"x\" : \"10\", \"y\" : \"10\"}, {\"x\" : \"300\", \"y\" : \"10\"} ] ";
+			_duck.setJsonPath(json);
 			_duck.x = Math.random() * 100 + 100;
 			_duck.y = Math.random() * 100 + 100;
-			_duck.updateTarget();
 			addAnimalListeners(_duck);
 			_gameContainer.addChild(_duck);
 		}

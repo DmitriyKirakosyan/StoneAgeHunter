@@ -1,4 +1,7 @@
 package game.animals {
+	import com.greensock.easing.Linear;
+	import com.greensock.TimelineMax;
+	import com.adobe.serialization.json.JSON;
 	import animation.IcSprite;
 	
 	import com.greensock.TweenLite;
@@ -11,11 +14,12 @@ package game.animals {
 
 	public class Duck extends IcActer {
 		private var _enemies:Vector.<IcSprite>;
-		private var _targetEnemy:IcSprite;
+		private var _patrolPath:Vector.<Point>;
 		private var _mode:uint;
 		private var _paused:Boolean;
 		
 		private var _currentTween:TweenLite;
+		private var _timelineMax:TimelineMax;
 		
 		private var _hp:HpLine;
 		
@@ -28,18 +32,36 @@ package game.animals {
 		
 		public function Duck() {
 			super();
-			this.scaleX = .4;
-			this.scaleY = .4;
 			_mode = MODE_BLOODY;
 			_paused = true;
 			speed = .5;
+			setScale();
 			drawDuck();
+			createHp();
+			addAnimations();
+			play(ANIMATE_STAY);
+		}
+		
+		public function setJsonPath(json:String):void {
+			var jsonObject:Object = JSON.decode(json);
+			_patrolPath = new Vector.<Point>();
+			if (jsonObject is Array) {
+				for each (var pointObj:Object in jsonObject) {
+					_patrolPath.push(new Point(pointObj["x"], pointObj["y"]));
+				}
+			}
+		}
+		
+		public function setScale():void {
+			this.scaleX = .4;
+			this.scaleY = .4;
+		}
+		
+		public function createHp():void {
 			_hp = new HpLine(5);
 			_hp.y = -20;
 			_hp.x = -20;
 			this.addChild(_hp);
-			addAnimations();
-			play(ANIMATE_STAY);
 		}
 		
 		public function get hp():Number { return _hp.value; }
@@ -69,7 +91,7 @@ package game.animals {
 			play(ANIMATE_MOVE);
 			if (_currentTween && _currentTween.paused) {
 				_currentTween.play();
-			}
+			} else { tweenPatrolPath(); }
 		}
 		
 		override public function pauseMove():void {
@@ -78,45 +100,27 @@ package game.animals {
 			_paused = true;
 		}
 		
-		public function updateTarget():void {
-			var goodEnemy:IcSprite;
-			for each (var enemy:IcSprite in _enemies) {
-				if (!goodEnemy ||
-						((goodEnemy.x + goodEnemy.y) > (enemy.x + enemy.y))) {
-					goodEnemy = enemy;
-				}
+		public function tweenPatrolPath():void {
+			_timelineMax = new TimelineMax({repeat : -1, yoyo : true});
+			for each (var point:Point in _patrolPath) {
+				_timelineMax.append( createTweenToPoint(point) );
 			}
-			if (_targetEnemy != goodEnemy) {
-				_targetEnemy = goodEnemy;
+			if (_patrolPath && _patrolPath.length > 0) {
+				_timelineMax.append(createTweenToPoint(_patrolPath[0]));
 			}
-			const targetPoint:Point =  new Point(_targetEnemy.x + _targetEnemy.width/2,
-																						_targetEnemy.y + _targetEnemy.height/2);
-			_currentTween = new TweenLite(this, computeDuration(new Point(this.x, this.y), targetPoint) / speed, 
-																										{x : targetPoint.x, y : targetPoint.y,
-																											onComplete : onTweenComplete,
-																											onUpdate : onTweenUpdate});
 			if (_paused) { _currentTween.pause(); }
 		}
 		
 		/* Internal functions */
 		
+		private function createTweenToPoint(point:Point):TweenLite {
+			var duration:Number = computeDuration(new Point(this.x, this.y), point) / speed;
+			return new TweenLite(this, duration, {x : point.x, y : point.y, ease:Linear.easeNone});
+		}
+		
 		private function addAnimations():void {
 			addAnimation(ANIMATE_STAY, new DuckStayD());
 			addAnimation(ANIMATE_MOVE, new DuckWalkD());
-		}
-		
-		private function onTweenComplete():void {
-			if (_mode == MODE_BLOODY) {
-				updateTarget();
-			}
-		}
-		
-		private function onTweenUpdate():void {
-			for each (var hunter:IcSprite in _enemies) {
-				if (this.hitTestObject(hunter)) {
-					dispatchEvent(new AnimalEvent(AnimalEvent.TOUCH_ACTOR, hunter));
-				}
-			}
 		}
 		
 		private function drawDuck():void {
