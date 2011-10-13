@@ -1,4 +1,5 @@
 package game.animals {
+	import com.greensock.TweenMax;
 	import com.greensock.easing.Linear;
 	import com.greensock.TimelineMax;
 	import com.adobe.serialization.json.JSON;
@@ -102,32 +103,36 @@ package game.animals {
 		
 		/* Internal functions */
 
-		private function tweenPatrolPath():TimelineMax {
+		private function tweenPatrolPath():void {
 			trace("tweeNPatrolPath");
+			var prevPoint:Point;
 			
-			var resultTimeline:TimelineMax = new TimelineMax({ repeat : -1 });
-			resultTimeline.killTweensOf(this);
+			_timelineMax = new TimelineMax({ repeat : -1 });
+			_timelineMax.stop();
+			_timelineMax.killTweensOf(this);
 			for (var i:int = 0; i < _patrolPath.length; ++i) {
-				if (i > -1) { resultTimeline.append( createTweenToPoint(_patrolPath[i]) ); }
+				if (i > 0) {
+					prevPoint = _patrolPath[i-1];
+					_timelineMax.append( createTweenToPoint(_patrolPath[i], prevPoint) );
+					}
 			}
 			if (_patrolPath && _patrolPath.length > 0) {
-				resultTimeline.append(createTweenToPoint(_patrolPath[0]));
+				_timelineMax.append(createTweenToPoint(_patrolPath[0], _patrolPath[_patrolPath.length-1]));
 			}
-			return resultTimeline;
+			_timelineMax.play();
 			//if (_paused) { _currentTween.pause(); }
 		}
 		
 		private function tweenToStartPatrolPath():void {
 			if (_patrolPath && _patrolPath.length > 0) {
-				_timelineMax = new TimelineMax();
-				_timelineMax.append(createTweenToPoint(_patrolPath[0], tweenPatrolPath));
-				_timelineMax.append(tweenPatrolPath());
+				createTweenToPoint(_patrolPath[0], new Point(this.x, this.y), tweenPatrolPath);
 			}
 		}
 		
-		private function createTweenToPoint(point:Point, onComplete:Function = null):TweenLite {
-			var duration:Number = computeDuration(new Point(this.x, this.y), point) / speed;
-			return new TweenLite(this, duration, {x : point.x, y : point.y, ease:Linear.easeNone, onStart : onTweenStart, onComplete : onComplete});
+		private function createTweenToPoint(point:Point, prevPoint:Point, onComplete:Function = null):TweenMax {
+			var duration:Number = computeDuration(prevPoint, point.clone()) / speed;
+			var duck:Duck = this;
+			return new TweenMax(duck, duration, { x : point.x, y : point.y, ease:Linear.easeNone, onStart : onTweenStart, onComplete : onComplete});
 		}
 		
 		private function onTweenStart():void { trace("tween start, tweens number : ", _timelineMax ? _timelineMax.getTweensOf(this).length : 0); }
