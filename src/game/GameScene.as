@@ -234,8 +234,8 @@ package game {
 			for each (var hunter:Hunter in _hunters) {
 				if (hunter == touchedHunter) {
 					hunter.damage();
-					hunter.x = Math.random() * 250 + 50;
-					hunter.y = Math.random() * 150 + 50;
+//					hunter.x = Math.random() * 250 + 50;
+//					hunter.y = Math.random() * 150 + 50;
 				}
 			}
 		}
