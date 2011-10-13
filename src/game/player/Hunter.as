@@ -28,7 +28,7 @@ package game.player {
 			_hp = new HpLine(2);
 			_hp.y = -20;
 			addChild(_hp);
-			addChild(new ManStayD());
+			addAnimations();
 			play(ANIMATE_STAY);
 		}
 		
@@ -76,6 +76,11 @@ package game.player {
 		}
 		
 		/* Internal functions */
+		
+		private function addAnimations():void {
+			addAnimation(ANIMATE_STAY, new ManStayD());
+			addAnimation(ANIMATE_MOVE, new ManRunD());
+		}
 		
 		override protected function stopMove():void {
 			super.stopMove();

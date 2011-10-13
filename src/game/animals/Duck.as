@@ -1,9 +1,9 @@
 package game.animals {
-	import flash.filters.GlowFilter;
 	import animation.IcSprite;
 	
 	import com.greensock.TweenLite;
 	
+	import flash.filters.GlowFilter;
 	import flash.geom.Point;
 	
 	import game.HpLine;
@@ -23,6 +23,9 @@ package game.animals {
 		public static const MODE_BLOODY:uint = 1;
 		public static const MODE_STALS:uint = 2;
 		
+		private const ANIMATE_STAY:String = "stay";
+		private const ANIMATE_MOVE:String = "move";
+		
 		public function Duck() {
 			super();
 			this.scaleX = .4;
@@ -35,6 +38,8 @@ package game.animals {
 			_hp.y = -20;
 			_hp.x = -20;
 			this.addChild(_hp);
+			addAnimations();
+			play(ANIMATE_STAY);
 		}
 		
 		public function get hp():Number { return _hp.value; }
@@ -61,12 +66,14 @@ package game.animals {
 		
 		override public function move():void {
 			_paused = false;
+			play(ANIMATE_MOVE);
 			if (_currentTween && _currentTween.paused) {
 				_currentTween.play();
 			}
 		}
 		
 		override public function pauseMove():void {
+			play(ANIMATE_STAY);
 			if (_currentTween) { _currentTween.pause(); }
 			_paused = true;
 		}
@@ -92,6 +99,11 @@ package game.animals {
 		}
 		
 		/* Internal functions */
+		
+		private function addAnimations():void {
+			addAnimation(ANIMATE_STAY, new DuckStayD());
+			addAnimation(ANIMATE_MOVE, new DuckWalkD());
+		}
 		
 		private function onTweenComplete():void {
 			if (_mode == MODE_BLOODY) {
