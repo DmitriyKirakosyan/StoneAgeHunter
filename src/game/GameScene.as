@@ -29,6 +29,7 @@ package game {
 		private var _hunters:Vector.<Hunter>;
 		private var _duck:Duck;
 		private var _stonesController:StonesController;
+		private var _drawingController:DrawingController;
 		
 		private var _debugPanel:DebugPanel;
 		
@@ -45,6 +46,7 @@ package game {
 			_gameContainer = new Sprite();
 			_stonesController = new StonesController(_gameContainer);
 			_debugPanel = new DebugPanel(container, this);
+			_drawingController = new DrawingController(container);
 			container.addChild(_mapContainer);
 			container.addChild(_gameContainer);
 			_gameContainer.addEventListener(Event.ENTER_FRAME, onGameContainerEnterFrame);
@@ -271,11 +273,11 @@ package game {
 		}
 
 		private function addListeners():void {
-			_tileMap.addEventListener(MouseEvent.CLICK, onTileMapClick);
+			_drawingController.addListeners();
 		}
 		
 		private function removeListeners():void {
-			_tileMap.removeEventListener(MouseEvent.CLICK, onTileMapClick);
+			_drawingController.removeListeners();
 		}
 		
 		private function unClickAll():void {
