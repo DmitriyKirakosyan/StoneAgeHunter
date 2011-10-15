@@ -52,9 +52,11 @@ package game {
 				addPathPartToVector(newPathPart);
 			} else {
 				var nowPoint:Point = new Point(_currentX, _currentY);
+				trace("now point x, y : " + nowPoint.x + ", " + nowPoint.y);
+				trace("last point x, y : " + lastPoint.x + ", " + lastPoint.y);
 				var lineLength:Number = Point.distance(lastPoint, nowPoint);
 				for (var i:int = 6; i < lineLength; i+= 6) {
-					newPathPart = createPathPart( Point.interpolate(lastPoint, nowPoint, i / lineLength) );
+					newPathPart = createPathPart( Point.interpolate(nowPoint, lastPoint, i / lineLength) );
 					_drawingContainer.addChild(newPathPart);
 					addPathPartToVector(newPathPart);
 				}
@@ -90,6 +92,12 @@ package game {
 		private function onMouseUp(event:MouseEvent):void {
 			_parentContainer.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			_drawing = false;
+			removeAllPathParts();
+		}
+		
+		private function removeAllPathParts():void {
+			for each (var part:Sprite in _pathParts) { _drawingContainer.removeChild(part); }
+			_pathParts = null
 		}
 		
 		private function addPathPartToVector(pathPart:Sprite):void {
