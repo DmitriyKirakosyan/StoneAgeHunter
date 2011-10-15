@@ -36,9 +36,41 @@ package game {
 		/* Internal functions */
 		
 		private function onEnterFrame(event:Event):void {
-				var newPathPart:Sprite = createPathPart();
+			drawPathToCurrentPoint();	
+		}
+		
+		private function drawPathToCurrentPoint():void {
+			if (!_drawing || !needDrawLine()) { return; }
+			trace("need draw line");
+			var lastPoint:Point = (_pathParts && _pathParts.length > 0) ?
+											new Point(_pathParts[_pathParts.length-1].x, _pathParts[_pathParts.length-1].y) :
+											null;
+			var newPathPart:Sprite;
+			if (!lastPoint) {
+				newPathPart = createPathPart();
 				_drawingContainer.addChild(newPathPart);
 				addPathPartToVector(newPathPart);
+			} else {
+				var nowPoint:Point = new Point(_currentX, _currentY);
+				var lineLength:Number = Point.distance(lastPoint, nowPoint);
+				for (var i:int = 6; i < lineLength; i+= 6) {
+					newPathPart = createPathPart( Point.interpolate(lastPoint, nowPoint, i / lineLength) );
+					_drawingContainer.addChild(newPathPart);
+					addPathPartToVector(newPathPart);
+				}
+			}
+		}
+		
+		private function needDrawLine():Boolean {
+			if (_pathParts && _pathParts.length > 0) {
+				if ( (_pathParts[_pathParts.length-1].x - _currentX < 6 &&
+					_pathParts[_pathParts.length-1].x - _currentX > -6) &&
+					(_pathParts[_pathParts.length-1].y - _currentY < 6 &&
+						_pathParts[_pathParts.length-1].y - _currentY > -6) ) {
+							return false;
+						}
+			}
+			return true;
 		}
 		
 		private function onMouseMove(event:MouseEvent):void {
@@ -71,7 +103,7 @@ package game {
 			result.graphics.drawCircle(0, 0, 2);
 			result.graphics.endFill();
 			if (point) {
-				result.x = point.y;
+				result.x = point.x;
 				result.y = point.y;
 			} else {
 				result.x = _currentX;
