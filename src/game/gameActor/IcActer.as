@@ -87,7 +87,7 @@ package game.gameActor {
 			}
 			
 			_pathTimeline.append(new TweenLite(this, duration / _speed,
-																					{x : point.x - this.width/2, y : point.y - this.height/2,
+																					{x : point.x, y : point.y,
 																						ease : Linear.easeNone,
 																						onStart : onStartPoint,
 																						onStartParams : [point]}));

@@ -59,7 +59,7 @@ package animation {
 		
 		private function playAnimation(icAnimation:IcAnimation, backAnimation:Boolean):void {
 			if (_currentAnimation) {
-				var currentAnimationMC:MovieClip = getBackOrFrontAnimation(icAnimation, _isBackAnimation);
+				var currentAnimationMC:MovieClip = getBackOrFrontAnimation(_currentAnimation, _isBackAnimation);
 				if (this.contains(currentAnimationMC)) { this.removeChild(currentAnimationMC); }
 			}
 			_currentAnimation = icAnimation;
