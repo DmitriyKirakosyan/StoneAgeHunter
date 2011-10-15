@@ -28,9 +28,6 @@ package game.animals {
 		public static const MODE_BLOODY:uint = 1;
 		public static const MODE_STALS:uint = 2;
 		
-		private const ANIMATE_STAY:String = "stay";
-		private const ANIMATE_MOVE:String = "move";
-		
 		public function Duck() {
 			super();
 			_mode = MODE_BLOODY;

@@ -7,15 +7,17 @@ package animation {
 
 	public class IcAnimation {
 		private var _name:String;
-		private var _movieClip:MovieClip;
+		private var _animation:MovieClip;
+		private var _animationBack:MovieClip;
 		
 		public function IcAnimation(name:String, movieClip:MovieClip):void {
 			_name = name;
-			_movieClip = movieClip;
+			_animation = movieClip;
 		}
 		
 		public function get name():String { return _name; }
-		public function get movieClip():MovieClip { return _movieClip; }
+		public function get animation():MovieClip { return _animation; }
+		public function get backAnimation():MovieClip { return _animationBack; }
 		
 		/* Internal functions */
 		

@@ -15,9 +15,6 @@ package game.player {
 		
 		private var _debug:Boolean;
 		
-		private const ANIMATE_MOVE:String = "move";
-		private const ANIMATE_STAY:String = "stay";
-		
 		public function Hunter(debug:Boolean) {
 			super();
 			_debug = debug;

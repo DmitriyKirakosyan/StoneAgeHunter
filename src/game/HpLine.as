@@ -27,7 +27,6 @@ package game {
 		}
 		
 		/* Internal functions */
-		
 		private function updateView():void {
 			this.graphics.clear();
 			this.graphics.beginFill(0xffaaaa);

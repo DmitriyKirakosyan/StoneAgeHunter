@@ -11,6 +11,9 @@ package game.gameActor {
 		private var _pathTimeline:TimelineMax;
 		private var _moving:Boolean;
 
+		protected const ANIMATE_MOVE:String = "move";
+		protected const ANIMATE_STAY:String = "stay";
+		
 		public function IcActer() {
 			super();
 			_speed = 1;

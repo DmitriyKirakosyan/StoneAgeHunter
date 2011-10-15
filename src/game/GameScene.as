@@ -1,19 +1,26 @@
 package game {
 	import animation.IcSprite;
+	
+	import flash.display.DisplayObject;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.MouseEvent;
+	import flash.geom.Point;
+	
 	import game.animals.AnimalEvent;
 	import game.animals.Duck;
-	import flash.events.Event;
-	import scene.SceneEvent;
-	import flash.geom.Point;
-	import flash.events.MouseEvent;
-	import game.player.Hunter;
-	import tilemap.TileMap;
-	import flash.display.Sprite;
-	import flash.events.EventDispatcher;
-	import scene.IScene;
+	import game.armor.Stone;
+	import game.gameActor.IcActer;
 	import game.gameActor.KeyPoint;
 	import game.gameActor.KeyPointEvent;
 	import game.gameActor.LinkToPoint;
+	import game.player.Hunter;
+	
+	import scene.IScene;
+	import scene.SceneEvent;
+	
+	import tilemap.TileMap;
 
 	public class GameScene extends EventDispatcher implements IScene {
 		private var _mapContainer:Sprite;
@@ -140,28 +147,36 @@ package game {
 		public function drawPaths():void {
 		}
 		private function onGameContainerEnterFrame(event:Event):void {
-			for each (var hunter:Hunter in _hunters) {
-				checkWithAll(hunter);
-			}
+			checkZSorting();
 		}
 		
-		private function checkWithAll(hunter:Hunter):void {
-			for each (var otherHunter:Hunter in _hunters) {
-				if (hunter != otherHunter &&
-						crossHunters(hunter, otherHunter) && needSwitchHunters(hunter, otherHunter)) {
-					const indexOfOne:int = _gameContainer.getChildIndex(hunter);
-					_gameContainer.setChildIndex(hunter, _gameContainer.getChildIndex(otherHunter));
-					_gameContainer.setChildIndex(otherHunter, indexOfOne);
+		private function checkZSorting():void {
+			for (var i:int = 0; i < _gameContainer.numChildren; ++i) {
+				if (_gameContainer.getChildAt(i) is IcActer) {
+					checkWithAll(_gameContainer.getChildAt(i) as IcActer);
 				}
 			}
 		}
 		
-		private function needSwitchHunters(one:Hunter, two:Hunter):Boolean {
+		private function checkWithAll(actor:IcActer):void {
+			var child:DisplayObject;
+			for (var i:int = 0; i < _gameContainer.numChildren; ++i) {
+				child = _gameContainer.getChildAt(i)
+				if (actor != child && child is IcActer) {
+					if (crossActors(actor, child) && needSwitchActors(actor, child)) {
+						_gameContainer.setChildIndex(child, _gameContainer.getChildIndex(actor));
+						_gameContainer.setChildIndex(actor, i);
+					}
+				}
+			}
+		}
+		
+		private function needSwitchActors(one:DisplayObject, two:DisplayObject):Boolean {
 			return (one.y > two.y && _gameContainer.getChildIndex(one) < _gameContainer.getChildIndex(two)) ||
 							(one.y < two.y && _gameContainer.getChildIndex(one) > _gameContainer.getChildIndex(two));
 		}
 		
-		private function crossHunters(one:Hunter, two:Hunter):Boolean {
+		private function crossActors(one:DisplayObject, two:DisplayObject):Boolean {
 			return one.hitTestObject(two);
 		}
 		
