@@ -41,7 +41,6 @@ package game {
 		
 		private function drawPathToCurrentPoint():void {
 			if (!_drawing || !needDrawLine()) { return; }
-			trace("need draw line");
 			var lastPoint:Point = (_pathParts && _pathParts.length > 0) ?
 											new Point(_pathParts[_pathParts.length-1].x, _pathParts[_pathParts.length-1].y) :
 											null;
@@ -52,8 +51,6 @@ package game {
 				addPathPartToVector(newPathPart);
 			} else {
 				var nowPoint:Point = new Point(_currentX, _currentY);
-				trace("now point x, y : " + nowPoint.x + ", " + nowPoint.y);
-				trace("last point x, y : " + lastPoint.x + ", " + lastPoint.y);
 				var lineLength:Number = Point.distance(lastPoint, nowPoint);
 				for (var i:int = 6; i < lineLength; i+= 6) {
 					newPathPart = createPathPart( Point.interpolate(nowPoint, lastPoint, i / lineLength) );
