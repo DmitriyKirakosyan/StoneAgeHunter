@@ -46,8 +46,8 @@ package game {
 			_gameContainer = new Sprite();
 			_stonesController = new StonesController(_gameContainer);
 			_debugPanel = new DebugPanel(container, this);
-			_drawingController = new DrawingController(container);
 			container.addChild(_mapContainer);
+			_drawingController = new DrawingController(container);
 			container.addChild(_gameContainer);
 			_gameContainer.addEventListener(Event.ENTER_FRAME, onGameContainerEnterFrame);
 			_tileMap = tileMap;
