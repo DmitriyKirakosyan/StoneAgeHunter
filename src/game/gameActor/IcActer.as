@@ -107,7 +107,13 @@ package game.gameActor {
 			if (targetPoint.y < this.y) {
 				changeToBackAnimation();
 			} else { changeToFrontAnimation(); }
-			//if (_isNormalRotation && 
+			if (_isNormalRotation && this.x < targetPoint.x) {
+				_isNormalRotation = false;
+				this.scaleX = -this.scaleX; this.x += this.width;
+			} else if (!_isNormalRotation && this.x > targetPoint.x) {
+				_isNormalRotation = true;
+				this.scaleX = -this.scaleX; this.x -= this.width;
+			}
 		}
 		
 	}
