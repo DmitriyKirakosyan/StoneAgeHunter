@@ -98,7 +98,7 @@ package game.gameActor {
 					return;
 				}
 			}
-			if (_keyPoints.length > 0) {
+			if (_keyPoints && _keyPoints.length > 0) {
 				_keyPoints[_keyPoints.length-1].attack = true;
 			}
 		}

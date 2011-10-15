@@ -95,6 +95,7 @@ package game {
 			_mapContainer.addChild(_tileMap);
 			_stonesController.createStones();
 			createHunters();
+			_drawingController.addHunters(_hunters);
 			createDuck();
 			_mapContainer.addChild(_drawingContainer);
 			addListeners();

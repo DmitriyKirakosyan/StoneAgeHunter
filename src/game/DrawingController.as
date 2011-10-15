@@ -3,12 +3,17 @@ package game {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	
+	import game.gameActor.IcActer;
+	import game.player.Hunter;
 
 	public class DrawingController {
 		private var _parentContainer:Sprite;
 		private var _drawingContainer:Sprite;
 		private var _drawing:Boolean;
 		private var _pathParts:Vector.<Sprite>;
+		
+		private var _hunters:Vector.<Hunter>;
 		
 		private var _currentX:Number;
 		private var _currentY:Number;
@@ -18,6 +23,18 @@ package game {
 			_parentContainer = container;
 			_drawingContainer = new Sprite();
 			_parentContainer.addChild(_drawingContainer);
+		}
+		
+		public function addHunter(hunter:Hunter):void {
+			if (!_hunters) { _hunters = new Vector.<Hunter>(); }
+			_hunters.push(hunter);
+		}
+		
+		public function addHunters(hunters:Vector.<Hunter>):void {
+			if (!_hunters) { _hunters = new Vector.<Hunter>(); }
+			if (hunters) {
+				hunters.forEach(function(item:Hunter, ..._):void { _hunters.push(item); });
+			}
 		}
 		
 		public function addListeners():void {
@@ -80,10 +97,23 @@ package game {
 		}
 		
 		private function onMouseDown(event:MouseEvent):void {
-			_drawing = true;
-			_currentX = event.stageX;
-			_currentY = event.stageY;
-			_parentContainer.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			var selectedHunter:Hunter = findSelectedHunter(event.stageX, event.stageY);
+			if (selectedHunter) {
+				
+				_drawing = true;
+				_currentX = event.stageX;
+				_currentY = event.stageY;
+				_parentContainer.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			}
+		}
+		
+		private function findSelectedHunter(mouseX:Number, mouseY:Number):Hunter {
+			for each (var hunter:Hunter in _hunters) {
+				if (hunter.hitTestPoint(mouseX, mouseY)) {
+					return hunter;
+				}
+			}
+			return null;
 		}
 		
 		private function onMouseUp(event:MouseEvent):void {
