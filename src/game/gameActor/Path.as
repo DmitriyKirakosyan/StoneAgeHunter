@@ -64,6 +64,13 @@ package game.gameActor {
 			return null;
 		}
 		
+		public function removeKeyPoint(point:Point):void {
+			const keyPoint:KeyPoint = getKeyPoint(point);
+			if (!keyPoint) { return; }
+			const index:int = _keyPoints.indexOf(keyPoint);
+			if (index != -1) { _keyPoints.slice(index, 1); }
+		}
+		
 		public function removePreviouseKeyPoint(point:Point):void {
 			const keyPoint:KeyPoint = getKeyPoint(point);
 			if (!keyPoint) { return; }

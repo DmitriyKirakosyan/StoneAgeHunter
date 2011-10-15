@@ -9,6 +9,7 @@ package animation {
 		private var _animations:Vector.<IcAnimation>;
 		private var _animating:Boolean;
 		private var _currentAnimation:IcAnimation;
+		private var _isBackAnimation:Boolean; //this is question need this or not
 		
 		public function IcSprite() {
 			super();
@@ -17,6 +18,8 @@ package animation {
 		
 		/* API */
 		
+		public function get isBackAnimation():Boolean { return _isBackAnimation; }
+		
 		/**
 		 * override this if need
 		 */
@@ -24,31 +27,49 @@ package animation {
 			return copyName == "" ? this : null;
 		}
 		
-		public function addAnimation(name:String, movieClip:MovieClip):void {
+		public function addAnimation(name:String, movieClip:MovieClip, movieClipBack:MovieClip = null):void {
 			if (!_animations) { _animations = new Vector.<IcAnimation>(); }
-			_animations.push(new IcAnimation(name, movieClip));
+			_animations.push(new IcAnimation(name, movieClip, movieClipBack));
 		}
 		
-		public function play(animationName:String = ""):void {
+		public function play(animationName:String = "", back:Boolean = false):void {
 			if (animationName != "") {
 				const icAnimation:IcAnimation = getAnimationByName(animationName);
-				if (icAnimation) { playAnimation(icAnimation); }
+				if (icAnimation) { playAnimation(icAnimation, back); }
 			} else {
 				if (_animations && _animations.length > 0) {
-					playAnimation(_animations[0]);
+					playAnimation(_animations[0], back);
 				}
+			}
+		}
+		
+		protected function changeToBackAnimation():void {
+			if (!_isBackAnimation) {
+				playAnimation(_currentAnimation, true);
+			}
+		}
+		
+		protected function changeToFrontAnimation():void {
+			if (_isBackAnimation) {
+				playAnimation(_currentAnimation, false);
 			}
 		}
 		
 		/* Internal functions */
 		
-		private function playAnimation(icAnimation:IcAnimation):void {
+		private function playAnimation(icAnimation:IcAnimation, backAnimation:Boolean):void {
 			if (_currentAnimation) {
-				if (this.contains(_currentAnimation.animation)) { this.removeChild(_currentAnimation.animation); }
+				var currentAnimationMC:MovieClip = getBackOrFrontAnimation(icAnimation, _isBackAnimation);
+				if (this.contains(currentAnimationMC)) { this.removeChild(currentAnimationMC); }
 			}
 			_currentAnimation = icAnimation;
-			this.addChild(icAnimation.animation);
+			this.addChild(getBackOrFrontAnimation(icAnimation, backAnimation));
 			_animating = true;
+			_isBackAnimation = backAnimation;
+		}
+		
+		private function getBackOrFrontAnimation(icAnimation:IcAnimation, back:Boolean):MovieClip {
+			return back ? icAnimation.backAnimation : icAnimation.animation;
 		}
 		
 		private function getAnimationByName(name:String):IcAnimation {

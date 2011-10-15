@@ -1,11 +1,11 @@
 package game.animals {
-	import com.greensock.TweenMax;
-	import com.greensock.easing.Linear;
-	import com.greensock.TimelineMax;
-	import com.adobe.serialization.json.JSON;
 	import animation.IcSprite;
 	
+	import com.adobe.serialization.json.JSON;
+	import com.greensock.TimelineMax;
 	import com.greensock.TweenLite;
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Linear;
 	
 	import flash.filters.GlowFilter;
 	import flash.geom.Point;
@@ -87,9 +87,7 @@ package game.animals {
 		override public function move():void {
 			_paused = false;
 			play(ANIMATE_MOVE);
-			if (_currentTween && _currentTween.paused) {
-				_currentTween.play();
-			} else { tweenToStartPatrolPath(); }
+			if (!_timelineMax) { tweenToStartPatrolPath(); }
 		}
 		
 		override public function pauseMove():void {
@@ -108,30 +106,36 @@ package game.animals {
 			for (var i:int = 0; i < _patrolPath.length; ++i) {
 				if (i > 0) {
 					prevPoint = _patrolPath[i-1];
-					_timelineMax.append( createTweenToPoint(_patrolPath[i], prevPoint) );
+					_timelineMax.append( createTweenToPoint(_patrolPath[i], prevPoint, onTweenStart) );
 					}
 			}
 			if (_patrolPath && _patrolPath.length > 0) {
-				_timelineMax.append(createTweenToPoint(_patrolPath[0], _patrolPath[_patrolPath.length-1]));
+				_timelineMax.append(createTweenToPoint(_patrolPath[0], _patrolPath[_patrolPath.length-1], onTweenStart));
 			}
 			_timelineMax.play();
 		}
 		
+		private function onTweenStart(point:Point):void {
+			trace("tween start");
+			changeAnimationAndRotation(point);
+		}
+		
 		private function tweenToStartPatrolPath():void {
 			if (_patrolPath && _patrolPath.length > 0) {
-				createTweenToPoint(_patrolPath[0], new Point(this.x, this.y), tweenPatrolPath);
+				createTweenToPoint(_patrolPath[0], new Point(this.x, this.y), onTweenStart, tweenPatrolPath);
 			}
 		}
 		
-		private function createTweenToPoint(point:Point, prevPoint:Point, onComplete:Function = null):TweenMax {
+		private function createTweenToPoint(point:Point, prevPoint:Point, onStart:Function =  null, onComplete:Function = null):TweenMax {
 			var duration:Number = computeDuration(prevPoint, point.clone()) / speed;
 			var duck:Duck = this;
-			return new TweenMax(duck, duration, { x : point.x, y : point.y, ease:Linear.easeNone, onComplete : onComplete});
+			return new TweenMax(duck, duration, { x : point.x, y : point.y, ease:Linear.easeNone,
+																						onStart : onStart, onStartParams : [point], onComplete : onComplete});
 		}
 		
 		private function addAnimations():void {
-			addAnimation(ANIMATE_STAY, new DuckStayD());
-			addAnimation(ANIMATE_MOVE, new DuckWalkD());
+			addAnimation(ANIMATE_STAY, new DuckStayD(), new DuckStayU());
+			addAnimation(ANIMATE_MOVE, new DuckWalkD(), new DuckWalkU());
 		}
 		
 		private function drawDuck():void {

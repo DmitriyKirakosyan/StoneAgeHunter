@@ -75,8 +75,8 @@ package game.player {
 		/* Internal functions */
 		
 		private function addAnimations():void {
-			addAnimation(ANIMATE_STAY, new ManStayD());
-			addAnimation(ANIMATE_MOVE, new ManRunD());
+			addAnimation(ANIMATE_STAY, new ManStayD(), new ManStayU());
+			addAnimation(ANIMATE_MOVE, new ManRunD(), new ManRunU());
 		}
 		
 		override protected function stopMove():void {

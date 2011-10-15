@@ -1,21 +1,26 @@
 package game.gameActor {
-	import com.greensock.easing.Linear;
-	import com.greensock.TweenLite;
-	import com.greensock.TimelineMax;
-	import flash.geom.Point;
 	import animation.IcSprite;
+	
+	import com.greensock.TimelineMax;
+	import com.greensock.TweenLite;
+	import com.greensock.easing.Linear;
+	
+	import flash.geom.Point;
 
 	public class IcActer extends IcSprite {
 		private var _speed:Number;
 		private var _path:Path;
 		private var _pathTimeline:TimelineMax;
 		private var _moving:Boolean;
+		
+		private var _isNormalRotation:Boolean;
 
 		protected const ANIMATE_MOVE:String = "move";
 		protected const ANIMATE_STAY:String = "stay";
 		
 		public function IcActer() {
 			super();
+			_isNormalRotation = true;
 			_speed = 1;
 			_moving = false;
 		}
@@ -90,11 +95,19 @@ package game.gameActor {
 		}
 		
 		private function onStartPoint(point:Point):void {
-			const prevPoint:KeyPoint = _path.getPreviouseKeyPoint(point);
+			changeAnimationAndRotation(point);
+			const prevPoint:KeyPoint = _path.getPreviouseKeyPoint(point); //realy it is current duck position
 			if (prevPoint) {
 				dispatchEvent(new KeyPointEvent(KeyPointEvent.REMOVE_ME, prevPoint));
 				_path.removePreviouseKeyPoint(point);
 			}
+		}
+		
+		protected function changeAnimationAndRotation(targetPoint:Point):void {
+			if (targetPoint.y < this.y) {
+				changeToBackAnimation();
+			} else { changeToFrontAnimation(); }
+			//if (_isNormalRotation && 
 		}
 		
 	}

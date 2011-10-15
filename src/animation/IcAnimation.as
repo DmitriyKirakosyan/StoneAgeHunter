@@ -10,9 +10,10 @@ package animation {
 		private var _animation:MovieClip;
 		private var _animationBack:MovieClip;
 		
-		public function IcAnimation(name:String, movieClip:MovieClip):void {
+		public function IcAnimation(name:String, movieClip:MovieClip, movieClipBack:MovieClip = null):void {
 			_name = name;
 			_animation = movieClip;
+			_animationBack = movieClipBack;
 		}
 		
 		public function get name():String { return _name; }
