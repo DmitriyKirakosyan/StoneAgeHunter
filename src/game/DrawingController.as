@@ -21,11 +21,18 @@ package game {
 		private var _currentX:Number;
 		private var _currentY:Number;
 		
+		private var _partsDistance:Number;
+		
 		public function DrawingController(container:Sprite) {
 			super();
+			_partsDistance = 2;
 			_parentContainer = container;
 			_drawingContainer = new Sprite();
 			_parentContainer.addChild(_drawingContainer);
+		}
+		
+		public function setPathPartsDistance(value:Number):void {
+			_partsDistance = value;
 		}
 		
 		public function get selectedHunter():Hunter { return _selectedHunter; }
@@ -73,7 +80,7 @@ package game {
 			} else {
 				var nowPoint:Point = new Point(_currentX, _currentY);
 				var lineLength:Number = Point.distance(lastPoint, nowPoint);
-				for (var i:int = 6; i < lineLength; i+= 6) {
+				for (var i:int = 4 + _partsDistance; i < lineLength; i+= 4 + _partsDistance) {
 					newPathPart = createPathPart( Point.interpolate(nowPoint, lastPoint, i / lineLength) );
 					addNewPathPart(newPathPart);
 				}

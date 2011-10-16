@@ -58,6 +58,8 @@ package game {
 		
 		/* functions for debug */
 		
+		public function get drawingController():DrawingController { return _drawingController; }
+		
 		public function dreamModeOn():void {
 			_dreamChanger.dreamOn();
 		}

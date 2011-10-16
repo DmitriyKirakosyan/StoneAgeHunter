@@ -1,13 +1,17 @@
 package game {
-	import flash.display.StageDisplayState;
-	import flash.text.TextFieldAutoSize;
-	import flash.text.TextField;
-	import game.player.Hunter;
-	import flash.events.Event;
-	import com.bit101.components.Slider;
-	import flash.events.MouseEvent;
-	import flash.display.Sprite;
 	import com.bit101.components.PushButton;
+	import com.bit101.components.RadioButton;
+	import com.bit101.components.Slider;
+	
+	import flash.display.Sprite;
+	import flash.display.StageDisplayState;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+	
+	import game.player.Hunter;
+
 	public class DebugPanel {
 		private var _gameSceneContainer:Sprite;
 		private var _container:Sprite;
@@ -20,6 +24,9 @@ package game {
 		private var _animalSpeedSlider:Slider;
 		private var _huntersHpSlider:Slider;
 		private var _animalHpSlider:Slider;
+		private var _pathPartsDistanceSlider:Slider;
+		private var _pathPartCircle:RadioButton;
+		private var _pathPartRectangle:RadioButton;
 		
 		public function DebugPanel(container:Sprite, gameScene:GameScene):void {
 			super();
@@ -63,6 +70,7 @@ package game {
 			_animalSpeedSlider = createSlider(400, 240, onAnimalSpeedSlider, .1, 2, .5, "Duck speed");
 			_huntersHpSlider = createSlider(400, 280, onHunterHpSlider, 1, 5, 3, "Hunters hp");
 			_animalHpSlider = createSlider(400, 320, onAnimalHpSlider, 1, 8, 5, "Duck hp");
+			_pathPartsDistanceSlider = createSlider(400, 160, onPathPartsDistanceSlider, 0, 15, 2, "distance between path parts");
 		}
 		
 		private function createSlider(x:Number, y:Number, handler:Function, minValue:Number, 
@@ -101,6 +109,10 @@ package game {
 		}
 		private function onAnimalHpSlider(event:Event):void {
 			_gameScene.duck.hp = _animalHpSlider.value;
+		}
+		
+		private function onPathPartsDistanceSlider(event:Event):void {
+			_gameScene.drawingController.setPathPartsDistance(_pathPartsDistanceSlider.value);
 		}
 		
 		private function addButtons():void {
