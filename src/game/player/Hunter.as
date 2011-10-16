@@ -54,14 +54,24 @@ package game.player {
 			return this;
 		}
 		
+		override public function addWayPoint(point:Point):void {
+			super.addWayPoint(point);
+			move();
+		}
+		
 		override public function move():void {
 			super.move();
 			if (pathTimeline && path) { play(ANIMATE_MOVE);}
 		}
 		
+		override protected function stop():void {
+			super.stop();
+			play(ANIMATE_STAY);
+		}
+		
 		override public function pauseMove():void {
 			super.pauseMove();
-			if (pathTimeline) { play(ANIMATE_STAY);}
+			if (pathTimeline) { play(ANIMATE_STAY); }
 		}
 		
 		public function onClick():void {
@@ -79,10 +89,5 @@ package game.player {
 			addAnimation(ANIMATE_MOVE, new ManRunD(), new ManRunU());
 		}
 		
-		override protected function stopMove():void {
-			super.stopMove();
-			play(ANIMATE_STAY);
-		}
-
 	}
 }
