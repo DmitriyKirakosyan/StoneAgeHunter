@@ -48,6 +48,7 @@ package game {
 			_debugPanel = new DebugPanel(container, this);
 			container.addChild(_mapContainer);
 			_drawingController = new DrawingController(container);
+			_drawingController.addEventListener(DrawingControllerEvent.ADD_PATH_POINT, onAddPathPoint);
 			container.addChild(_gameContainer);
 			_gameContainer.addEventListener(Event.ENTER_FRAME, onGameContainerEnterFrame);
 			_tileMap = tileMap;
@@ -247,6 +248,12 @@ package game {
 			animal.removeEventListener(MouseEvent.MOUSE_OUT, onAnimalMouseOut);
 		}
 		
+		private function onAddPathPoint(event:DrawingControllerEvent):void {
+			if (_drawingController.selectedHunter) {
+				_drawingController.selectedHunter.addWayPoint(event.point);
+			}
+		}
+		
 		private function onAnimalTouchActor(event:AnimalEvent):void {
 			const touchedHunter:IcSprite = event.actor;
 			for each (var hunter:Hunter in _hunters) {
@@ -300,11 +307,11 @@ package game {
 		}
 		
 		private function onkeyPointRemoveRequest(event:KeyPointEvent):void {
-			if (_drawingContainer.contains(event.keyPoint)) {
-				_drawingContainer.removeChild(event.keyPoint);
-			} else {
-				trace("[GameScene.onkeyPointRemoveRequest] WARNING keyPoint dont contants on scene");
-			}
+			//if (_drawingContainer.contains(event.keyPoint)) {
+			//	_drawingContainer.removeChild(event.keyPoint);
+			//} else {
+			//	trace("[GameScene.onkeyPointRemoveRequest] WARNING keyPoint dont contants on scene");
+			//}
 		}
 		
 		private function showHunterExistingPath(hunter:Hunter):void {

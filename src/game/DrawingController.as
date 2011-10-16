@@ -1,17 +1,20 @@
 package game {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
 	import game.gameActor.IcActer;
 	import game.player.Hunter;
 
-	public class DrawingController {
+	public class DrawingController extends EventDispatcher{
 		private var _parentContainer:Sprite;
 		private var _drawingContainer:Sprite;
 		private var _drawing:Boolean;
 		private var _pathParts:Vector.<Sprite>;
+		
+		private var _selectedHunter:Hunter;
 		
 		private var _hunters:Vector.<Hunter>;
 		
@@ -24,6 +27,8 @@ package game {
 			_drawingContainer = new Sprite();
 			_parentContainer.addChild(_drawingContainer);
 		}
+		
+		public function get selectedHunter():Hunter { return _selectedHunter; }
 		
 		public function addHunter(hunter:Hunter):void {
 			if (!_hunters) { _hunters = new Vector.<Hunter>(); }
@@ -64,17 +69,21 @@ package game {
 			var newPathPart:Sprite;
 			if (!lastPoint) {
 				newPathPart = createPathPart();
-				_drawingContainer.addChild(newPathPart);
-				addPathPartToVector(newPathPart);
+				addNewPathPart(newPathPart);
 			} else {
 				var nowPoint:Point = new Point(_currentX, _currentY);
 				var lineLength:Number = Point.distance(lastPoint, nowPoint);
 				for (var i:int = 6; i < lineLength; i+= 6) {
 					newPathPart = createPathPart( Point.interpolate(nowPoint, lastPoint, i / lineLength) );
-					_drawingContainer.addChild(newPathPart);
-					addPathPartToVector(newPathPart);
+					addNewPathPart(newPathPart);
 				}
 			}
+		}
+		
+		private function addNewPathPart(pathPart:Sprite):void {
+			_drawingContainer.addChild(pathPart);
+			addPathPartToVector(pathPart);
+			dispatchEvent(new DrawingControllerEvent(DrawingControllerEvent.ADD_PATH_POINT, new Point(pathPart.x, pathPart.y)));
 		}
 		
 		private function needDrawLine():Boolean {
@@ -99,7 +108,7 @@ package game {
 		private function onMouseDown(event:MouseEvent):void {
 			var selectedHunter:Hunter = findSelectedHunter(event.stageX, event.stageY);
 			if (selectedHunter) {
-				
+				_selectedHunter = selectedHunter;
 				_drawing = true;
 				_currentX = event.stageX;
 				_currentY = event.stageY;

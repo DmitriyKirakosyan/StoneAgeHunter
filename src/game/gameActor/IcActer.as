@@ -54,6 +54,7 @@ package game.gameActor {
 		}
 		
 		public function pauseMove():void {
+			trace("pause");
 			if (_pathTimeline) { _pathTimeline.pause(); }
 		}
 
@@ -82,16 +83,16 @@ package game.gameActor {
 		
 		private function addPointToTimeline(point:Point, duration:Number):void {
 			if (!_pathTimeline) {
-				_pathTimeline = new TimelineMax({onComplete : stopMove });
-				_pathTimeline.pause();
+				_pathTimeline = new TimelineMax();
 			}
-			
+			trace("add way point x, y : " + point.x + ", " + point.y);
 			_pathTimeline.append(new TweenLite(this, duration / _speed,
 																					{x : point.x, y : point.y,
 																						ease : Linear.easeNone,
 																						onStart : onStartPoint,
 																						onStartParams : [point]}));
 			if (_pathTimeline.paused) { trace("paused"); }
+			_pathTimeline.play();
 		}
 		
 		private function onStartPoint(point:Point):void {
