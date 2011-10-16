@@ -13,10 +13,6 @@ package game {
 		private var _container:Sprite;
 		private var _gameScene:GameScene;
 	
-		private var _goBtn:PushButton;
-		private var _attackBtn:PushButton;
-		private var _pauseBtn:PushButton;
-		private var _clearBtn:PushButton;
 		private var _goMenuBtn:PushButton;
 		private var _fullScreenBtn:PushButton;
 		
@@ -55,10 +51,6 @@ package game {
 		//TODO bad memory managment here, а мне плевать
 		
 		private function createButtons():void {
-			_goBtn = new PushButton(_container, 400, 50, "lets go", onButtonGoClick);
-			_attackBtn = new PushButton(_container, 400, 70, "attack", onButtonAttackClick);
-			_pauseBtn = new PushButton(_container, 400, 90, "pause", onButtonPauseClick);
-			_clearBtn = new PushButton(_container, 400, 110, "clear", onButtonClearClick);
 			_goMenuBtn = new PushButton(_container, 400, 130, "go to menu", onButtonMenuClick);
 			
 			_fullScreenBtn = new PushButton(_container, 400, 20, "fullscreen", onFullScreenClick);
@@ -129,25 +121,6 @@ package game {
 					_gameSceneContainer.stage.displayState=StageDisplayState.NORMAL;
 				}
 			}
-		}
-		
-		private function onButtonGoClick(event:MouseEvent):void {
-			_gameScene.dreamModeOff();
-			_gameScene.play();
-		}
-		
-		private function onButtonAttackClick(event:MouseEvent):void {
-			// attack here
-		}
-		
-		private function onButtonPauseClick(event:MouseEvent):void {
-			_gameScene.dreamModeOn();
-			_gameScene.pause();
-		}
-		
-		private function onButtonClearClick(event:MouseEvent):void {
-			_gameScene.drawingContainer.graphics.clear();
-			_gameScene.drawing = false;
 		}
 		
 		private function onButtonMenuClick(event:MouseEvent):void {
