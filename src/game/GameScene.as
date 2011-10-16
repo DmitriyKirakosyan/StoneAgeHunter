@@ -100,6 +100,7 @@ package game {
 			createHunters();
 			_drawingController.addHunters(_hunters);
 			createDuck();
+			_duck.move();
 			_mapContainer.addChild(_drawingContainer);
 			addListeners();
 			_debugPanel.open();
