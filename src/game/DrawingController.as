@@ -22,6 +22,9 @@ package game {
 		private var _currentY:Number;
 		
 		private var _partsDistance:Number;
+		private var _partShape:String;
+		
+		public static const SHAPE_RECTANGLE:String = "rectangle";
 		
 		public function DrawingController(container:Sprite) {
 			super();
@@ -33,6 +36,10 @@ package game {
 		
 		public function setPathPartsDistance(value:Number):void {
 			_partsDistance = value;
+		}
+		
+		public function setPartShape(shapeName:String):void {
+			_partShape = shapeName;
 		}
 		
 		public function get selectedHunter():Hunter { return _selectedHunter; }
@@ -151,7 +158,9 @@ package game {
 		private function createPathPart(point:Point = null):Sprite {
 			var result:Sprite = new Sprite();
 			result.graphics.beginFill(0xffffff);
-			result.graphics.drawCircle(0, 0, 2);
+			if (_partShape == SHAPE_RECTANGLE) {
+				result.graphics.drawRect(-3, -3, 6, 6);
+			} else { result.graphics.drawCircle(0, 0, 2); }
 			result.graphics.endFill();
 			if (point) {
 				result.x = point.x;

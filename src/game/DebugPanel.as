@@ -59,7 +59,8 @@ package game {
 		
 		private function createButtons():void {
 			_goMenuBtn = new PushButton(_container, 400, 130, "go to menu", onButtonMenuClick);
-			
+			_pathPartCircle = new RadioButton(_container, 400, 50, "circle", true, onCircleClick);
+			_pathPartRectangle = new RadioButton(_container, 450, 50, "rectangle", false, onRectangleClick);
 			_fullScreenBtn = new PushButton(_container, 400, 20, "fullscreen", onFullScreenClick);
 			
 			createSliders();
@@ -91,6 +92,14 @@ package game {
 			tf1.x = x;
 			tf1.y = y;
 			_container.addChild(tf1);
+		}
+		
+		private function onCircleClick(event:Event):void {
+			_gameScene.drawingController.setPartShape("circle");
+		}
+		
+		private function onRectangleClick(event:Event):void {
+			_gameScene.drawingController.setPartShape("rectangle");
 		}
 		
 		private function onHunterSpeedSlider(event:Event):void {
