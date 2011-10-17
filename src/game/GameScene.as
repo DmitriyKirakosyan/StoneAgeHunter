@@ -12,6 +12,7 @@ package game {
 	import game.animals.Duck;
 	import game.armor.Stone;
 	import game.gameActor.IcActer;
+	import game.gameActor.IcActerEvent;
 	import game.gameActor.KeyPoint;
 	import game.gameActor.KeyPointEvent;
 	import game.gameActor.LinkToPoint;
@@ -232,10 +233,12 @@ package game {
 		private function addHunterListeners(hunter:Hunter):void {
 			hunter.addEventListener(MouseEvent.CLICK, onHunterClick);
 			hunter.addEventListener(KeyPointEvent.REMOVE_ME, onkeyPointRemoveRequest);
+			hunter.addEventListener(IcActerEvent.TWEEN_TICK, onHunterTick);
 		}
 		private function removeHunterListeners(hunter:Hunter):void {
 			hunter.removeEventListener(MouseEvent.CLICK, onHunterClick);
-			hunter.addEventListener(KeyPointEvent.REMOVE_ME, onkeyPointRemoveRequest);
+			hunter.removeEventListener(KeyPointEvent.REMOVE_ME, onkeyPointRemoveRequest);
+			hunter.removeEventListener(IcActerEvent.TWEEN_TICK, onHunterTick);
 		}
 		
 		private function addAnimalListeners(animal:Duck):void {
@@ -315,6 +318,10 @@ package game {
 			//} else {
 			//	trace("[GameScene.onkeyPointRemoveRequest] WARNING keyPoint dont contants on scene");
 			//}
+		}
+		
+		private function onHunterTick(event:IcActerEvent):void {
+			
 		}
 		
 		private function showHunterExistingPath(hunter:Hunter):void {

@@ -89,7 +89,8 @@ package game.gameActor {
 																					{x : point.x, y : point.y,
 																						ease : Linear.easeNone,
 																						onStart : onStartPoint,
-																						onStartParams : [point]}));
+																						onStartParams : [point],
+																						onComplete : onTweenComplete}));
 			if (_pathTimeline.paused) { trace("paused"); }
 			_pathTimeline.play();
 		}
@@ -101,6 +102,10 @@ package game.gameActor {
 				dispatchEvent(new KeyPointEvent(KeyPointEvent.REMOVE_ME, prevPoint));
 				_path.removePreviouseKeyPoint(point);
 			}
+		}
+		
+		private function onTweenComplete():void {
+			dispatchEvent(new IcActerEvent(IcActerEvent.TWEEN_TICK));
 		}
 		
 		protected function changeAnimationAndRotation(targetPoint:Point):void {
