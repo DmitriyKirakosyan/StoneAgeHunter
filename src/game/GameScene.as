@@ -321,7 +321,9 @@ package game {
 		}
 		
 		private function onHunterTick(event:IcActerEvent):void {
-			
+			if (_stonesController.stoneUnderHunter(event.acter)) {
+				trace("i want to get this stone :)");
+			}
 		}
 		
 		private function showHunterExistingPath(hunter:Hunter):void {

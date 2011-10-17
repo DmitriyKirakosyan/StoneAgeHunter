@@ -105,7 +105,7 @@ package game.gameActor {
 		}
 		
 		private function onTweenComplete():void {
-			dispatchEvent(new IcActerEvent(IcActerEvent.TWEEN_TICK));
+			dispatchEvent(new IcActerEvent(IcActerEvent.TWEEN_TICK, this));
 		}
 		
 		protected function changeAnimationAndRotation(targetPoint:Point):void {

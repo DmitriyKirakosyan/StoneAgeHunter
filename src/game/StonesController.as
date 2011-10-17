@@ -3,6 +3,7 @@ package game {
 	import flash.events.MouseEvent;
 	
 	import game.armor.Stone;
+	import game.gameActor.IcActer;
 
 	public class StonesController {
 		
@@ -32,6 +33,13 @@ package game {
 				_gameContainer.removeChild(stone);
 			}
 			_stones = null;
+		}
+		
+		public function stoneUnderHunter(hunter:IcActer):Boolean {
+			for each (var stone:Stone in _stones) {
+				if (stone.hitTestObject(hunter)) { return true; }
+			}
+			return false;
 		}
 		
 		/* Internal functions */
