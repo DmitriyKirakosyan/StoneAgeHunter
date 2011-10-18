@@ -70,6 +70,14 @@ package game.gameActor {
 			if (!_path) { _path = new Path(); }
 			_path.startPath(point);
 		}
+		
+		public function removePrevTween():void {
+			if (_pathTimeline) {
+				_pathTimeline.vars["onComplete"] = null;
+				_pathTimeline.kill();
+				_pathTimeline = null;
+			}
+		}
 
 		public function addWayPoint(point:Point):void {
 			if (!_path) { _path = new Path(); }

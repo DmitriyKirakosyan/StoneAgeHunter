@@ -51,7 +51,7 @@ package game {
 			_zSortingManager = new ZSortingManager(this);
 			container.addChild(_mapContainer);
 			_drawingController = new DrawingController(container);
-			_drawingController.addEventListener(DrawingControllerEvent.ADD_PATH_POINT, onAddPathPoint);
+			addDrawingControllerListeners();
 			container.addChild(_gameContainer);
 			_gameContainer.addEventListener(Event.ENTER_FRAME, onGameContainerEnterFrame);
 			_tileMap = tileMap;
@@ -217,6 +217,16 @@ package game {
 			_gameContainer.removeChild(_duck);
 		}
 		
+		private function addDrawingControllerListeners():void {
+			_drawingController.addEventListener(DrawingControllerEvent.ADD_PATH_POINT, onAddPathPoint);
+			_drawingController.addEventListener(DrawingControllerEvent.START_DRAWING_PATH, onStartDrawingPath);
+		}
+		
+		private function removeDrawingControllerListeners():void {
+			_drawingController.removeEventListener(DrawingControllerEvent.ADD_PATH_POINT, onAddPathPoint);
+			_drawingController.removeEventListener(DrawingControllerEvent.START_DRAWING_PATH, onStartDrawingPath);
+		}
+		
 		private function addHunterListeners(hunter:Hunter):void {
 			hunter.addEventListener(MouseEvent.CLICK, onHunterClick);
 			hunter.addEventListener(KeyPointEvent.REMOVE_ME, onkeyPointRemoveRequest);
@@ -241,6 +251,12 @@ package game {
 			animal.removeEventListener(MouseEvent.CLICK, onAnimalClick);
 			animal.removeEventListener(MouseEvent.MOUSE_OVER, onAnimalMouseOver);
 			animal.removeEventListener(MouseEvent.MOUSE_OUT, onAnimalMouseOut);
+		}
+		
+		private function onStartDrawingPath(event:DrawingControllerEvent):void {
+			if (_drawingController.selectedHunter) {
+				_drawingController.selectedHunter.startFollowPath();
+			}
 		}
 		
 		private function onAddPathPoint(event:DrawingControllerEvent):void {

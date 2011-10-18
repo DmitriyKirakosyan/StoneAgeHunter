@@ -54,6 +54,10 @@ package game.player {
 			return this;
 		}
 		
+		public function startFollowPath():void {
+			removePrevTween();
+		}
+		
 		override public function addWayPoint(point:Point):void {
 			super.addWayPoint(point);
 			move();

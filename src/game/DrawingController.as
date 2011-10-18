@@ -139,6 +139,7 @@ package game {
 				_currentX = event.stageX;
 				_currentY = event.stageY;
 				_parentContainer.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+				dispatchEvent(new DrawingControllerEvent(DrawingControllerEvent.START_DRAWING_PATH, new Point(event.stageX, event.stageY)));
 			}
 		}
 		
