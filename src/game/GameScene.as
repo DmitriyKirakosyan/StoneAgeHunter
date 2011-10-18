@@ -31,6 +31,7 @@ package game {
 		private var _duck:Duck;
 		private var _stonesController:StonesController;
 		private var _drawingController:DrawingController;
+		private var _zSortingManager:ZSortingManager;
 		
 		private var _debugPanel:DebugPanel;
 		
@@ -47,6 +48,7 @@ package game {
 			_gameContainer = new Sprite();
 			_stonesController = new StonesController(_gameContainer);
 			_debugPanel = new DebugPanel(container, this);
+			_zSortingManager = new ZSortingManager(this);
 			container.addChild(_mapContainer);
 			_drawingController = new DrawingController(container);
 			_drawingController.addEventListener(DrawingControllerEvent.ADD_PATH_POINT, onAddPathPoint);
@@ -155,37 +157,12 @@ package game {
 		public function drawPaths():void {
 		}
 		private function onGameContainerEnterFrame(event:Event):void {
-			checkZSorting();
+			_zSortingManager.checkZSorting();
+			checkDuckMode();
 		}
 		
-		private function checkZSorting():void {
-			for (var i:int = 0; i < _gameContainer.numChildren; ++i) {
-				if (_gameContainer.getChildAt(i) is IcActer) {
-					checkWithAll(_gameContainer.getChildAt(i) as IcActer);
-				}
-			}
-		}
-		
-		private function checkWithAll(actor:IcActer):void {
-			var child:DisplayObject;
-			for (var i:int = 0; i < _gameContainer.numChildren; ++i) {
-				child = _gameContainer.getChildAt(i)
-				if (actor != child && child is IcActer) {
-					if (crossActors(actor, child) && needSwitchActors(actor, child)) {
-						_gameContainer.setChildIndex(child, _gameContainer.getChildIndex(actor));
-						_gameContainer.setChildIndex(actor, i);
-					}
-				}
-			}
-		}
-		
-		private function needSwitchActors(one:DisplayObject, two:DisplayObject):Boolean {
-			return (one.y > two.y && _gameContainer.getChildIndex(one) < _gameContainer.getChildIndex(two)) ||
-							(one.y < two.y && _gameContainer.getChildIndex(one) > _gameContainer.getChildIndex(two));
-		}
-		
-		private function crossActors(one:DisplayObject, two:DisplayObject):Boolean {
-			return one.hitTestObject(two);
+		private function checkDuckMode():void {
+			
 		}
 		
 		private function createHunter(debug:Boolean):Hunter {
