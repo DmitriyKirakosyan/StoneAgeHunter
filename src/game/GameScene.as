@@ -163,11 +163,17 @@ package game {
 		
 		private function checkDuckMode():void {
 			if (_duck && _duck.mode == Duck.MODE_BLOODY) { return; }
+			var hunter:Hunter = getHunterForDuckEat();
+			if (hunter) { _duck.fasHunter(hunter); }
+		}
+		
+		private function getHunterForDuckEat():Hunter {
 			for each (var hunter:Hunter in _hunters) {
 				if (Point.distance(new Point(hunter.x, hunter.y), new Point(_duck.x, _duck.y)) < 150) {
-					_duck.fasHunter(hunter);
+					return hunter;
 				}
 			}
+			return null;
 		}
 		
 		private function createHunter(debug:Boolean):Hunter {
@@ -224,12 +230,14 @@ package game {
 		
 		private function addAnimalListeners(animal:Duck):void {
 			animal.addEventListener(AnimalEvent.TOUCH_ACTOR, onAnimalTouchActor);
+			animal.addEventListener(AnimalEvent.FOLLOW_COMPLETE, onAnimalFollowComplete);
 			animal.addEventListener(MouseEvent.CLICK, onAnimalClick);
 			animal.addEventListener(MouseEvent.MOUSE_OVER, onAnimalMouseOver);
 			animal.addEventListener(MouseEvent.MOUSE_OUT, onAnimalMouseOut);
 		}
 		private function removeAnimalListeners(animal:Duck):void {
 			animal.removeEventListener(AnimalEvent.TOUCH_ACTOR, onAnimalTouchActor);
+			animal.removeEventListener(AnimalEvent.FOLLOW_COMPLETE, onAnimalFollowComplete);
 			animal.removeEventListener(MouseEvent.CLICK, onAnimalClick);
 			animal.removeEventListener(MouseEvent.MOUSE_OVER, onAnimalMouseOver);
 			animal.removeEventListener(MouseEvent.MOUSE_OUT, onAnimalMouseOut);
@@ -247,6 +255,12 @@ package game {
 				if (hunter == touchedHunter) {
 					hunter.damage();
 				}
+			}
+		}
+		
+		private function onAnimalFollowComplete(event:AnimalEvent):void {
+			if (!getHunterForDuckEat()) {
+				_duck.goForPatrolPath();
 			}
 		}
 		
