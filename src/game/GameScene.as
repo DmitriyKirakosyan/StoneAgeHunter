@@ -313,11 +313,7 @@ package game {
 		}
 		
 		private function onkeyPointRemoveRequest(event:KeyPointEvent):void {
-			//if (_drawingContainer.contains(event.keyPoint)) {
-			//	_drawingContainer.removeChild(event.keyPoint);
-			//} else {
-			//	trace("[GameScene.onkeyPointRemoveRequest] WARNING keyPoint dont contants on scene");
-			//}
+			_drawingController.removePoint(event.keyPoint.point);
 		}
 		
 		private function onHunterTick(event:IcActerEvent):void {

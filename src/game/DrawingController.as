@@ -42,6 +42,18 @@ package game {
 			_partShape = shapeName;
 		}
 		
+		public function removePoint(point:Point):void {
+			if (!_pathParts) { return; }
+			for (var i:int = 0; i < _pathParts.length; ++i) {
+				if (_pathParts[i].x == point.x && _pathParts[i].y == point.y) {
+					if (_drawingContainer.contains(_pathParts[i])) {
+						_drawingContainer.removeChild(_pathParts[i]);
+					} else { trace(" WARN [DrawingController.removePoint] pathPart dosnt contains on drawingContainer"); }
+					_pathParts.splice(i, 1);
+				}
+			}
+		}
+		
 		public function get selectedHunter():Hunter { return _selectedHunter; }
 		
 		public function addHunter(hunter:Hunter):void {
