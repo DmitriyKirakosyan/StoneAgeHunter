@@ -21,8 +21,8 @@ package game {
 			for (var i:int = 0; i < 10; ++i) {
 				stone = new Stone();
 				addStoneListeners(stone);
-				stone.x = Math.random() * 300;
-				stone.y = Math.random() * 300;
+				stone.x = Math.random() * 57 + 80;
+				stone.y = Math.random() * 50 + 80;
 				_gameContainer.addChild(stone);
 				_stones.push(stone);
 			}
