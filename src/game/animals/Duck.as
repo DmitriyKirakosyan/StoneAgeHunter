@@ -24,13 +24,13 @@ package game.animals {
 		
 		private var _hp:HpLine;
 		
-		public static const MODE_NOTHING:uint = 0;
+		public static const MODE_SELF_PATH:uint = 0;
 		public static const MODE_BLOODY:uint = 1;
 		public static const MODE_STALS:uint = 2;
 		
 		public function Duck() {
 			super();
-			_mode = MODE_BLOODY;
+			_mode = MODE_SELF_PATH;
 			_paused = true;
 			speed = .5;
 			setScale();
@@ -80,7 +80,7 @@ package game.animals {
 		}
 		
 		public function remove():void {
-			_mode = MODE_NOTHING;
+			_mode = MODE_SELF_PATH;
 			if (_currentTween) { _currentTween.kill(); }
 		}
 		

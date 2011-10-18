@@ -190,8 +190,6 @@ package game {
 		
 		private function createHunter(debug:Boolean):Hunter {
 			const hunter:Hunter = new Hunter(debug);
-			hunter.x = Math.random() * 250 + 50;
-			hunter.y = Math.random() * 150 + 50;
 			_gameContainer.addChild(hunter);
 			addHunterListeners(hunter);
 			return hunter;
@@ -202,6 +200,7 @@ package game {
 			var hunter:Hunter;
 			for (var i:int = 0; i < 2; ++i) {
 				hunter = createHunter(false);
+				hunter.x = 350 + i * 80; hunter.y = 300 - i * 30;
 				_hunters.push(hunter);
 			}
 		}
@@ -216,12 +215,12 @@ package game {
 		
 		private function createDuck():void {
 			_duck = new Duck();
-			var json:String = "[{\"x\" : \"20\", \"y\" : \"50\"}, {\"x\" : \"530\", \"y\" : \"50\"}," +
-								"{\"x\" : \"530\", \"y\" : \"340\"}, {\"x\" : \"20\", \"y\" : \"340\"}," +
+			var json:String = "[{\"x\" : \"20\", \"y\" : \"50\"}, {\"x\" : \"230\", \"y\" : \"50\"}," +
+								"{\"x\" : \"230\", \"y\" : \"140\"}, {\"x\" : \"20\", \"y\" : \"140\"}," +
 								"{\"x\" : \"20\", \"y\" : \"50\"} ]";
 			_duck.setJsonPath(json);
-			_duck.x = Math.random() * 100 + 100;
-			_duck.y = Math.random() * 100 + 100;
+			_duck.x = 100;
+			_duck.y = 100;
 			addAnimalListeners(_duck);
 			_gameContainer.addChild(_duck);
 		}
@@ -265,8 +264,6 @@ package game {
 			for each (var hunter:Hunter in _hunters) {
 				if (hunter == touchedHunter) {
 					hunter.damage();
-//					hunter.x = Math.random() * 250 + 50;
-//					hunter.y = Math.random() * 150 + 50;
 				}
 			}
 		}
