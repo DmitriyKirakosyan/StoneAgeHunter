@@ -12,12 +12,15 @@ package game.animals {
 	
 	import game.HpLine;
 	import game.gameActor.IcActer;
+	import game.player.Hunter;
 
 	public class Duck extends IcActer {
 		private var _enemies:Vector.<IcSprite>;
 		private var _patrolPath:Vector.<Point>;
 		private var _mode:uint;
 		private var _paused:Boolean;
+		
+		private var _targetHunter:Hunter;
 		
 		private var _currentTween:TweenLite;
 		private var _timelineMax:TimelineMax;
@@ -40,6 +43,8 @@ package game.animals {
 			play(ANIMATE_STAY);
 		}
 		
+		public function get mode():uint { return _mode; }
+		
 		public function setJsonPath(json:String):void {
 			var jsonObject:Object = JSON.decode(json);
 			_patrolPath = new Vector.<Point>();
@@ -48,6 +53,13 @@ package game.animals {
 					_patrolPath.push(new Point(pointObj["x"], pointObj["y"]));
 				}
 			}
+		}
+		
+		public function fasHunter(hunter:Hunter):void {
+			_targetHunter = hunter;
+			_mode = MODE_BLOODY;
+			stopPathMoving();
+			followHunter();
 		}
 		
 		public function setScale():void {
@@ -87,7 +99,7 @@ package game.animals {
 		override public function move():void {
 			_paused = false;
 			play(ANIMATE_MOVE);
-			if (!_timelineMax) { tweenToStartPatrolPath(); }
+			if (!_timelineMax) { goForPatrolPath(); }
 		}
 		
 		override public function pauseMove():void {
@@ -96,6 +108,19 @@ package game.animals {
 		}
 		
 		/* Internal functions */
+		
+		private function followHunter():void {
+			if (!_targetHunter) { goForPatrolPath(); return; }
+			var duration:Number = computeDuration(new Point(this.x, this.y), new Point(_targetHunter.x, _targetHunter.y)) / speed;
+			new TweenMax(this, duration, {x : _targetHunter.x, y : _targetHunter.y, ease : Linear.easeNone});
+		}
+		
+		private function stopPathMoving():void {
+			if (_timelineMax) {
+				_timelineMax.vars["onComplete"] = null;
+				_timelineMax.kill();
+			}
+		}
 
 		private function tweenPatrolPath():void {
 			var prevPoint:Point;
@@ -120,7 +145,7 @@ package game.animals {
 			changeAnimationAndRotation(point);
 		}
 		
-		private function tweenToStartPatrolPath():void {
+		private function goForPatrolPath():void {
 			if (_patrolPath && _patrolPath.length > 0) {
 				createTweenToPoint(_patrolPath[0], new Point(this.x, this.y), onTweenStart, tweenPatrolPath);
 			}

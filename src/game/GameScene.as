@@ -162,7 +162,12 @@ package game {
 		}
 		
 		private function checkDuckMode():void {
-			
+			if (_duck && _duck.mode == Duck.MODE_BLOODY) { return; }
+			for each (var hunter:Hunter in _hunters) {
+				if (Point.distance(new Point(hunter.x, hunter.y), new Point(_duck.x, _duck.y)) < 150) {
+					_duck.fasHunter(hunter);
+				}
+			}
 		}
 		
 		private function createHunter(debug:Boolean):Hunter {
