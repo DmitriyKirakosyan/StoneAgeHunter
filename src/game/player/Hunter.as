@@ -22,6 +22,7 @@ package game.player {
 			super();
 			_debug = debug;
 			_baseColor = Math.random() * 0xffffff;
+			filters = [new GlowFilter(_baseColor)];
 			path.setLinksColor(_baseColor);
 			this.scaleX = .3;
 			this.scaleY = .3;
@@ -38,6 +39,8 @@ package game.player {
 		public function set hp(value:Number):void {
 			_hp.value = value;
 		}
+
+		public function get baseColor():uint { return _baseColor; }
 		
 		public function damage(value:Number = 1):void {
 			_hp.damage(value);
@@ -90,11 +93,11 @@ package game.player {
 		}
 		
 		public function onClick():void {
-			startPath(new Point(this.x, this.y));
-			filters = [new GlowFilter(_baseColor)];
+		//	startPath(new Point(this.x, this.y));
+		//	filters = [new GlowFilter(_baseColor)];
 		}
 		public function unselect():void {
-			filters = [];
+		//	filters = [];
 		}
 		
 		/* Internal functions */

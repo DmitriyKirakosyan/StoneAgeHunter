@@ -170,7 +170,7 @@ package game {
 		
 		private function createPathPart(point:Point = null):Sprite {
 			var result:Sprite = new Sprite();
-			result.graphics.beginFill(0xffffff);
+			result.graphics.beginFill(_selectedHunter ? _selectedHunter.baseColor : 0xffffff);
 			if (_partShape == SHAPE_RECTANGLE) {
 				result.graphics.drawRect(-3, -3, 6, 6);
 			} else { result.graphics.drawCircle(0, 0, 2); }
