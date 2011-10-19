@@ -326,8 +326,12 @@ package game {
 		}
 		
 		private function onHunterTick(event:IcActerEvent):void {
-			if (_stonesController.stoneUnderHunter(event.acter)) {
-				trace("i want to get this stone :)");
+			if (! (event.acter is Hunter)) { return; }
+			var hunter:Hunter = event.acter as Hunter;
+			var stone:Stone = _stonesController.getStoneUnderHunter(event.acter);
+			if (stone && !hunter.hasStone) {
+				_stonesController.removeStone(stone);
+				hunter.putStone(stone);
 			}
 		}
 		

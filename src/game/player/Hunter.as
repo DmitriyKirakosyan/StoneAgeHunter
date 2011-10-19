@@ -6,10 +6,13 @@ package game.player {
 	import flash.geom.Point;
 	
 	import game.HpLine;
+	import game.armor.Stone;
 	import game.gameActor.IcActer;
 
 	public class Hunter extends IcActer {
 		private var _hp:HpLine;
+		
+		private var _stone:Stone;
 		
 		private var _baseColor:uint;
 		
@@ -40,7 +43,15 @@ package game.player {
 			_hp.damage(value);
 		}
 		
-		public function castStone():void {
+		public function get hasStone():Boolean {
+			return _stone != null;
+		}
+		
+		public function putStone(stone:Stone):void {
+			_stone = stone;
+			stone.x = 150;
+			stone.y = 50;
+			this.addChild(stone);
 		}
 		
 		override public function getAlternativeCopy(copyName:String=""):IcSprite {

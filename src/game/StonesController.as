@@ -35,11 +35,19 @@ package game {
 			_stones = null;
 		}
 		
-		public function stoneUnderHunter(hunter:IcActer):Boolean {
+		public function getStoneUnderHunter(hunter:IcActer):Stone {
 			for each (var stone:Stone in _stones) {
-				if (stone.hitTestObject(hunter)) { return true; }
+				if (stone.hitTestObject(hunter)) { return stone; }
 			}
-			return false;
+			return null;
+		}
+		
+		public function removeStone(stone:Stone):void {
+			var index:int = _stones.indexOf(stone);
+			if (index != -1) {
+				_stones.splice(index, 1);
+				if (_gameContainer.contains(stone)) { _gameContainer.removeChild(stone); } else { trace("StonesController.removeStone] WARN wrong stone"); }
+			}
 		}
 		
 		/* Internal functions */
