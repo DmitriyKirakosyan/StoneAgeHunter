@@ -132,6 +132,7 @@ package game {
 		}
 		
 		private function onMouseDown(event:MouseEvent):void {
+			removeAllPathParts();
 			var selectedHunter:Hunter = findSelectedHunter(event.stageX, event.stageY);
 			if (selectedHunter) {
 				_selectedHunter = selectedHunter;
@@ -155,7 +156,6 @@ package game {
 		private function onMouseUp(event:MouseEvent):void {
 			_parentContainer.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			_drawing = false;
-			removeAllPathParts();
 		}
 		
 		private function removeAllPathParts():void {
