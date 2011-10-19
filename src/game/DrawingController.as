@@ -5,7 +5,6 @@ package game {
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
-	import game.gameActor.IcActer;
 	import game.player.Hunter;
 
 	public class DrawingController extends EventDispatcher{
@@ -46,13 +45,11 @@ package game {
 			if (!_pathParts) { return; }
 			for (var i:int = 0; i < _pathParts.length; ++i) {
 				if (_pathParts[i].x == point.x && _pathParts[i].y == point.y) {
-					if (_drawingContainer.contains(_pathParts[i])) {
-						_drawingContainer.removeChild(_pathParts[i]);
-					} else { trace(" WARN [DrawingController.removePoint] pathPart dosnt contains on drawingContainer"); }
-					_pathParts.splice(i, 1);
+					removeFirstPoints(i+1);
 				}
 			}
 		}
+		
 		
 		public function get selectedHunter():Hunter { return _selectedHunter; }
 		
@@ -83,6 +80,15 @@ package game {
 		
 		/* Internal functions */
 		
+		private function removeFirstPoints(num:int):void {
+			for (var i:int = 0; i < num; ++i) {
+				if (_drawingContainer.contains(_pathParts[i])) {
+					_drawingContainer.removeChild(_pathParts[i]);
+				} else { trace(" WARN [DrawingController.removePoint] pathPart dosnt contains on drawingContainer"); }
+			}
+			_pathParts.splice(0, num);
+		}
+
 		private function onEnterFrame(event:Event):void {
 			drawPathToCurrentPoint();	
 		}
@@ -160,7 +166,7 @@ package game {
 		
 		private function removeAllPathParts():void {
 			for each (var part:Sprite in _pathParts) { _drawingContainer.removeChild(part); }
-			_pathParts = null
+			_pathParts = null;
 		}
 		
 		private function addPathPartToVector(pathPart:Sprite):void {
