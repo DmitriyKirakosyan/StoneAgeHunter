@@ -1,7 +1,6 @@
 package game.player {
 	import animation.IcSprite;
 	
-	import flash.display.BitmapData;
 	import flash.filters.GlowFilter;
 	import flash.geom.Point;
 	
@@ -24,8 +23,8 @@ package game.player {
 			_baseColor = Math.random() * 0xffffff;
 			filters = [new GlowFilter(_baseColor)];
 			path.setLinksColor(_baseColor);
-			this.scaleX = .3;
-			this.scaleY = .3;
+			this.scaleX = .1;
+			this.scaleY = .1;
 			_hp = new HpLine(2);
 			_hp.y = -20;
 			addChild(_hp);
@@ -34,6 +33,12 @@ package game.player {
 		}
 		
 		/* API */
+		
+		// for debug
+		public function setScale(value:Number):void {
+			this.scaleX = value;
+			this.scaleY = value;
+		}
 		
 		public function get hp():Number { return _hp.value; }
 		public function set hp(value:Number):void {

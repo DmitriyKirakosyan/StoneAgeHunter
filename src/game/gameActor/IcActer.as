@@ -94,7 +94,7 @@ package game.gameActor {
 				_pathTimeline = new TimelineMax({onComplete : stop});
 			}
 			_pathTimeline.append(new TweenLite(this, duration / _speed,
-																					{x : point.x, y : point.y,
+																					{x : point.x, y : point.y - this.height/4,
 																						ease : Linear.easeNone,
 																						onStart : onStartPoint,
 																						onStartParams : [point],

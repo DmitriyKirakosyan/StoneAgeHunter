@@ -25,6 +25,8 @@ package game {
 		private var _huntersHpSlider:Slider;
 		private var _animalHpSlider:Slider;
 		private var _pathPartsDistanceSlider:Slider;
+		private var _huntersScaleSlider:Slider;
+		private var _animalScaleSlider:Slider;
 		private var _pathPartCircle:RadioButton;
 		private var _pathPartRectangle:RadioButton;
 		
@@ -58,7 +60,7 @@ package game {
 		//TODO bad memory managment here, а мне плевать
 		
 		private function createButtons():void {
-			_goMenuBtn = new PushButton(_container, 400, 130, "go to menu", onButtonMenuClick);
+			_goMenuBtn = new PushButton(_container, 400, 80, "go to menu", onButtonMenuClick);
 			_pathPartCircle = new RadioButton(_container, 400, 50, "circle", true, onCircleClick);
 			_pathPartRectangle = new RadioButton(_container, 450, 50, "rectangle", false, onRectangleClick);
 			_fullScreenBtn = new PushButton(_container, 400, 20, "fullscreen", onFullScreenClick);
@@ -67,17 +69,21 @@ package game {
 		}
 		
 		private function createSliders():void {
-			_huntersSpeedSlider = createSlider(400, 200, onHunterSpeedSlider, .1, 2, 1, "Hunters speed");
-			_animalSpeedSlider = createSlider(400, 240, onAnimalSpeedSlider, .1, 2, .5, "Duck speed");
-			_huntersHpSlider = createSlider(400, 280, onHunterHpSlider, 1, 5, 3, "Hunters hp");
+			_huntersScaleSlider = createSlider(400, 170, onHunterScaleSlider, .1, 1, .1, "Hunters scale");
+			_huntersScaleSlider.tick = .01;
+			_animalScaleSlider = createSlider(400, 200, onAnimalScaleSlider, .1, 1, .3, "Duck scale");
+			_animalScaleSlider.tick = .01;
+			_huntersSpeedSlider = createSlider(400, 230, onHunterSpeedSlider, .1, 2, 1, "Hunters speed");
+			_animalSpeedSlider = createSlider(400, 260, onAnimalSpeedSlider, .1, 2, .5, "Duck speed");
+			_huntersHpSlider = createSlider(400, 290, onHunterHpSlider, 1, 5, 3, "Hunters hp");
 			_animalHpSlider = createSlider(400, 320, onAnimalHpSlider, 1, 8, 5, "Duck hp");
-			_pathPartsDistanceSlider = createSlider(400, 160, onPathPartsDistanceSlider, 0, 15, 2, "distance between path parts");
+			_pathPartsDistanceSlider = createSlider(400, 140, onPathPartsDistanceSlider, 0, 15, 2, "distance between path parts");
 		}
 		
 		private function createSlider(x:Number, y:Number, handler:Function, minValue:Number, 
 																	maxValue:Number, value:Number, name:String):Slider {
 			createSliderLabel(name, x, y);
-			const slider:Slider = new Slider("horizontal", _container, x, y + 20, handler);
+			const slider:Slider = new Slider("horizontal", _container, x, y + 15, handler);
 			slider.maximum = maxValue;
 			slider.minimum = minValue;
 			slider.value = value;
@@ -102,6 +108,15 @@ package game {
 			_gameScene.drawingController.setPartShape("rectangle");
 		}
 		
+		private function onHunterScaleSlider(event:Event):void {
+			for each (var hunter:Hunter in _gameScene.hunters) {
+				hunter.setScale(_huntersScaleSlider.value);
+			}
+		}
+		
+		private function onAnimalScaleSlider(event:Event):void {
+			_gameScene.duck.setScale(_animalScaleSlider.value);
+		}
 		private function onHunterSpeedSlider(event:Event):void {
 			for each (var hunter:Hunter in _gameScene.hunters) {
 				hunter.speed = _huntersSpeedSlider.value;

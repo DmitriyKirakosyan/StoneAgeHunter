@@ -22,7 +22,6 @@ package game.animals {
 		
 		private var _targetHunter:Hunter;
 		
-		private var _currentTween:TweenLite;
 		private var _timelineMax:TimelineMax;
 		
 		private var _hp:HpLine;
@@ -37,7 +36,7 @@ package game.animals {
 			_mode = MODE_PATROL;
 			_paused = true;
 			speed = .5;
-			setScale();
+			setScale(.3);
 			drawDuck();
 			createHp();
 			addAnimations();
@@ -69,9 +68,9 @@ package game.animals {
 			followHunter();
 		}
 		
-		public function setScale():void {
-			this.scaleX = .4;
-			this.scaleY = .4;
+		public function setScale(value:Number):void {
+			this.scaleX = value;
+			this.scaleY = value;
 		}
 		
 		public function createHp():void {
