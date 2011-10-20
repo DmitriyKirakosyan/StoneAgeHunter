@@ -58,8 +58,8 @@ package game.player {
 		
 		public function putStone(stone:Stone):void {
 			_stone = stone;
-			stone.x = 150;
-			stone.y = 50;
+			stone.x = this.width/5;
+			stone.y = this.height/4;
 			this.addChild(stone);
 		}
 		
