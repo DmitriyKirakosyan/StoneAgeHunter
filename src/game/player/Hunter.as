@@ -36,8 +36,7 @@ package game.player {
 		
 		// for debug
 		public function setScale(value:Number):void {
-			this.scaleX = value;
-			this.scaleY = value;
+			animationScale = value;
 		}
 		
 		public function get hp():Number { return _hp.value; }

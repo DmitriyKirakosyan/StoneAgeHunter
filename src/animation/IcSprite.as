@@ -1,11 +1,13 @@
 package animation {
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
+	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
 
 	public class IcSprite extends Sprite {
+		private var _animationContainer:Sprite;
 		private var _animations:Vector.<IcAnimation>;
 		private var _animating:Boolean;
 		private var _currentAnimation:IcAnimation;
@@ -14,11 +16,18 @@ package animation {
 		public function IcSprite() {
 			super();
 			_animating = false;
+			_animationContainer = new Sprite();
+			this.addChild(_animationContainer);
 		}
 		
 		/* API */
 		
 		public function get isBackAnimation():Boolean { return _isBackAnimation; }
+		
+		public function set animationScale(value:Number):void {
+			_animationContainer.scaleX = value;
+			_animationContainer.scaleY = value;
+		}
 		
 		/**
 		 * override this if need
@@ -60,10 +69,10 @@ package animation {
 		private function playAnimation(icAnimation:IcAnimation, backAnimation:Boolean):void {
 			if (_currentAnimation) {
 				var currentAnimationMC:MovieClip = getBackOrFrontAnimation(_currentAnimation, _isBackAnimation);
-				if (this.contains(currentAnimationMC)) { this.removeChild(currentAnimationMC); }
+				if (_animationContainer.contains(currentAnimationMC)) { _animationContainer.removeChild(currentAnimationMC); }
 			}
 			_currentAnimation = icAnimation;
-			this.addChild(getBackOrFrontAnimation(icAnimation, backAnimation));
+			_animationContainer.addChild(getBackOrFrontAnimation(icAnimation, backAnimation));
 			_animating = true;
 			_isBackAnimation = backAnimation;
 		}

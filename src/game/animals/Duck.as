@@ -37,7 +37,6 @@ package game.animals {
 			_paused = true;
 			speed = .5;
 			setScale(.3);
-			drawDuck();
 			createHp();
 			addAnimations();
 			play(ANIMATE_STAY);
@@ -69,8 +68,7 @@ package game.animals {
 		}
 		
 		public function setScale(value:Number):void {
-			this.scaleX = value;
-			this.scaleY = value;
+			animationScale = value;
 		}
 		
 		public function createHp():void {
