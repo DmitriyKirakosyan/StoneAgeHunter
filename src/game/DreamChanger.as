@@ -31,6 +31,7 @@ package game {
 		}
 		
 		public function dreamOn():void {
+			/*
 			if (_mode == PLAN_MODE) { return; }
 			_mode = PLAN_MODE;
 			_alterContainer = new Sprite();
@@ -48,6 +49,7 @@ package game {
 				_alterObjects.push(alterCopy);
 			}
 			changeToAlterContainer();
+			*/
 		}
 		
 		public function dreamOff():void {

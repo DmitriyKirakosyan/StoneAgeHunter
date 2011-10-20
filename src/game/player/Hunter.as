@@ -9,10 +9,13 @@ package game.player {
 	import game.gameActor.IcActer;
 
 	public class Hunter extends IcActer {
+		/* hitpoints line */
 		private var _hp:HpLine;
 		
+		/* stone, witch took the hunter */
 		private var _stone:Stone;
-		
+
+		/* hunter's color of glow and path */
 		private var _baseColor:uint;
 		
 		private var _debug:Boolean;
