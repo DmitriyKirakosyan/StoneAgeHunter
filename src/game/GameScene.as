@@ -50,7 +50,7 @@ package game {
 			_debugPanel = new DebugPanel(container, this);
 			_zSortingManager = new ZSortingManager(this);
 			container.addChild(_mapContainer);
-			_drawingController = new DrawingController(container);
+			_drawingController = new DrawingController(container, tileMap);
 			addDrawingControllerListeners();
 			container.addChild(_gameContainer);
 			_gameContainer.addEventListener(Event.ENTER_FRAME, onGameContainerEnterFrame);

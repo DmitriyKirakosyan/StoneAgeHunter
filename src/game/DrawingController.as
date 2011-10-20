@@ -6,6 +6,8 @@ package game {
 	import flash.geom.Point;
 	
 	import game.player.Hunter;
+	
+	import tilemap.TileMap;
 
 	public class DrawingController extends EventDispatcher{
 		private var _parentContainer:Sprite;
@@ -23,12 +25,15 @@ package game {
 		private var _partsDistance:Number;
 		private var _partShape:String;
 		
+		private var _tilemap:TileMap;
+		
 		public static const SHAPE_RECTANGLE:String = "rectangle";
 		
-		public function DrawingController(container:Sprite) {
+		public function DrawingController(container:Sprite, tilemap:TileMap) {
 			super();
 			_partsDistance = 2;
 			_parentContainer = container;
+			_tilemap = tilemap;
 			_drawingContainer = new Sprite();
 			_parentContainer.addChild(_drawingContainer);
 		}
@@ -90,7 +95,11 @@ package game {
 		}
 
 		private function onEnterFrame(event:Event):void {
-			drawPathToCurrentPoint();	
+			if (_tilemap.canGoTo(new Point(_currentX, _currentY))) {
+				drawPathToCurrentPoint();
+			} else {
+				stopDrawing();
+			}
 		}
 		
 		private function drawPathToCurrentPoint():void {
@@ -160,6 +169,10 @@ package game {
 		}
 		
 		private function onMouseUp(event:MouseEvent):void {
+			stopDrawing();
+		}
+		
+		private function stopDrawing():void {
 			_parentContainer.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 			_drawing = false;
 		}

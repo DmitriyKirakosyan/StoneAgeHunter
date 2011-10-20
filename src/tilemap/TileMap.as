@@ -1,5 +1,7 @@
 package tilemap {
 	import flash.display.Sprite;
+	import flash.geom.Point;
+
 	public class TileMap extends Sprite {
 		private var _tiles:Vector.<Vector.<Tile>>;
 		private var _textureName:String;
@@ -7,6 +9,24 @@ package tilemap {
 		public function TileMap():void {
 			super();
 			createTextures();
+		}
+		
+		public function canGoTo(point:Point):Boolean {
+			if (pointInMap(point)) {
+				const i:int = point.x / _tiles[0][0].width;
+				const j:int = point.y / _tiles[0][0].height;
+				return _tiles[i][j].locked;
+			}
+			return false;
+		}
+		
+		public function pointInMap(point:Point):Boolean {
+			if (!_tiles || _tiles.length == 0 || _tiles[0].length == 0) { return false; }
+			const i:int = point.x / _tiles[0][0].width;
+			const j:int = point.y / _tiles[0][0].height;
+			trace("[TileMap] i : " + i + ", j : " + j);
+			if (i < 0 || i > _tiles.length || j < 0 || j > _tiles[0].length) { return false; }
+			return true;
 		}
 		
 		/* Tests functions */
