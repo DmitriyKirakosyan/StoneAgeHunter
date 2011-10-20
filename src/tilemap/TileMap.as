@@ -19,9 +19,9 @@ package tilemap {
 		private function createTextures():void{
 			const mapData:Array = [[0,0,0,0,0,0,0,0,0],
 														 [0,0,0,0,0,0,0,0,0],
-														 [0,0,0,0,0,0,0,0,0],
-														 [0,0,0,0,0,0,0,0,0],
-														 [0,0,0,0,0,0,0,0,0],
+														 [0,0,0,0,0,1,0,0,0],
+														 [0,0,0,0,1,0,0,0,0],
+														 [0,0,0,1,0,0,0,0,0],
 														 [0,0,0,0,0,0,0,0,0]];
 			createByMatrixArray(mapData, 9, 6);
 		}
@@ -32,7 +32,7 @@ package tilemap {
 			for (var i:int = 0; i < width; ++i) {
 				_tiles[i] = new Vector.<Tile>();
 				for (var j:int = 0; j < height; ++j) {
-					tile = new Tile();
+					tile = new Tile(matrix[j][i]);
 					setTilePosition(tile, i, j);
 					_tiles[i].push(tile);
 					this.addChild(tile);
