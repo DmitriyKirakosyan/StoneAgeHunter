@@ -7,6 +7,7 @@ package game.animals {
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Linear;
 	
+	import flash.events.Event;
 	import flash.filters.GlowFilter;
 	import flash.geom.Point;
 	
@@ -111,8 +112,13 @@ package game.animals {
 		private function followHunter():void {
 			if (!_targetHunter) { goForPatrolPath(); return; }
 			var duration:Number = computeDuration(new Point(this.x, this.y), new Point(_targetHunter.x, _targetHunter.y)) / speed;
-			new TweenMax(this, duration, {x : _targetHunter.x, y : _targetHunter.y, ease : Linear.easeNone,
-																		onComplete : onFollowHunterComplete});
+			_timelineMax = new TimelineMax();
+			_timelineMax.stop();
+			_timelineMax.killTweensOf(this);
+			_timelineMax.append(new TweenMax(this, duration, {x : _targetHunter.x, y : _targetHunter.y, ease : Linear.easeNone,
+				onComplete : onFollowHunterComplete}));
+			
+			_timelineMax.play();
 		}
 		
 		private function onFollowHunterComplete():void {
