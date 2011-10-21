@@ -15,7 +15,7 @@ package tilemap {
 			if (pointInMap(point)) {
 				const i:int = point.x / _tiles[0][0].width;
 				const j:int = point.y / _tiles[0][0].height;
-				return _tiles[i][j].locked;
+				return !_tiles[i][j].locked;
 			}
 			return false;
 		}
