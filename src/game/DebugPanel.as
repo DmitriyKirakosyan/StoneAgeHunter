@@ -7,17 +7,21 @@ package game {
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
-	import flash.text.TextField;
+import flash.geom.Point;
+import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
 	
 	import game.player.Hunter;
 
-	public class DebugPanel {
+import leveleditor.LevelEditor;
+
+public class DebugPanel {
 		private var _gameSceneContainer:Sprite;
 		private var _container:Sprite;
 		private var _gameScene:GameScene;
 	
 		private var _goMenuBtn:PushButton;
+		private var _openLevelEditorBtn:PushButton;
 		private var _fullScreenBtn:PushButton;
 		
 		private var _huntersSpeedSlider:Slider;
@@ -29,6 +33,8 @@ package game {
 		private var _animalScaleSlider:Slider;
 		private var _pathPartCircle:RadioButton;
 		private var _pathPartRectangle:RadioButton;
+
+		private var _levelEditor:LevelEditor;
 		
 		public function DebugPanel(container:Sprite, gameScene:GameScene):void {
 			super();
@@ -36,6 +42,7 @@ package game {
 			_container = new Sprite();
 			_container.visible = false;
 			_gameScene = gameScene;
+			_levelEditor = new LevelEditor(container, new Point(0, 0));
 			createButtons();
 			
 			_gameSceneContainer.addEventListener(MouseEvent.CLICK, onKeyDown);
@@ -61,6 +68,7 @@ package game {
 		
 		private function createButtons():void {
 			_goMenuBtn = new PushButton(_container, 400, 80, "go to menu", onButtonMenuClick);
+			_openLevelEditorBtn = new PushButton(_container, 400, 100, "open level editor", onOpenLevelEditorClick);
 			_pathPartCircle = new RadioButton(_container, 400, 50, "circle", true, onCircleClick);
 			_pathPartRectangle = new RadioButton(_container, 450, 50, "rectangle", false, onRectangleClick);
 			_fullScreenBtn = new PushButton(_container, 400, 20, "fullscreen", onFullScreenClick);
@@ -162,6 +170,11 @@ package game {
 		private function onButtonMenuClick(event:MouseEvent):void {
 			event.stopPropagation();
 			_gameScene.dispatchAboutClose();
+		}
+
+		private function onOpenLevelEditorClick(event:MouseEvent):void {
+			event.stopPropagation();
+			_levelEditor.open();
 		}
 		
 	}
