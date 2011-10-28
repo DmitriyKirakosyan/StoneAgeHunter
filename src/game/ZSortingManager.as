@@ -36,8 +36,16 @@ package game {
 		}
 		
 		private function needSwitchActors(one:DisplayObject, two:DisplayObject):Boolean {
-			return (one.y > two.y && _gameContainer.getChildIndex(one) < _gameContainer.getChildIndex(two)) ||
-				(one.y < two.y && _gameContainer.getChildIndex(one) > _gameContainer.getChildIndex(two));
+			return (oneAboveTwoByLegs(two, one) && _gameContainer.getChildIndex(one) < _gameContainer.getChildIndex(two)) ||
+				(oneAboveTwoByLegs(one,  two) && _gameContainer.getChildIndex(one) > _gameContainer.getChildIndex(two));
+		}
+
+		private function oneAboveTwoByCenter(one:DisplayObject, two:DisplayObject):Boolean {
+			return one.y < two.y;
+		}
+
+		private function oneAboveTwoByLegs(one:DisplayObject, two:DisplayObject):Boolean {
+			return one.y + one.height/2.5 < two.y + two.height/2.5;
 		}
 		
 		private function crossActors(one:DisplayObject, two:DisplayObject):Boolean {

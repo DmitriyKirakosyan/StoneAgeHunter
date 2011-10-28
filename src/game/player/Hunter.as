@@ -26,7 +26,7 @@ package game.player {
 			_baseColor = Math.random() * 0xffffff;
 			filters = [new GlowFilter(_baseColor)];
 			path.setLinksColor(_baseColor);
-			setScale(.1);
+			setScale(.3);
 			_hp = new HpLine(2);
 			_hp.y = -20;
 			addChild(_hp);

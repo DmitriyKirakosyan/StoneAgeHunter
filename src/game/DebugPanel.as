@@ -77,7 +77,7 @@ public class DebugPanel {
 		}
 		
 		private function createSliders():void {
-			_huntersScaleSlider = createSlider(400, 170, onHunterScaleSlider, .1, 1, .1, "Hunters scale");
+			_huntersScaleSlider = createSlider(400, 170, onHunterScaleSlider, .1, 1, .3, "Hunters scale");
 			_huntersScaleSlider.tick = .01;
 			_animalScaleSlider = createSlider(400, 200, onAnimalScaleSlider, .1, 1, .3, "Duck scale");
 			_animalScaleSlider.tick = .01;
