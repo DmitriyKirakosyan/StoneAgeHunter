@@ -95,7 +95,8 @@ package game {
 		}
 
 		private function onEnterFrame(event:Event):void {
-			if (_tilemap.canGoTo(new Point(_currentX, _currentY))) {
+			if (_tilemap.canGoTo(new Point(_currentX, _currentY)) &&
+					(!_selectedHunter.pathParts || _selectedHunter.pathParts.length < 250)) {
 				drawPathToCurrentPoint();
 			} else {
 				stopDrawing();
