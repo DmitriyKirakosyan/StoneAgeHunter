@@ -13,8 +13,7 @@ package game {
 		private var _parentContainer:Sprite;
 		private var _drawingContainer:Sprite;
 		private var _drawing:Boolean;
-		private var _pathParts:Vector.<Sprite>;
-		
+
 		private var _selectedHunter:Hunter;
 		
 		private var _hunters:Vector.<Hunter>;
@@ -47,15 +46,16 @@ package game {
 		}
 		
 		public function removePoint(point:Point):void {
-			if (!_pathParts) { return; }
-			for (var i:int = 0; i < _pathParts.length; ++i) {
-				if (_pathParts[i].x == point.x && _pathParts[i].y == point.y) {
-					removeFirstPoints(i+1);
+			var pathParts:Vector.<Sprite> = _selectedHunter.pathParts;
+			if (!pathParts) { return; }
+			for (var i:int = 0; i < pathParts.length; ++i) {
+				if (pathParts[i].x == point.x && pathParts[i].y == point.y) {
+					removeFirstPoints(pathParts,  i+1);
 				}
 			}
 		}
-		
-		
+
+
 		public function get selectedHunter():Hunter { return _selectedHunter; }
 		
 		public function addHunter(hunter:Hunter):void {
@@ -85,13 +85,13 @@ package game {
 		
 		/* Internal functions */
 		
-		private function removeFirstPoints(num:int):void {
+		private function removeFirstPoints(pathParts:Vector.<Sprite>, num:int):void {
 			for (var i:int = 0; i < num; ++i) {
-				if (_drawingContainer.contains(_pathParts[i])) {
-					_drawingContainer.removeChild(_pathParts[i]);
+				if (_drawingContainer.contains(pathParts[i])) {
+					_drawingContainer.removeChild(pathParts[i]);
 				} else { trace(" WARN [DrawingController.removePoint] pathPart dosnt contains on drawingContainer"); }
 			}
-			_pathParts.splice(0, num);
+			pathParts.splice(0, num);
 		}
 
 		private function onEnterFrame(event:Event):void {
@@ -103,9 +103,10 @@ package game {
 		}
 		
 		private function drawPathToCurrentPoint():void {
-			if (!_drawing || !needDrawLine()) { return; }
-			var lastPoint:Point = (_pathParts && _pathParts.length > 0) ?
-											new Point(_pathParts[_pathParts.length-1].x, _pathParts[_pathParts.length-1].y) :
+			if (!_drawing || !_selectedHunter || !needDrawLine()) { return; }
+			var lastPoint:Point = (_selectedHunter.pathParts && _selectedHunter.pathParts.length > 0) ?
+											new Point(_selectedHunter.pathParts[_selectedHunter.pathParts.length-1].x,
+																_selectedHunter.pathParts[_selectedHunter.pathParts.length-1].y) :
 											null;
 			var newPathPart:Sprite;
 			if (!lastPoint) {
@@ -123,20 +124,11 @@ package game {
 		
 		private function addNewPathPart(pathPart:Sprite):void {
 			_drawingContainer.addChild(pathPart);
-			addPathPartToVector(pathPart);
-			dispatchEvent(new DrawingControllerEvent(DrawingControllerEvent.ADD_PATH_POINT, new Point(pathPart.x, pathPart.y)));
+			_selectedHunter.addPathPart(pathPart);
 		}
 		
 		private function needDrawLine():Boolean {
-			if (_pathParts && _pathParts.length > 0) {
-				if ( (_pathParts[_pathParts.length-1].x - _currentX < 6 &&
-					_pathParts[_pathParts.length-1].x - _currentX > -6) &&
-					(_pathParts[_pathParts.length-1].y - _currentY < 6 &&
-						_pathParts[_pathParts.length-1].y - _currentY > -6) ) {
-							return false;
-						}
-			}
-			return true;
+			return _selectedHunter.needDrawLine(_currentX, _currentY);
 		}
 		
 		private function onMouseMove(event:MouseEvent):void {
@@ -147,9 +139,9 @@ package game {
 		}
 		
 		private function onMouseDown(event:MouseEvent):void {
-			removeAllPathParts();
 			var selectedHunter:Hunter = findSelectedHunter(event.stageX, event.stageY);
 			if (selectedHunter) {
+				removePathPartsOf(selectedHunter);
 				_selectedHunter = selectedHunter;
 				_drawing = true;
 				_currentX = event.stageX;
@@ -177,14 +169,10 @@ package game {
 			_drawing = false;
 		}
 		
-		private function removeAllPathParts():void {
-			for each (var part:Sprite in _pathParts) { _drawingContainer.removeChild(part); }
-			_pathParts = null;
-		}
-		
-		private function addPathPartToVector(pathPart:Sprite):void {
-			if (!_pathParts) { _pathParts = new Vector.<Sprite>(); }
-			_pathParts.push(pathPart);
+		private function removePathPartsOf(hunter:Hunter):void {
+			for each (var pathPart:Sprite in hunter.pathParts) {
+				if (_drawingContainer.contains(pathPart)) { _drawingContainer.removeChild(pathPart); }
+			}
 		}
 		
 		private function createPathPart(point:Point = null):Sprite {

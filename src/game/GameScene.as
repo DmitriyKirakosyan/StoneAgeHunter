@@ -161,12 +161,10 @@ package game {
 		}
 		
 		private function addDrawingControllerListeners():void {
-			_drawingController.addEventListener(DrawingControllerEvent.ADD_PATH_POINT, onAddPathPoint);
 			_drawingController.addEventListener(DrawingControllerEvent.START_DRAWING_PATH, onStartDrawingPath);
 		}
 		
 		private function removeDrawingControllerListeners():void {
-			_drawingController.removeEventListener(DrawingControllerEvent.ADD_PATH_POINT, onAddPathPoint);
 			_drawingController.removeEventListener(DrawingControllerEvent.START_DRAWING_PATH, onStartDrawingPath);
 		}
 		
@@ -199,12 +197,6 @@ package game {
 		private function onStartDrawingPath(event:DrawingControllerEvent):void {
 			if (_drawingController.selectedHunter) {
 				_drawingController.selectedHunter.startFollowPath();
-			}
-		}
-		
-		private function onAddPathPoint(event:DrawingControllerEvent):void {
-			if (_drawingController.selectedHunter) {
-				_drawingController.selectedHunter.addWayPoint(event.point);
 			}
 		}
 		

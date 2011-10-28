@@ -1,7 +1,9 @@
 package game.player {
 	import animation.IcSprite;
-	
-	import flash.filters.GlowFilter;
+
+import flash.display.Sprite;
+
+import flash.filters.GlowFilter;
 	import flash.geom.Point;
 	
 	import game.HpLine;
@@ -9,6 +11,8 @@ package game.player {
 	import game.gameActor.IcActer;
 
 	public class Hunter extends IcActer {
+		private var _pathParts:Vector.<Sprite>;
+
 		/* hitpoints line */
 		private var _hp:HpLine;
 		
@@ -77,12 +81,29 @@ package game.player {
 		public function startFollowPath():void {
 			removePrevTween();
 		}
-		
-		override public function addWayPoint(point:Point):void {
-			super.addWayPoint(point);
+
+		public function get pathParts():Vector.<Sprite> { return _pathParts; }
+
+		public function addPathPart(pathPart:Sprite):void {
+			if (!_pathParts) { _pathParts = new Vector.<Sprite>(); }
+			_pathParts.push(pathPart);
+			 super.addWayPoint(new Point(pathPart.x,  pathPart.y));
 			move();
 		}
-		
+
+
+		public function needDrawLine(x:Number,  y:Number):Boolean {
+			if (_pathParts && _pathParts.length > 0) {
+				if ( (_pathParts[_pathParts.length-1].x - x < 6 &&
+					_pathParts[_pathParts.length-1].x - x > -6) &&
+					(_pathParts[_pathParts.length-1].y - y < 6 &&
+						_pathParts[_pathParts.length-1].y - y > -6) ) {
+							return false;
+						}
+			}
+			return true;
+		}
+
 		override public function move():void {
 			super.move();
 			if (pathTimeline && path) { play(ANIMATE_MOVE);}
