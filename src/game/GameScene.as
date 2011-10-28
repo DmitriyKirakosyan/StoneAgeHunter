@@ -55,6 +55,8 @@ package game {
 		/* functions for debug */
 		
 		public function get drawingController():DrawingController { return _drawingController; }
+
+		public function get gameContainer():Sprite { return _gameContainer; }
 		
 		public function get hunters():Vector.<Hunter> {
 			return _hunters;
