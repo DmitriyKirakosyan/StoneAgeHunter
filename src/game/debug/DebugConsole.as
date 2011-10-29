@@ -17,6 +17,7 @@ import flash.text.TextFieldType;
 import flash.ui.Keyboard;
 
 import game.GameScene;
+import game.player.Hunter;
 
 import mx.controls.Text;
 import mx.effects.Tween;
@@ -34,6 +35,10 @@ public class DebugConsole {
 
 	private const MODE_OPEN:uint = 0;
 	private const MODE_HIDE:uint = 1;
+
+	private const HUNTER_HP_POS_X:String = "hunter.hp.x=";
+	private const HUNTER_HP_POS_Y:String = "hunter.hp.y=";
+	private const HUNTER_HP_VISIBLE:String = "hunter.hp.visible=";
 
 	public function DebugConsole(gameScene:GameScene) {
 		super();
@@ -85,15 +90,49 @@ public class DebugConsole {
 
 	private function onKeyPressed(event:KeyboardEvent):void {
 		if (event.charCode == Keyboard.ENTER) {
-			trace("[DebugConsole.onKeyPressed] perssed");
+			parceAndApplyText();
 		}
+	}
+
+	private function parceAndApplyText():void {
+		if (_consoleTF.text.indexOf(HUNTER_HP_POS_X) != -1) {
+			var strX:String = _consoleTF.text.substr(_consoleTF.text.indexOf(HUNTER_HP_POS_X) + HUNTER_HP_POS_X.length);
+			changeHunterHpX(Number(strX));
+			return;
+		}
+		if (_consoleTF.text.indexOf(HUNTER_HP_POS_Y) != -1) {
+			var strY:String = _consoleTF.text.substr(_consoleTF.text.indexOf(HUNTER_HP_POS_Y) + HUNTER_HP_POS_Y.length);
+			changeHunterHpY(Number(strY));
+			return;
+		}
+		if (_consoleTF.text.indexOf(HUNTER_HP_VISIBLE) != -1) {
+			var strVisible:String = _consoleTF.text.substr(_consoleTF.text.indexOf(HUNTER_HP_VISIBLE) + HUNTER_HP_VISIBLE.length);
+			changeHunterHpVisible(strVisible == true);
+			return;
+		}
+	}
+
+	private function changeHunterHpX(x:Number):void {
+		 for each (var hunter:Hunter in _gameScene.hunters) {
+			hunter.hpBar.x = x;
+		 }
+	}
+	private function changeHunterHpY(y:Number):void {
+		 for each (var hunter:Hunter in _gameScene.hunters) {
+			hunter.hpBar.y = y;
+		 }
+	}
+	private function changeHunterHpVisible(visible:Boolean):void {
+		 for each (var hunter:Hunter in _gameScene.hunters) {
+			hunter.hpBar.visible = visible;
+		 }
 	}
 
 	private function createConsole():void {
 		_consoleTF = new TextField();
 		_consoleTF.autoSize = TextFieldAutoSize.LEFT;
 		_consoleTF.type = TextFieldType.INPUT;
-		_consoleTF.text = "hi console";
+		_consoleTF.text = "hunter.hp.x=-30";
 	}
 
 	private function createArrow():void {

@@ -51,6 +51,9 @@ public class Hunter extends IcActer {
 			_hp.value = value;
 		}
 
+		//for debug
+		public function get hpBar():Sprite { return _hp; }
+
 		public function get baseColor():uint { return _baseColor; }
 		
 		public function damage(value:Number = 1):void {
