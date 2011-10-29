@@ -44,7 +44,7 @@ package animation {
 		public function play(animationName:String = "", back:Boolean = false):void {
 			if (animationName != "") {
 				const icAnimation:IcAnimation = getAnimationByName(animationName);
-				if (icAnimation) { playAnimation(icAnimation, back); }
+				if (icAnimation && _currentAnimation != icAnimation) { playAnimation(icAnimation, back); }
 			} else {
 				if (_animations && _animations.length > 0) {
 					playAnimation(_animations[0], back);

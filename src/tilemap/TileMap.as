@@ -24,7 +24,6 @@ package tilemap {
 			if (!_tiles || _tiles.length == 0 || _tiles[0].length == 0) { return false; }
 			const i:int = point.x / _tiles[0][0].width;
 			const j:int = point.y / _tiles[0][0].height;
-			trace("[TileMap] i : " + i + ", j : " + j);
 			if (i < 0 || i > _tiles.length || j < 0 || j > _tiles[0].length) { return false; }
 			return true;
 		}

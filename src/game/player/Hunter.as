@@ -79,6 +79,7 @@ import flash.filters.GlowFilter;
 		}
 		
 		public function startFollowPath():void {
+			trace("[Hunter.startFollowPath]");
 			removePrevTween();
 		}
 
@@ -88,7 +89,6 @@ import flash.filters.GlowFilter;
 			if (!_pathParts) { _pathParts = new Vector.<Sprite>(); }
 			_pathParts.push(pathPart);
 			 super.addWayPoint(new Point(pathPart.x,  pathPart.y));
-			move();
 		}
 
 

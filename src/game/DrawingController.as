@@ -162,7 +162,16 @@ package game {
 		}
 		
 		private function onMouseUp(event:MouseEvent):void {
+			selectLastPathPart();
 			stopDrawing();
+		}
+
+		private function selectLastPathPart():void {
+			var pathParts:Vector.<Sprite> = _selectedHunter.pathParts;
+			if (pathParts && pathParts.length > 0) {
+				var lastPart:Sprite = pathParts[pathParts.length-1];
+				lastPart.scaleX = lastPart.scaleY = 2;
+			}
 		}
 		
 		private function stopDrawing():void {
