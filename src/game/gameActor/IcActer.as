@@ -3,7 +3,8 @@ package game.gameActor {
 	
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenLite;
-	import com.greensock.easing.Linear;
+import com.greensock.TweenMax;
+import com.greensock.easing.Linear;
 	
 	import flash.geom.Point;
 
@@ -96,16 +97,16 @@ package game.gameActor {
 			_pathTimeline.append(new TweenLite(this, duration / _speed,
 																					{x : point.x, y : point.y - this.height/4,
 																						ease : Linear.easeNone,
-																						onStart : onStartPoint,
+																						onStart : onStartTween,
 																						onStartParams : [point],
 																						onComplete : onTweenComplete}));
 			if (_pathTimeline.paused) { trace("paused"); }
 			_pathTimeline.play();
 		}
 		
-		private function onStartPoint(point:Point):void {
+		protected function onStartTween(point:Point):void {
 			changeAnimationAndRotation(point);
-			const prevPoint:KeyPoint = _path.getPreviouseKeyPoint(point); //realy it is current duck position
+			const prevPoint:KeyPoint = _path.getPreviouseKeyPoint(point); //realy it is current acter position
 			if (prevPoint) {
 				dispatchEvent(new KeyPointEvent(KeyPointEvent.REMOVE_ME, prevPoint));
 				_path.removePreviouseKeyPoint(point);
@@ -113,11 +114,11 @@ package game.gameActor {
 		}
 		
 		private function onTweenComplete():void {
-			dispatchEvent(new IcActerEvent(IcActerEvent.TWEEN_TICK, this));
+			dispatchEvent(new IcActerEvent(IcActerEvent.TWEEN_COMPLETE, this));
 		}
 		
 		protected function changeAnimationAndRotation(targetPoint:Point):void {
-			if (targetPoint.y < this.y) {
+			if (targetPoint.y - this.height/4 < this.y) {
 				changeToBackAnimation();
 			} else { changeToFrontAnimation(); }
 			if (_isNormalRotation && this.x < targetPoint.x) {

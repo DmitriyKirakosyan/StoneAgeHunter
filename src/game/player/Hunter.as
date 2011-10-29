@@ -9,8 +9,9 @@ import flash.filters.GlowFilter;
 	import game.HpLine;
 	import game.armor.Stone;
 	import game.gameActor.IcActer;
+import game.gameActor.IcActerEvent;
 
-	public class Hunter extends IcActer {
+public class Hunter extends IcActer {
 		private var _pathParts:Vector.<Sprite>;
 
 		/* hitpoints line */
@@ -81,6 +82,7 @@ import flash.filters.GlowFilter;
 		public function startFollowPath():void {
 			trace("[Hunter.startFollowPath]");
 			removePrevTween();
+			move();
 		}
 
 		public function get pathParts():Vector.<Sprite> { return _pathParts; }
@@ -113,18 +115,15 @@ import flash.filters.GlowFilter;
 			super.stop();
 			play(ANIMATE_STAY);
 		}
+
+		override protected function onStartTween(point:Point):void {
+			play(ANIMATE_MOVE);
+			super.onStartTween(point);
+		}
 		
 		override public function pauseMove():void {
 			super.pauseMove();
 			if (pathTimeline) { play(ANIMATE_STAY); }
-		}
-		
-		public function onClick():void {
-		//	startPath(new Point(this.x, this.y));
-		//	filters = [new GlowFilter(_baseColor)];
-		}
-		public function unselect():void {
-		//	filters = [];
 		}
 		
 		/* Internal functions */

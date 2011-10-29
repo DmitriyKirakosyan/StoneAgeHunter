@@ -171,12 +171,12 @@ package game {
 		private function addHunterListeners(hunter:Hunter):void {
 			hunter.addEventListener(MouseEvent.CLICK, onHunterClick);
 			hunter.addEventListener(KeyPointEvent.REMOVE_ME, onkeyPointRemoveRequest);
-			hunter.addEventListener(IcActerEvent.TWEEN_TICK, onHunterTick);
+			hunter.addEventListener(IcActerEvent.TWEEN_COMPLETE, onHunterTick);
 		}
 		private function removeHunterListeners(hunter:Hunter):void {
 			hunter.removeEventListener(MouseEvent.CLICK, onHunterClick);
 			hunter.removeEventListener(KeyPointEvent.REMOVE_ME, onkeyPointRemoveRequest);
-			hunter.removeEventListener(IcActerEvent.TWEEN_TICK, onHunterTick);
+			hunter.removeEventListener(IcActerEvent.TWEEN_COMPLETE, onHunterTick);
 		}
 		
 		private function addAnimalListeners(animal:Duck):void {
@@ -240,7 +240,6 @@ package game {
 		
 		private function unClickAll():void {
 			for each (var hunter:Hunter in _hunters) {
-				hunter.unselect();
 			}
 		}
 		
@@ -251,7 +250,6 @@ package game {
 			if (hunter) {
 				_drawing = true;
 				_selectedHunter = hunter;
-				hunter.onClick();
 				showHunterExistingPath(_selectedHunter);
 			}
 		}
