@@ -167,6 +167,7 @@ package game {
 		}
 
 		private function selectLastPathPart():void {
+			if (!_selectedHunter) { return; }
 			var pathParts:Vector.<Sprite> = _selectedHunter.pathParts;
 			if (pathParts && pathParts.length > 0) {
 				var lastPart:Sprite = pathParts[pathParts.length-1];

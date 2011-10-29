@@ -1,4 +1,5 @@
-package game {
+package game.debug {
+import game.*;
 	import com.bit101.components.PushButton;
 	import com.bit101.components.RadioButton;
 	import com.bit101.components.Slider;

@@ -10,7 +10,9 @@ package game {
 	import game.animals.AnimalEvent;
 	import game.animals.Duck;
 	import game.armor.Stone;
-	import game.gameActor.IcActerEvent;
+import game.debug.DebugConsole;
+import game.debug.DebugPanel;
+import game.gameActor.IcActerEvent;
 	import game.gameActor.KeyPoint;
 	import game.gameActor.KeyPointEvent;
 	import game.gameActor.LinkToPoint;
@@ -32,6 +34,7 @@ package game {
 		private var _zSortingManager:ZSortingManager;
 		
 		private var _debugPanel:DebugPanel;
+		private var _debugConsole:DebugConsole;
 		
 		private var _drawingContainer:Sprite;
 		private var _drawing:Boolean;
@@ -43,6 +46,7 @@ package game {
 			_gameContainer = new Sprite();
 			_stonesController = new StonesController(_gameContainer);
 			_debugPanel = new DebugPanel(container, this);
+			_debugConsole = new DebugConsole(this);
 			_zSortingManager = new ZSortingManager(this);
 			container.addChild(_mapContainer);
 			_drawingController = new DrawingController(container, tileMap);
@@ -84,8 +88,10 @@ package game {
 			_mapContainer.addChild(_drawingContainer);
 			addListeners();
 			_debugPanel.open();
+			_debugConsole.init();
 		}
 		public function close():void {
+			_debugConsole.remove();
 			_debugPanel.close();
 			removeListeners();
 			_mapContainer.removeChild(_tileMap);
