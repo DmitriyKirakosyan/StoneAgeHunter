@@ -14,7 +14,7 @@ import game.debug.DebugConsole;
 import game.debug.DebugPanel;
 import game.gameActor.IcActerEvent;
 	import game.gameActor.KeyPoint;
-	import game.gameActor.KeyPointEvent;
+	import game.gameActor.ActerKeyPointEvent;
 	import game.gameActor.LinkToPoint;
 	import game.player.Hunter;
 	
@@ -176,12 +176,12 @@ import game.gameActor.IcActerEvent;
 		
 		private function addHunterListeners(hunter:Hunter):void {
 			hunter.addEventListener(MouseEvent.CLICK, onHunterClick);
-			hunter.addEventListener(KeyPointEvent.REMOVE_ME, onkeyPointRemoveRequest);
+			hunter.addEventListener(ActerKeyPointEvent.REMOVE_ME, onkeyPointRemoveRequest);
 			hunter.addEventListener(IcActerEvent.TWEEN_COMPLETE, onHunterTick);
 		}
 		private function removeHunterListeners(hunter:Hunter):void {
 			hunter.removeEventListener(MouseEvent.CLICK, onHunterClick);
-			hunter.removeEventListener(KeyPointEvent.REMOVE_ME, onkeyPointRemoveRequest);
+			hunter.removeEventListener(ActerKeyPointEvent.REMOVE_ME, onkeyPointRemoveRequest);
 			hunter.removeEventListener(IcActerEvent.TWEEN_COMPLETE, onHunterTick);
 		}
 		
@@ -260,8 +260,9 @@ import game.gameActor.IcActerEvent;
 			}
 		}
 		
-		private function onkeyPointRemoveRequest(event:KeyPointEvent):void {
-			_drawingController.removePoint(event.keyPoint.point);
+		private function onkeyPointRemoveRequest(event:ActerKeyPointEvent):void {
+			if (!(event.acter is Hunter)) { trace("[GameScene.onkeyPointRemoveRequest] acter isnt hunter"); return; }
+			_drawingController.removePoint(event.acter as Hunter,  event.keyPoint.point);
 		}
 		
 		private function onHunterTick(event:IcActerEvent):void {

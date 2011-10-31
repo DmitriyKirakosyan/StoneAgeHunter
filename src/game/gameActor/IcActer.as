@@ -108,7 +108,7 @@ import com.greensock.easing.Linear;
 			changeAnimationAndRotation(point);
 			const prevPoint:KeyPoint = _path.getPreviouseKeyPoint(point); //realy it is current acter position
 			if (prevPoint) {
-				dispatchEvent(new KeyPointEvent(KeyPointEvent.REMOVE_ME, prevPoint));
+				dispatchEvent(new ActerKeyPointEvent(ActerKeyPointEvent.REMOVE_ME, this, prevPoint));
 				_path.removePreviouseKeyPoint(point);
 			}
 		}

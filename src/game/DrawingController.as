@@ -4,8 +4,10 @@ package game {
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	
-	import game.player.Hunter;
+
+import game.gameActor.IcActer;
+
+import game.player.Hunter;
 	
 	import tilemap.TileMap;
 
@@ -45,8 +47,8 @@ package game {
 			_partShape = shapeName;
 		}
 		
-		public function removePoint(point:Point):void {
-			var pathParts:Vector.<Sprite> = _selectedHunter.pathParts;
+		public function removePoint(hunter:Hunter,  point:Point):void {
+			var pathParts:Vector.<Sprite> = hunter.pathParts;
 			if (!pathParts) { return; }
 			for (var i:int = 0; i < pathParts.length; ++i) {
 				if (pathParts[i].x == point.x && pathParts[i].y == point.y) {

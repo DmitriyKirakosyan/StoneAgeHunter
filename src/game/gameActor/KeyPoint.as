@@ -22,7 +22,6 @@ package game.gameActor {
 			_selected = false;
 			_point = point;
 			draw(NORMAL_COLOR);
-			addEventListener(MouseEvent.CLICK, onMouseClick);
 		}
 		
 		public function get selected():Boolean { return _selected; }
@@ -59,10 +58,6 @@ package game.gameActor {
 			this.graphics.lineStyle(3, lineColor);
 			this.graphics.drawCircle(0, 0, 5);
 			this.graphics.endFill();
-		}
-		
-		private function onMouseClick(event:MouseEvent):void {
-			dispatchEvent(new KeyPointEvent(KeyPointEvent.CLICK, this));
 		}
 	}
 }
