@@ -19,9 +19,6 @@ import flash.ui.Keyboard;
 import game.GameScene;
 import game.player.Hunter;
 
-import mx.controls.Text;
-import mx.effects.Tween;
-
 public class DebugConsole {
 	private var _gameScene:GameScene;
 	private var _container:Sprite;
