@@ -1,11 +1,11 @@
-﻿package {
+package {
 	import tilemap.TileMap;
 	import flash.events.Event;
 	import game.GameScene;
 	import game.MenuScene;
 	import scene.SceneController;
 	import flash.display.Sprite;
-
+	
 	[SWF(width=570, height=380, frameRate=25)]
 	public class Main extends Sprite {
 		private var _tileMap:TileMap;
@@ -27,6 +27,6 @@
 			sceneController.addScene(gameScene);
 			sceneController.addSceneDependence(menuScene, gameScene, true);
 		}
-
+		
 	}
 }

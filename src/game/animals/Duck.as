@@ -1,7 +1,5 @@
 package game.animals {
 	import animation.IcSprite;
-	
-	import com.adobe.serialization.json.JSON;
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
@@ -46,7 +44,7 @@ package game.animals {
 		public function get mode():uint { return _mode; }
 		
 		public function setJsonPath(json:String):void {
-			var jsonObject:Object = JSON.decode(json);
+			var jsonObject:Object = JSON.parse(json);
 			_patrolPath = new Vector.<Point>();
 			if (jsonObject is Array) {
 				for each (var pointObj:Object in jsonObject) {
