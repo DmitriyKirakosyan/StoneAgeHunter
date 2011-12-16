@@ -97,21 +97,15 @@ public class DebugPanel {
 		}
 		
 		private function onHunterScaleSlider(event:Event):void {
-			for each (var hunter:Hunter in _gameScene.hunters) {
-				hunter.setScale(_huntersScaleSlider.value);
-			}
+			_gameScene.hunter.setScale(_huntersScaleSlider.value);
 		}
 		
 		private function onHunterSpeedSlider(event:Event):void {
-			for each (var hunter:Hunter in _gameScene.hunters) {
-				hunter.speed = _huntersSpeedSlider.value;
-			}
+			_gameScene.hunter.speed = _huntersSpeedSlider.value;
 		}
 
 		private function onHunterHpSlider(event:Event):void {
-			for each (var hunter:Hunter in _gameScene.hunters) {
-				hunter.hp = _huntersHpSlider.value;
-			}
+			_gameScene.hunter.hp = _huntersHpSlider.value;
 		}
 
 		private function addButtons():void {

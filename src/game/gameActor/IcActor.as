@@ -51,7 +51,7 @@ import com.greensock.easing.Linear;
 		}
 		
 		public function move():void {
-			if (_pathTimeline && _path) { _pathTimeline.play(); }
+			if (_pathTimeline) { _pathTimeline.play(); }
 		}
 		
 		public function pauseMove():void {
@@ -59,8 +59,7 @@ import com.greensock.easing.Linear;
 			if (_pathTimeline) { _pathTimeline.pause(); }
 		}
 
-		protected function stop():void {
-			_path = null;
+		public function stop():void {
 		}
 		
 		public function computeDuration(one:Point, two:Point):Number {

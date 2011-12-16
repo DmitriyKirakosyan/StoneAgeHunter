@@ -110,19 +110,13 @@ public class DebugConsole {
 	}
 
 	private function changeHunterHpX(x:Number):void {
-		 for each (var hunter:Hunter in _gameScene.hunters) {
-			hunter.hpBar.x = x;
-		 }
+		_gameScene.hunter.hpBar.x = x;
 	}
 	private function changeHunterHpY(y:Number):void {
-		 for each (var hunter:Hunter in _gameScene.hunters) {
-			hunter.hpBar.y = y;
-		 }
+		_gameScene.hunter.hpBar.y = y;
 	}
 	private function changeHunterHpVisible(visible:Boolean):void {
-		 for each (var hunter:Hunter in _gameScene.hunters) {
-			hunter.hpBar.visible = visible;
-		 }
+		_gameScene.hunter.hpBar.visible = visible;
 	}
 
 	private function createConsole():void {

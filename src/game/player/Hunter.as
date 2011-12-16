@@ -111,11 +111,10 @@ public class Hunter extends IcActor {
 
 		override public function move():void {
 			super.move();
-			if (pathTimeline && path) { play(ANIMATE_MOVE);}
+			play(ANIMATE_MOVE);
 		}
 		
-		override protected function stop():void {
-			super.stop();
+		override public function stop():void {
 			play(ANIMATE_STAY);
 		}
 

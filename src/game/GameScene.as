@@ -1,7 +1,9 @@
 package game {
 	import animation.IcSprite;
-	
-	import flash.display.Sprite;
+
+import com.greensock.TweenLite;
+
+import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
@@ -27,7 +29,7 @@ import game.gameActor.IcActerEvent;
 		private var _mapContainer:Sprite;
 		private var _gameContainer:Sprite;
 		private var _tileMap:TileMap;
-		private var _hunters:Vector.<Hunter>;
+		private var _hunter:Hunter;
 		private var _zSortingManager:ZSortingManager;
 		
 		private var _debugPanel:DebugPanel;
@@ -45,16 +47,15 @@ import game.gameActor.IcActerEvent;
 			container.addChild(_mapContainer);
 			container.addChild(_gameContainer);
 			_gameContainer.addEventListener(Event.ENTER_FRAME, onGameContainerEnterFrame);
+			container.addEventListener(MouseEvent.MOUSE_DOWN, onContainerMouseDown);
 			_tileMap = tileMap;
 		}
 		
 		/* functions for debug */
 		
 		public function get gameContainer():Sprite { return _gameContainer; }
-		
-		public function get hunters():Vector.<Hunter> {
-			return _hunters;
-		}
+
+		public function get hunter():Hunter { return _hunter; }
 		
 		public function get mapContainer():Sprite {
 			return _mapContainer;
@@ -66,7 +67,7 @@ import game.gameActor.IcActerEvent;
 		
 		public function open():void {
 			_mapContainer.addChild(_tileMap);
-			createHunters();
+			createHunter();
 			_debugPanel.open();
 			_debugConsole.init();
 		}
@@ -74,7 +75,7 @@ import game.gameActor.IcActerEvent;
 			_debugConsole.remove();
 			_debugPanel.close();
 			_mapContainer.removeChild(_tileMap);
-			removeHunters();
+			removeHunter();
 		}
 		
 		/* Internal functions */
@@ -82,66 +83,29 @@ import game.gameActor.IcActerEvent;
 		private function onGameContainerEnterFrame(event:Event):void {
 			_zSortingManager.checkZSorting();
 		}
-		
-		private function createHunter(debug:Boolean):Hunter {
-			const hunter:Hunter = new Hunter(debug);
-			_gameContainer.addChild(hunter);
-			addHunterListeners(hunter);
-			return hunter;
+
+		private function onContainerMouseDown(event:MouseEvent):void {
+			_hunter.move();
+			TweenLite.to(_hunter,
+									 _hunter.computeDuration(new Point(_hunter.x, _hunter.y), new Point(event.stageX, event.stageY)),
+									 {x : event.stageX, y : event.stageY,
+									 onComplete : function():void {_hunter.stop();}});
 		}
 		
-		private function createHunters():void {
-			_hunters = new Vector.<Hunter>();
-			var hunter:Hunter;
-			for (var i:int = 0; i < 2; ++i) {
-				hunter = createHunter(false);
-				hunter.x = 350 + i * 80; hunter.y = 300 - i * 30;
-				_hunters.push(hunter);
-			}
+		private function createHunter():void {
+			_hunter = new Hunter(false);
+			_hunter.x = 350;
+			_hunter.y = 300;
+			_gameContainer.addChild(_hunter);
 		}
 		
-		private function removeHunters():void {
-			for each (var hunter:Hunter in _hunters) {
-				removeHunterListeners(hunter);
-				_gameContainer.removeChild(hunter);
-			}
-			_hunters = null;
+		private function removeHunter():void {
+			_gameContainer.removeChild(_hunter);
 		}
 
-		private function addHunterListeners(hunter:Hunter):void {
-			hunter.addEventListener(MouseEvent.CLICK, onHunterClick);
-		}
-		private function removeHunterListeners(hunter:Hunter):void {
-			hunter.removeEventListener(MouseEvent.CLICK, onHunterClick);
-		}
-		
-		private function onAnimalTouchActor(event:AnimalEvent):void {
-			const touchedHunter:IcSprite = event.actor;
-			for each (var hunter:Hunter in _hunters) {
-				if (hunter == touchedHunter) {
-					hunter.damage();
-				}
-			}
-		}
-		
 		private function onAnimalClick(event:MouseEvent):void {
 			if (_selectedHunter && _selectedHunter.path) {
 				_selectedHunter.path.setAttackPoint();
-			}
-		}
-		
-		private function unClickAll():void {
-			for each (var hunter:Hunter in _hunters) {
-			}
-		}
-		
-		private function onHunterClick(event:MouseEvent):void {
-			unClickAll();
-			if (_selectedHunter) { hideCurrentPath(); }
-			const hunter:Hunter = findClickedHunter(event.stageX, event.stageY);
-			if (hunter) {
-				_selectedHunter = hunter;
-				showHunterExistingPath(_selectedHunter);
 			}
 		}
 		
@@ -161,13 +125,6 @@ import game.gameActor.IcActerEvent;
 				keyPoint.alpha = .4;
 			}
 			if (_selectedHunter.path.links) { _selectedHunter.path.links.forEach(function(item:LinkToPoint, ..._):void { item.alpha = .4; }); }
-		}
-		
-		private function findClickedHunter(x:Number, y:Number):Hunter {
-			for each (var hunter:Hunter in _hunters) {
-				if (hunter.hitTestPoint(x, y)) { return hunter; }
-			}
-			return null;
 		}
 		
 	}
