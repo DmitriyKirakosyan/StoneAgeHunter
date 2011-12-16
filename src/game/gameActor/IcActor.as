@@ -8,7 +8,7 @@ import com.greensock.easing.Linear;
 	
 	import flash.geom.Point;
 
-	public class IcActer extends IcSprite {
+	public class IcActor extends IcSprite {
 		private var _speed:Number;
 		private var _path:Path;
 		private var _pathTimeline:TimelineMax;
@@ -19,7 +19,7 @@ import com.greensock.easing.Linear;
 		protected const ANIMATE_MOVE:String = "move";
 		protected const ANIMATE_STAY:String = "stay";
 		
-		public function IcActer() {
+		public function IcActor() {
 			super();
 			_isNormalRotation = true;
 			_speed = 1;
@@ -108,7 +108,6 @@ import com.greensock.easing.Linear;
 			changeAnimationAndRotation(point);
 			const prevPoint:KeyPoint = _path.getPreviouseKeyPoint(point); //realy it is current acter position
 			if (prevPoint) {
-				dispatchEvent(new ActerKeyPointEvent(ActerKeyPointEvent.REMOVE_ME, this, prevPoint));
 				_path.removePreviouseKeyPoint(point);
 			}
 		}

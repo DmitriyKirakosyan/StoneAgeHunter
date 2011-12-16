@@ -12,10 +12,10 @@ package game.animals {
 	import flash.geom.Point;
 	
 	import game.HpLine;
-	import game.gameActor.IcActer;
+	import game.gameActor.IcActor;
 	import game.player.Hunter;
 
-	public class Duck extends IcActer {
+	public class Duck extends IcActor {
 		private var _enemies:Vector.<IcSprite>;
 		private var _patrolPath:Vector.<Point>;
 		private var _mode:uint;

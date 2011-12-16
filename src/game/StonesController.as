@@ -3,7 +3,7 @@ package game {
 	import flash.events.MouseEvent;
 	
 	import game.armor.Stone;
-	import game.gameActor.IcActer;
+	import game.gameActor.IcActor;
 
 	public class StonesController {
 		
@@ -35,7 +35,7 @@ package game {
 			_stones = null;
 		}
 		
-		public function getStoneUnderHunter(hunter:IcActer):Stone {
+		public function getStoneUnderHunter(hunter:IcActor):Stone {
 			for each (var stone:Stone in _stones) {
 				if (stone.hitTestObject(hunter)) { return stone; }
 			}

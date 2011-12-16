@@ -28,14 +28,11 @@ import game.gameActor.IcActerEvent;
 		private var _gameContainer:Sprite;
 		private var _tileMap:TileMap;
 		private var _hunters:Vector.<Hunter>;
-		private var _drawingController:DrawingController;
 		private var _zSortingManager:ZSortingManager;
 		
 		private var _debugPanel:DebugPanel;
 		private var _debugConsole:DebugConsole;
 		
-		private var _drawingContainer:Sprite;
-		private var _drawing:Boolean;
 		private var _selectedHunter:Hunter;
 		
 		public function GameScene(container:Sprite, tileMap:TileMap):void {
@@ -46,17 +43,13 @@ import game.gameActor.IcActerEvent;
 			_debugConsole = new DebugConsole(this);
 			_zSortingManager = new ZSortingManager(this);
 			container.addChild(_mapContainer);
-			_drawingController = new DrawingController(container, tileMap);
 			container.addChild(_gameContainer);
 			_gameContainer.addEventListener(Event.ENTER_FRAME, onGameContainerEnterFrame);
 			_tileMap = tileMap;
-			_drawingContainer = new Sprite();
 		}
 		
 		/* functions for debug */
 		
-		public function get drawingController():DrawingController { return _drawingController; }
-
 		public function get gameContainer():Sprite { return _gameContainer; }
 		
 		public function get hunters():Vector.<Hunter> {
@@ -72,25 +65,16 @@ import game.gameActor.IcActerEvent;
 		}
 		
 		public function open():void {
-			_drawing = false;
 			_mapContainer.addChild(_tileMap);
 			createHunters();
-			_drawingController.addHunters(_hunters);
-			addDrawingControllerListeners();
-			_mapContainer.addChild(_drawingContainer);
-			addListeners();
 			_debugPanel.open();
 			_debugConsole.init();
 		}
 		public function close():void {
 			_debugConsole.remove();
 			_debugPanel.close();
-			removeListeners();
 			_mapContainer.removeChild(_tileMap);
 			removeHunters();
-			_mapContainer.removeChild(_drawingContainer);
-			_drawingContainer.graphics.clear();
-			removeDrawingControllerListeners();
 		}
 		
 		/* Internal functions */
@@ -124,27 +108,11 @@ import game.gameActor.IcActerEvent;
 			_hunters = null;
 		}
 
-		private function addDrawingControllerListeners():void {
-			_drawingController.addEventListener(DrawingControllerEvent.START_DRAWING_PATH, onStartDrawingPath);
-		}
-		
-		private function removeDrawingControllerListeners():void {
-			_drawingController.removeEventListener(DrawingControllerEvent.START_DRAWING_PATH, onStartDrawingPath);
-		}
-		
 		private function addHunterListeners(hunter:Hunter):void {
 			hunter.addEventListener(MouseEvent.CLICK, onHunterClick);
-			hunter.addEventListener(ActerKeyPointEvent.REMOVE_ME, onkeyPointRemoveRequest);
 		}
 		private function removeHunterListeners(hunter:Hunter):void {
 			hunter.removeEventListener(MouseEvent.CLICK, onHunterClick);
-			hunter.removeEventListener(ActerKeyPointEvent.REMOVE_ME, onkeyPointRemoveRequest);
-		}
-		
-		private function onStartDrawingPath(event:DrawingControllerEvent):void {
-			if (_drawingController.selectedHunter) {
-				_drawingController.selectedHunter.startFollowPath();
-			}
 		}
 		
 		private function onAnimalTouchActor(event:AnimalEvent):void {
@@ -162,14 +130,6 @@ import game.gameActor.IcActerEvent;
 			}
 		}
 		
-		private function addListeners():void {
-			_drawingController.addListeners();
-		}
-		
-		private function removeListeners():void {
-			_drawingController.removeListeners();
-		}
-		
 		private function unClickAll():void {
 			for each (var hunter:Hunter in _hunters) {
 			}
@@ -180,15 +140,9 @@ import game.gameActor.IcActerEvent;
 			if (_selectedHunter) { hideCurrentPath(); }
 			const hunter:Hunter = findClickedHunter(event.stageX, event.stageY);
 			if (hunter) {
-				_drawing = true;
 				_selectedHunter = hunter;
 				showHunterExistingPath(_selectedHunter);
 			}
-		}
-		
-		private function onkeyPointRemoveRequest(event:ActerKeyPointEvent):void {
-			if (!(event.acter is Hunter)) { trace("[GameScene.onkeyPointRemoveRequest] acter isnt hunter"); return; }
-			_drawingController.removePoint(event.acter as Hunter,  event.keyPoint.point);
 		}
 		
 		private function showHunterExistingPath(hunter:Hunter):void {

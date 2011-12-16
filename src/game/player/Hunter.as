@@ -8,10 +8,10 @@ import flash.filters.GlowFilter;
 	
 	import game.HpLine;
 	import game.armor.Stone;
-	import game.gameActor.IcActer;
+	import game.gameActor.IcActor;
 import game.gameActor.IcActerEvent;
 
-public class Hunter extends IcActer {
+public class Hunter extends IcActor {
 		private var _pathParts:Vector.<Sprite>;
 
 		/* hitpoints line */
