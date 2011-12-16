@@ -8,10 +8,10 @@ import flash.filters.GlowFilter;
 	
 	import game.HpLine;
 	import game.armor.Stone;
-	import game.gameActor.IcActer;
+	import game.gameActor.IcActor;
 import game.gameActor.IcActerEvent;
 
-public class Hunter extends IcActer {
+public class Hunter extends IcActor {
 		private var _pathParts:Vector.<Sprite>;
 
 		/* hitpoints line */
@@ -111,11 +111,10 @@ public class Hunter extends IcActer {
 
 		override public function move():void {
 			super.move();
-			if (pathTimeline && path) { play(ANIMATE_MOVE);}
+			play(ANIMATE_MOVE);
 		}
 		
-		override protected function stop():void {
-			super.stop();
+		override public function stop():void {
 			play(ANIMATE_STAY);
 		}
 

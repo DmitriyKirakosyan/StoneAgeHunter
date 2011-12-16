@@ -2,7 +2,7 @@ package game {
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	
-	import game.gameActor.IcActer;
+	import game.gameActor.IcActor;
 
 	public class ZSortingManager {
 		private var _gameScene:GameScene;
@@ -16,17 +16,17 @@ package game {
 		
 		public function checkZSorting():void {
 			for (var i:int = 0; i < _gameContainer.numChildren; ++i) {
-				if (_gameContainer.getChildAt(i) is IcActer) {
-					checkWithAll(_gameContainer.getChildAt(i) as IcActer);
+				if (_gameContainer.getChildAt(i) is IcActor) {
+					checkWithAll(_gameContainer.getChildAt(i) as IcActor);
 				}
 			}
 		}
 		
-		private function checkWithAll(actor:IcActer):void {
+		private function checkWithAll(actor:IcActor):void {
 			var child:DisplayObject;
 			for (var i:int = 0; i < _gameContainer.numChildren; ++i) {
 				child = _gameContainer.getChildAt(i)
-				if (actor != child && child is IcActer) {
+				if (actor != child && child is IcActor) {
 					if (crossActors(actor, child) && needSwitchActors(actor, child)) {
 						_gameContainer.setChildIndex(child, _gameContainer.getChildIndex(actor));
 						_gameContainer.setChildIndex(actor, i);

@@ -16,6 +16,7 @@ package {
 		
 		private function onAddedToStage(event:Event):void {
 			_tileMap = new TileMap();
+			this.alpha = .03;
 			start();
 		}
 		

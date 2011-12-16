@@ -5,7 +5,7 @@ package game {
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 
-import game.gameActor.IcActer;
+import game.gameActor.IcActor;
 
 import game.player.Hunter;
 	
