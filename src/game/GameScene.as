@@ -1,9 +1,11 @@
 package game {
 	import animation.IcSprite;
-
-import com.greensock.TweenLite;
-
-import flash.display.Sprite;
+	
+	import com.greensock.TweenLite;
+	import com.greensock.easing.Back;
+	import com.greensock.easing.Linear;
+	
+	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
@@ -12,11 +14,11 @@ import flash.display.Sprite;
 	import game.animals.AnimalEvent;
 	import game.animals.Duck;
 	import game.armor.Stone;
-import game.debug.DebugConsole;
-import game.debug.DebugPanel;
-import game.gameActor.IcActerEvent;
-	import game.gameActor.KeyPoint;
+	import game.debug.DebugConsole;
+	import game.debug.DebugPanel;
 	import game.gameActor.ActerKeyPointEvent;
+	import game.gameActor.IcActerEvent;
+	import game.gameActor.KeyPoint;
 	import game.gameActor.LinkToPoint;
 	import game.player.Hunter;
 	
@@ -28,14 +30,21 @@ import game.gameActor.IcActerEvent;
 	public class GameScene extends EventDispatcher implements IScene {
 		private var _mapContainer:Sprite;
 		private var _gameContainer:Sprite;
-		private var _tileMap:TileMap;
 		private var _hunter:Hunter;
+		
 		private var _zSortingManager:ZSortingManager;
+		private var _parallaxManager:ParallaxManager;
+		private var _perspectiveManager:PerspectiveManager;
+		
+		private var _backDecorations:BackDecorations;
+		
+		private var _decoraativeObjects:Vector.<DecorativeObject>
 		
 		private var _debugPanel:DebugPanel;
 		private var _debugConsole:DebugConsole;
 		
 		private var _selectedHunter:Hunter;
+		public var active:Boolean;
 		
 		public function GameScene(container:Sprite, tileMap:TileMap):void {
 			super();
@@ -44,15 +53,38 @@ import game.gameActor.IcActerEvent;
 			_debugPanel = new DebugPanel(container, this);
 			_debugConsole = new DebugConsole(this);
 			_zSortingManager = new ZSortingManager(this);
+			_parallaxManager = new ParallaxManager(this);
+			_perspectiveManager = new PerspectiveManager(this);
+			backDecorations = new BackDecorations;
+			gameContainer.addChild(backDecorations);
 			container.addChild(_mapContainer);
 			container.addChild(_gameContainer);
 			_gameContainer.addEventListener(Event.ENTER_FRAME, onGameContainerEnterFrame);
 			container.addEventListener(MouseEvent.MOUSE_DOWN, onContainerMouseDown);
-			_tileMap = tileMap;
 		}
 		
 		/* functions for debug */
 		
+		public function get decoraativeObjects():Vector.<DecorativeObject>
+		{
+			return _decoraativeObjects;
+		}
+
+		public function set decoraativeObjects(value:Vector.<DecorativeObject>):void
+		{
+			_decoraativeObjects = value;
+		}
+
+		public function get backDecorations():BackDecorations
+		{
+			return _backDecorations;
+		}
+
+		public function set backDecorations(value:BackDecorations):void
+		{
+			_backDecorations = value;
+		}
+
 		public function get gameContainer():Sprite { return _gameContainer; }
 
 		public function get hunter():Hunter { return _hunter; }
@@ -66,7 +98,6 @@ import game.gameActor.IcActerEvent;
 		}
 		
 		public function open():void {
-			_mapContainer.addChild(_tileMap);
 			createHunter();
 			_debugPanel.open();
 			_debugConsole.init();
@@ -74,7 +105,6 @@ import game.gameActor.IcActerEvent;
 		public function close():void {
 			_debugConsole.remove();
 			_debugPanel.close();
-			_mapContainer.removeChild(_tileMap);
 			removeHunter();
 		}
 		
@@ -85,14 +115,17 @@ import game.gameActor.IcActerEvent;
 		}
 
 		private function onContainerMouseDown(event:MouseEvent):void {
-			_hunter.move();
-			TweenLite.to(_hunter,
-									 _hunter.computeDuration(new Point(_hunter.x, _hunter.y), new Point(event.stageX, event.stageY)),
-									 {x : event.stageX, y : event.stageY,
-									 onComplete : function():void {_hunter.stop();}});
+			if(_hunter){
+				_hunter.move();
+				TweenLite.to(_hunter,
+										 _hunter.computeDuration(new Point(_hunter.x, _hunter.y), new Point(event.stageX, event.stageY)),
+										 {ease:Linear.easeNone, x : event.stageX, y : event.stageY,
+										 onComplete : function():void {_hunter.stop();}});
+			}
 		}
 		
 		private function createHunter():void {
+			trace("createHunter")
 			_hunter = new Hunter(false);
 			_hunter.x = 350;
 			_hunter.y = 300;

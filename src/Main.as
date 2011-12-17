@@ -6,7 +6,7 @@ package {
 	import scene.SceneController;
 	import flash.display.Sprite;
 	
-	[SWF(width=570, height=380, frameRate=25)]
+	[SWF(width=550, height=400, frameRate=25)]
 	public class Main extends Sprite {
 		private var _tileMap:TileMap;
 		
@@ -16,7 +16,7 @@ package {
 		
 		private function onAddedToStage(event:Event):void {
 			_tileMap = new TileMap();
-			this.alpha = .03;
+			//this.alpha = .03;
 			start();
 		}
 		
