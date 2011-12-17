@@ -21,6 +21,9 @@ package game
 		
 		private var _offsetX:int = 0;
 		
+		//насколько задний фон шире сцены
+		private var stageDiff:int;
+		
 		public function BackDecorations()
 		{
 			super();
@@ -34,7 +37,12 @@ package game
 
 		public function set offsetX(value:int):void
 		{
-			_offsetX = value;
+			var newValue:Number = (value/stage.stageWidth) * stageDiff;
+			trace(stageDiff + " " + newValue);
+			if(newValue < stageDiff/2 && newValue > -stageDiff){
+				_offsetX = newValue;
+				backContainer.x = newValue;
+			}
 		}
 
 		protected function onnAddedToStage(event:Event):void
@@ -51,8 +59,8 @@ package game
 			background.y = stage.stageHeight - background.height;
 			backBack.y = background.y - backBack.height;
 			backContainer.y = background.y - backContainer.height + 14;
-			backContainer.x = -(backContainer.width - stage.stageWidth)/2;
-			
+			stageDiff = backContainer.width - stage.stageWidth;
+			backContainer.x = -stageDiff/2;
 			addChild(backContainer);
 		}
 		

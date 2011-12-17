@@ -44,7 +44,7 @@ package game {
 		private var _debugConsole:DebugConsole;
 		
 		private var _selectedHunter:Hunter;
-		public var active:Boolean;
+		public var active:Boolean = true;
 		
 		public function GameScene(container:Sprite, tileMap:TileMap):void {
 			super();

@@ -9,7 +9,7 @@ package game
 		private var _gameScene:GameScene;
 		private var _screenCenterX:int;
 		private var _stage:Stage;
-		private var parallaxForce:int = 1;
+		private var parallaxForce:Number = 0.2;
 		public function ParallaxManager(gameScene:GameScene)
 		{
 			_gameScene = gameScene;
@@ -35,7 +35,7 @@ package game
 		
 		private function updateObjectPositions(param0:int):void
 		{
-			_gameScene.backDecorations.offsetX = parallaxForce * param0;
+			_gameScene.backDecorations.offsetX = param0;
 		}
 	}
 }
