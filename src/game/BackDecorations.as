@@ -38,7 +38,6 @@ package game
 		public function set offsetX(value:int):void
 		{
 			var newValue:Number = (value/stage.stageWidth) * stageDiff;
-			trace(stageDiff + " " + newValue);
 			if(newValue < stageDiff/2 && newValue > -stageDiff){
 				_offsetX = newValue;
 				backContainer.x = newValue;

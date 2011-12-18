@@ -1,5 +1,7 @@
 package game
 {
+	import animation.IcSprite;
+	
 	import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -36,6 +38,15 @@ package game
 		private function updateObjectPositions(param0:int):void
 		{
 			_gameScene.backDecorations.offsetX = param0;
+			if(_gameScene.hunter){
+				_gameScene.hunter.parallaxOffset = param0;
+			}
+			for each (var object:IcSprite in _gameScene.allObjects){
+				object.parallaxOffset = param0;
+			}
+			for each (object in _gameScene.decorativeObjects){
+				object.parallaxOffset = param0;
+			}
 		}
 	}
 }

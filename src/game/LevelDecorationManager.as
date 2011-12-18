@@ -48,6 +48,15 @@ package game
 				case "background":
 					return new BackgroundView();
 					break;
+				case "stone":
+					return new StoneView();
+					break;
+				case "littleHill":
+					return new LittleHillView();
+					break;
+				case "paddle":
+					return new UsualPaddleView();
+					break;
 				default:
 					return new MovieClip();
 					break;

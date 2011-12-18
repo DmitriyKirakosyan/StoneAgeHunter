@@ -1,4 +1,6 @@
 package animation {
+	import event.IcSpriteEvent;
+	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.display.DisplayObjectContainer;
@@ -11,6 +13,16 @@ package animation {
 		private var _animations:Vector.<IcAnimation>;
 		private var _animating:Boolean;
 		private var _currentAnimation:IcAnimation;
+		
+		
+		
+		protected var parallaxForce:Number = 0.0004;
+		
+		
+		//2 составляющи позиции по оси X (действительное положение и параллакс отступ)
+		protected var _realXpos:int;
+		protected var _parallaxOffset:int;
+		
 		private var _isBackAnimation:Boolean; //this is question need this or not
 		
 		public function IcSprite() {
@@ -21,6 +33,42 @@ package animation {
 		}
 		
 		/* API */
+		
+		public function get realXpos():int
+		{
+			return _realXpos;
+		}
+
+		public function set realXpos(value:int):void
+		{
+			_realXpos = value;
+			updatePosition();
+		}
+		
+		override public function set y(value:Number):void
+		{
+			// TODO Auto Generated method stub
+			super.y = value;
+			dispatchEvent(new IcSpriteEvent(IcSpriteEvent.MOVE, this));
+		}
+		
+		
+		public function get parallaxOffset():int
+		{
+			return _parallaxOffset;
+		}
+
+		public function set parallaxOffset(value:int):void
+		{
+			_parallaxOffset = value;
+			_parallaxOffset *= parallaxForce * y;
+			updatePosition();
+		}
+		
+		private function updatePosition():void
+		{
+			x = _realXpos + _parallaxOffset;
+		}
 		
 		public function get isBackAnimation():Boolean { return _isBackAnimation; }
 		

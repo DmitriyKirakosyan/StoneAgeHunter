@@ -36,14 +36,15 @@ package game {
 		private var _parallaxManager:ParallaxManager;
 		private var _perspectiveManager:PerspectiveManager;
 		
+		private var _mobManager:MobManager;
+		
 		private var _backDecorations:BackDecorations;
 		
-		private var _decoraativeObjects:Vector.<DecorativeObject>
+		private var _decoraativeObjects:Vector.<DecorativeObject> = new Vector.<DecorativeObject>;
 		
 		private var _debugPanel:DebugPanel;
 		private var _debugConsole:DebugConsole;
 		
-		private var _selectedHunter:Hunter;
 		public var active:Boolean = true;
 		
 		public function GameScene(container:Sprite, tileMap:TileMap):void {
@@ -65,12 +66,19 @@ package game {
 		
 		/* functions for debug */
 		
-		public function get decoraativeObjects():Vector.<DecorativeObject>
+		public function get allObjects():Array
+		{
+			var newArray:Array = new Array();
+			
+			return newArray;
+		}
+
+		public function get decorativeObjects():Vector.<DecorativeObject>
 		{
 			return _decoraativeObjects;
 		}
 
-		public function set decoraativeObjects(value:Vector.<DecorativeObject>):void
+		public function set decorativeObjects(value:Vector.<DecorativeObject>):void
 		{
 			_decoraativeObjects = value;
 		}
@@ -99,13 +107,35 @@ package game {
 		
 		public function open():void {
 			createHunter();
+			createDecorativeObjects();
 			_debugPanel.open();
 			_debugConsole.init();
 		}
+		
+		private function createDecorativeObjects():void {
+			for (var i:int = 0; i < 10; i++){
+				decorativeObjects.push(new DecorativeObject(LevelDecorationManager.getDecorationElement("littleHill")));
+				_gameContainer.addChild(decorativeObjects[i]);
+				decorativeObjects[i].realXpos = Math.round(Math.random() * _gameContainer.stage.stageWidth);
+				decorativeObjects[i].y = Math.round(Math.random() * (_gameContainer.stage.stageHeight - 80)) +70;
+			}
+			decorativeObjects.push(new DecorativeObject(LevelDecorationManager.getDecorationElement("paddle")))
+			_gameContainer.addChild(decorativeObjects[decorativeObjects.length-1]);	
+			decorativeObjects[decorativeObjects.length-1].realXpos = 200;
+			decorativeObjects[decorativeObjects.length-1].y= 200;
+		}
+		
 		public function close():void {
 			_debugConsole.remove();
 			_debugPanel.close();
 			removeHunter();
+			removeDecorativeObjects();
+		}
+		
+		private function removeDecorativeObjects():void
+		{
+			// TODO Auto Generated method stub
+			
 		}
 		
 		/* Internal functions */
@@ -119,7 +149,7 @@ package game {
 				_hunter.move();
 				TweenLite.to(_hunter,
 										 _hunter.computeDuration(new Point(_hunter.x, _hunter.y), new Point(event.stageX, event.stageY)),
-										 {ease:Linear.easeNone, x : event.stageX, y : event.stageY,
+										 {ease:Linear.easeNone, realXpos : event.stageX, y : event.stageY,
 										 onComplete : function():void {_hunter.stop();}});
 			}
 		}
@@ -127,7 +157,7 @@ package game {
 		private function createHunter():void {
 			trace("createHunter")
 			_hunter = new Hunter(false);
-			_hunter.x = 350;
+			_hunter.realXpos = 350;
 			_hunter.y = 300;
 			_gameContainer.addChild(_hunter);
 		}
@@ -135,30 +165,7 @@ package game {
 		private function removeHunter():void {
 			_gameContainer.removeChild(_hunter);
 		}
-
-		private function onAnimalClick(event:MouseEvent):void {
-			if (_selectedHunter && _selectedHunter.path) {
-				_selectedHunter.path.setAttackPoint();
-			}
-		}
 		
-		private function showHunterExistingPath(hunter:Hunter):void {
-			if (!hunter) { return; }
-			if (hunter.path) {
-				for each (var point:KeyPoint in hunter.path.points) {
-					point.alpha = 1;
-				}
-			}
-			if (hunter.path.links) { hunter.path.links.forEach(function(item:LinkToPoint, ..._):void { item.alpha = 1; }); }
-		}
-		
-		private function hideCurrentPath():void {
-			if (!_selectedHunter.path) { return; }
-			for each (var keyPoint:KeyPoint in _selectedHunter.path.points) {
-				keyPoint.alpha = .4;
-			}
-			if (_selectedHunter.path.links) { _selectedHunter.path.links.forEach(function(item:LinkToPoint, ..._):void { item.alpha = .4; }); }
-		}
 		
 	}
 }

@@ -3,8 +3,8 @@ package game.gameActor {
 	
 	import com.greensock.TimelineMax;
 	import com.greensock.TweenLite;
-import com.greensock.TweenMax;
-import com.greensock.easing.Linear;
+	import com.greensock.TweenMax;
+	import com.greensock.easing.Linear;
 	
 	import flash.geom.Point;
 
@@ -13,6 +13,8 @@ import com.greensock.easing.Linear;
 		private var _path:Path;
 		private var _pathTimeline:TimelineMax;
 		private var _moving:Boolean;
+		
+		//странно, что нет такого логичного параметра как direction
 		
 		private var _isNormalRotation:Boolean;
 
