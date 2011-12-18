@@ -1,4 +1,6 @@
 package game {
+	import animation.IcSprite;
+	
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	
@@ -16,17 +18,17 @@ package game {
 		
 		public function checkZSorting():void {
 			for (var i:int = 0; i < _gameContainer.numChildren; ++i) {
-				if (_gameContainer.getChildAt(i) is IcActor) {
-					checkWithAll(_gameContainer.getChildAt(i) as IcActor);
+				if (_gameContainer.getChildAt(i) is IcSprite) {
+					checkWithAll(_gameContainer.getChildAt(i) as IcSprite);
 				}
 			}
 		}
 		
-		private function checkWithAll(actor:IcActor):void {
-			var child:DisplayObject;
+		private function checkWithAll(actor:IcSprite):void {
+			var child:*;
 			for (var i:int = 0; i < _gameContainer.numChildren; ++i) {
 				child = _gameContainer.getChildAt(i)
-				if (actor != child && child is IcActor) {
+				if (actor != child && child is IcSprite) {
 					if (crossActors(actor, child) && needSwitchActors(actor, child)) {
 						_gameContainer.setChildIndex(child, _gameContainer.getChildIndex(actor));
 						_gameContainer.setChildIndex(actor, i);
@@ -35,9 +37,9 @@ package game {
 			}
 		}
 		
-		private function needSwitchActors(one:DisplayObject, two:DisplayObject):Boolean {
-			return (oneAboveTwoByLegs(two, one) && _gameContainer.getChildIndex(one) < _gameContainer.getChildIndex(two)) ||
-				(oneAboveTwoByLegs(one,  two) && _gameContainer.getChildIndex(one) > _gameContainer.getChildIndex(two));
+		private function needSwitchActors(one:IcSprite, two:IcSprite):Boolean {
+			return ((oneAboveTwoByLegs(two, one)) && _gameContainer.getChildIndex(one) < _gameContainer.getChildIndex(two)) ||
+				((oneAboveTwoByLegs(one,  two)) && _gameContainer.getChildIndex(one) > _gameContainer.getChildIndex(two));
 		}
 
 		private function oneAboveTwoByCenter(one:DisplayObject, two:DisplayObject):Boolean {

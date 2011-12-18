@@ -14,7 +14,7 @@ package animation {
 		private var _animating:Boolean;
 		private var _currentAnimation:IcAnimation;
 		
-		
+		public var _underAll:Boolean;
 		
 		protected var parallaxForce:Number = 0.0004;
 		
