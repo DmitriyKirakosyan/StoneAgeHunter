@@ -49,7 +49,7 @@ package animation {
 		{
 			// TODO Auto Generated method stub
 			super.y = value;
-			dispatchEvent(new IcSpriteEvent(IcSpriteEvent.MOVE, this));
+			dispatchEvent(new IcSpriteEvent(IcSpriteEvent.MOVE_BY_Y, this));
 		}
 		
 		

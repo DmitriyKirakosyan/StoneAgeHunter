@@ -7,7 +7,8 @@ package event
 	public class IcSpriteEvent extends Event
 	{
 		
-		public static const MOVE:String = "move";
+		public static const MOVE_BY_Y:String = "move_by_y";
+		public static const MOVE_BY_X:String = "move_by_x";
 		
 		public var icTarget:IcSprite;
 		

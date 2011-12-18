@@ -14,7 +14,7 @@ package game
 		public function PerspectiveManager(gameScene:GameScene)
 		{
 			_gameScene = gameScene;
-			_gameScene.gameContainer.addEventListener(IcSpriteEvent.MOVE, onSpriteMove);
+			_gameScene.gameContainer.addEventListener(IcSpriteEvent.MOVE_BY_Y, onSpriteMove);
 		}
 		
 		protected function onSpriteMove(event:IcSpriteEvent):void
