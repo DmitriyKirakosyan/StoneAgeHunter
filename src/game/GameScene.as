@@ -73,16 +73,20 @@ package game {
 			_currentMousePoint.x = event.stageX;
 			_currentMousePoint.y = event.stageY;
 			if(_hunter && _mouseDown){
-				
-				_hunter.move();
-				var toX:Number = event.stageX - _gameContainer.x;
-				var toY:Number = event.stageY - _gameContainer.y;
-				TweenLite.killTweensOf(_hunter);
-				TweenLite.to(_hunter,
-					_hunter.computeDuration(new Point(_hunter.x, _hunter.y), new Point(toX, toY)),
-					{ease:Linear.easeNone, realXpos : toX, y : toY,
-						onComplete : function():void {_hunter.stop();}});
+				moveHunterToCurrentMousePoint();
 			}
+		}
+
+		private function moveHunterToCurrentMousePoint():void {
+			_hunter.move();
+			var toPoint:Point = new Point(_currentMousePoint.x - _gameContainer.x,
+							         							_currentMousePoint.y - _gameContainer.y);
+			TweenLite.killTweensOf(_hunter);
+			_hunter.changeAnimationAndRotation(toPoint)
+			TweenLite.to(_hunter,
+				_hunter.computeDuration(new Point(_hunter.x, _hunter.y), toPoint),
+				{ease:Linear.easeNone, realXpos : toPoint.x, y : toPoint.y,
+					onComplete : function():void {_hunter.stop();}});
 		}
 		
 		protected function onContainerMouseUp(event:MouseEvent):void
@@ -167,13 +171,7 @@ package game {
 		private function onContainerMouseDown(event:MouseEvent):void {
 			_mouseDown = true;
 			if(_hunter){
-				_hunter.move();
-				var toX:Number = event.stageX - _gameContainer.x;
-				var toY:Number = event.stageY - _gameContainer.y;
-				TweenLite.to(_hunter,
-										 _hunter.computeDuration(new Point(_hunter.x, _hunter.y), new Point(toX, toY)),
-										 {ease:Linear.easeNone, realXpos : toX, y : toY,
-										 onComplete : function():void {_hunter.stop();}});
+				moveHunterToCurrentMousePoint();
 			}
 		}
 		

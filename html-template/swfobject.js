@@ -74,7 +74,7 @@ var swfobject = function() {
 	}(),
 	
 	/* Cross-browser onDomLoad
-		- Will fire an event as soon as the DOM of a web page is loaded
+		- Will fire an events as soon as the DOM of a web page is loaded
 		- Internet Explorer workaround based on Diego Perini's solution: http://javascript.nwbox.com/IEContentLoaded/
 		- Regular onload serves as fallback
 	*/ 
@@ -147,7 +147,7 @@ var swfobject = function() {
 	
 	/* Cross-browser onload
 		- Based on James Edwards' solution: http://brothercake.com/site/resources/scripts/onload/
-		- Will fire an event as soon as a web page including all of its assets are loaded 
+		- Will fire an events as soon as a web page including all of its assets are loaded
 	 */
 	function addLoadEvent(fn) {
 		if (typeof win.addEventListener != UNDEF) {

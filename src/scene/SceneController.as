@@ -45,7 +45,7 @@ package scene {
 			scn.addEventListener(SceneEvent.SWITCH_ME, onSceneWantSwitch);
 		}
 		
-		// event handlers
+		// events handlers
 		
 		private function onSceneWantSwitch(event:SceneEvent):void {
 			event.targetScene.close();

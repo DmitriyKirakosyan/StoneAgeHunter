@@ -22,6 +22,9 @@ public class Hunter extends IcActor {
 
 		/* hunter's color of glow and path */
 		private var _baseColor:uint;
+
+		/* point where hunter moving now */
+		private var _targetPoint:Point;
 		
 		private var _debug:Boolean;
 		
@@ -38,6 +41,9 @@ public class Hunter extends IcActor {
 		}
 		
 		/* API */
+
+		public function set targetPoint(value:Point):void { _targetPoint = value; }
+		public function get targetPoint():Point { return _targetPoint; }
 		
 		// for debug
 		public function setScale(value:Number):void {

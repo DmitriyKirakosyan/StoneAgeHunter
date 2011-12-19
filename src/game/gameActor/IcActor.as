@@ -117,7 +117,7 @@ package game.gameActor {
 			dispatchEvent(new IcActerEvent(IcActerEvent.TWEEN_COMPLETE, this));
 		}
 		
-		protected function changeAnimationAndRotation(targetPoint:Point):void {
+		public function changeAnimationAndRotation(targetPoint:Point):void {
 			if (targetPoint.y - this.height/4 < this.y) {
 				changeToBackAnimation();
 			} else { changeToFrontAnimation(); }

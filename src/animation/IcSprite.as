@@ -1,5 +1,5 @@
 package animation {
-	import event.IcSpriteEvent;
+	import events.IcSpriteEvent;
 	
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;

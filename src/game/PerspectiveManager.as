@@ -2,7 +2,7 @@ package game
 {
 	import animation.IcSprite;
 	
-	import event.IcSpriteEvent;
+	import events.IcSpriteEvent;
 	
 	import flash.events.Event;
 
@@ -19,8 +19,10 @@ package game
 		
 		protected function onSpriteMove(event:IcSpriteEvent):void
 		{
-			var tempSprite:IcSprite = (event as IcSpriteEvent).icTarget;
-			(event as IcSpriteEvent).icTarget.scaleX = tempSprite.scaleY = 0.7 + tempSprite.y * perspactiveForce;
+			var icSprite:IcSprite = event.icTarget;
+			var scale:Number = 0.7 + icSprite.y * perspactiveForce;
+			icSprite.scaleX = (icSprite.scaleX < 0) ? -scale : scale;
+			icSprite.scaleY = scale;
 		}
 	}
 }
