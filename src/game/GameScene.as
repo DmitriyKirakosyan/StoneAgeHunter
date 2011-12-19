@@ -21,6 +21,11 @@ package game {
 		private const WIDTH:Number = 1000;
 		private const HEIGHT:Number = 1000;
 
+		private const WINDOW_WIDTH:Number = 550;
+		private const WINDOW_HEIGHT:Number = 400;
+
+		private var _currentMousePoint:Point;
+
 		private var _gameContainer:Sprite;
 		private var _hunter:Hunter;
 		
@@ -42,6 +47,11 @@ package game {
 		public function GameScene(container:Sprite, tileMap:TileMap):void {
 			super();
 			_gameContainer = new Sprite();
+			_gameContainer.graphics.beginFill(0,.2);
+			_gameContainer.graphics.drawRect(0,0,WIDTH,HEIGHT);
+			_gameContainer.graphics.endFill();
+			_gameContainer.x = -400;
+			_gameContainer.y = -200;
 			_debugPanel = new DebugPanel(container, this);
 			//_debugConsole = new DebugConsole(this);
 			_zSortingManager = new ZSortingManager(this);
@@ -59,13 +69,18 @@ package game {
 		
 		protected function onContainerMouseMove(event:MouseEvent):void
 		{
+			if (!_currentMousePoint) { _currentMousePoint = new Point(); }
+			_currentMousePoint.x = event.stageX;
+			_currentMousePoint.y = event.stageY;
 			if(_hunter && _mouseDown){
 				
 				_hunter.move();
+				var toX:Number = event.stageX - _gameContainer.x;
+				var toY:Number = event.stageY - _gameContainer.y;
 				TweenLite.killTweensOf(_hunter);
 				TweenLite.to(_hunter,
-					_hunter.computeDuration(new Point(_hunter.x, _hunter.y), new Point(event.stageX, event.stageY - _hunter.height/2)),
-					{ease:Linear.easeNone, realXpos : event.stageX, y : event.stageY - _hunter.height/2,
+					_hunter.computeDuration(new Point(_hunter.x, _hunter.y), new Point(toX, toY)),
+					{ease:Linear.easeNone, realXpos : toX, y : toY,
 						onComplete : function():void {_hunter.stop();}});
 			}
 		}
@@ -117,10 +132,10 @@ package game {
 		//делаем всякие камушки - хуямушки
 		private function createDecorativeObjects():void {
 			var decorate:DecorativeObject;
-			for (var i:int = 0; i < 10; i++){
+			for (var i:int = 0; i < 30; i++){
 				decorate = DecorativeObject.createLittleHill();
 				decorate.realXpos = Math.round(Math.random() * _gameContainer.stage.stageWidth);
-				decorate.y = Math.round(Math.random() * (_gameContainer.stage.stageHeight - 80)) +70;
+				decorate.y = Math.round(Math.random() * (HEIGHT-70)) +70;
 				_gameContainer.addChild(decorate);
 				decorativeObjects.push(decorate);
 			}
@@ -142,15 +157,22 @@ package game {
 		
 		private function onGameContainerEnterFrame(event:Event):void {
 			_zSortingManager.checkZSorting();
+			if (!_hunter) { return; }
+			if (_gameContainer.x + _hunter.x < 200) { _gameContainer.x += 7; }
+			if (_gameContainer.x + _hunter.x > WINDOW_WIDTH-200) { _gameContainer.x-= 7; }
+			if (_gameContainer.y + _hunter.y < 200) { _gameContainer.y+= 7; }
+			if (_gameContainer.y + _hunter.y > WINDOW_HEIGHT-200) { _gameContainer.y-= 7; }
 		}
 
 		private function onContainerMouseDown(event:MouseEvent):void {
 			_mouseDown = true;
 			if(_hunter){
 				_hunter.move();
+				var toX:Number = event.stageX - _gameContainer.x;
+				var toY:Number = event.stageY - _gameContainer.y;
 				TweenLite.to(_hunter,
-										 _hunter.computeDuration(new Point(_hunter.x, _hunter.y), new Point(event.stageX, event.stageY - _hunter.height/2)),
-										 {ease:Linear.easeNone, realXpos : event.stageX, y : event.stageY - _hunter.height/2,
+										 _hunter.computeDuration(new Point(_hunter.x, _hunter.y), new Point(toX, toY)),
+										 {ease:Linear.easeNone, realXpos : toX, y : toY,
 										 onComplete : function():void {_hunter.stop();}});
 			}
 		}
