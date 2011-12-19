@@ -1,4 +1,5 @@
-package game {
+package game.drawing {
+import game.*;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;

@@ -1,4 +1,4 @@
-package game {
+package game.player {
 	import flash.display.Sprite;
 
 	public class HpLine extends Sprite {

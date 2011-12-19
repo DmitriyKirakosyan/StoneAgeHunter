@@ -1,4 +1,4 @@
-package game {
+package game.drawing {
 	import flash.events.Event;
 	import flash.geom.Point;
 	

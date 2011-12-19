@@ -14,7 +14,7 @@ package animation {
 		private var _animating:Boolean;
 		private var _currentAnimation:IcAnimation;
 		
-		public var _underAll:Boolean;
+		private var _underAll:Boolean;
 		
 		protected var parallaxForce:Number = 0.0004;
 		
@@ -33,7 +33,9 @@ package animation {
 		}
 		
 		/* API */
-		
+
+		public function set underAll(value:Boolean):void { _underAll = value; }
+
 		public function get realXpos():int
 		{
 			return _realXpos;

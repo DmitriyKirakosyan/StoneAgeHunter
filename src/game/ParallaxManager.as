@@ -37,7 +37,7 @@ package game
 		
 		private function updateObjectPositions(param0:int):void
 		{
-			_gameScene.backDecorations.offsetX = param0;
+			//_gameScene.backDecorations.offsetX = param0;
 			if(_gameScene.hunter){
 				_gameScene.hunter.parallaxOffset = param0;
 			}

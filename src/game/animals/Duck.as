@@ -9,7 +9,7 @@ package game.animals {
 	import flash.filters.GlowFilter;
 	import flash.geom.Point;
 	
-	import game.HpLine;
+	import game.player.HpLine;
 	import game.gameActor.IcActor;
 	import game.player.Hunter;
 

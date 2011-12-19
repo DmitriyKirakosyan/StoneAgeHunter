@@ -18,7 +18,8 @@ package game {
 	import game.map.tilemap.TileMap;
 
 	public class GameScene extends EventDispatcher implements IScene {
-
+		private const WIDTH:Number = 1000;
+		private const HEIGHT:Number = 1000;
 
 		private var _gameContainer:Sprite;
 		private var _hunter:Hunter;
@@ -32,7 +33,7 @@ package game {
 		private var _decoraativeObjects:Vector.<DecorativeObject> = new Vector.<DecorativeObject>;
 		
 		private var _debugPanel:DebugPanel;
-		private var _debugConsole:DebugConsole;
+		//private var _debugConsole:DebugConsole;
 		
 		public var active:Boolean = true;
 		
@@ -42,12 +43,12 @@ package game {
 			super();
 			_gameContainer = new Sprite();
 			_debugPanel = new DebugPanel(container, this);
-			_debugConsole = new DebugConsole(this);
+			//_debugConsole = new DebugConsole(this);
 			_zSortingManager = new ZSortingManager(this);
 			_parallaxManager = new ParallaxManager(this);
 			_perspectiveManager = new PerspectiveManager(this);
-			backDecorations = new BackDecorations;
-			gameContainer.addChild(backDecorations);
+			//backDecorations = new BackDecorations;
+			//gameContainer.addChild(backDecorations);
 			container.addChild(_gameContainer);
 			_gameContainer.addEventListener(Event.ENTER_FRAME, onGameContainerEnterFrame);
 			container.addEventListener(MouseEvent.MOUSE_DOWN, onContainerMouseDown);
@@ -110,36 +111,31 @@ package game {
 			createHunter();
 			createDecorativeObjects();
 			_debugPanel.open();
-			_debugConsole.init();
+			//_debugConsole.init();
 		}
-		
 		
 		//делаем всякие камушки - хуямушки
 		private function createDecorativeObjects():void {
+			var decorate:DecorativeObject;
 			for (var i:int = 0; i < 10; i++){
-				decorativeObjects.push(new DecorativeObject(LevelDecorationManager.getDecorationElement("littleHill")));
-				_gameContainer.addChild(decorativeObjects[i]);
-				decorativeObjects[i].realXpos = Math.round(Math.random() * _gameContainer.stage.stageWidth);
-				decorativeObjects[i].y = Math.round(Math.random() * (_gameContainer.stage.stageHeight - 80)) +70;
+				decorate = DecorativeObject.createLittleHill();
+				decorate.realXpos = Math.round(Math.random() * _gameContainer.stage.stageWidth);
+				decorate.y = Math.round(Math.random() * (_gameContainer.stage.stageHeight - 80)) +70;
+				_gameContainer.addChild(decorate);
+				decorativeObjects.push(decorate);
 			}
-			decorativeObjects.push(new DecorativeObject(LevelDecorationManager.getDecorationElement("paddle")))
-			_gameContainer.addChild(decorativeObjects[decorativeObjects.length-1]);	
-			decorativeObjects[decorativeObjects.length-1].realXpos = 200;
-			decorativeObjects[decorativeObjects.length-1].y= 200;
-			decorativeObjects[decorativeObjects.length-1]._underAll = true;
+			decorate = DecorativeObject.createPaddle();
+			decorativeObjects.push(decorate)
+			_gameContainer.addChild(decorate);
+			decorate.realXpos = 200;
+			decorate.y= 200;
+			decorate.underAll = true;
 		}
 		
 		public function close():void {
-			_debugConsole.remove();
+			//_debugConsole.remove();
 			_debugPanel.close();
 			removeHunter();
-			removeDecorativeObjects();
-		}
-		
-		private function removeDecorativeObjects():void
-		{
-			// TODO Auto Generated method stub
-			
 		}
 		
 		/* Internal functions */

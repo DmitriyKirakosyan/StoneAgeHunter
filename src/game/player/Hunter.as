@@ -6,7 +6,7 @@ import flash.display.Sprite;
 import flash.filters.GlowFilter;
 	import flash.geom.Point;
 	
-	import game.HpLine;
+	import game.player.HpLine;
 	import game.armor.Stone;
 	import game.gameActor.IcActor;
 import game.gameActor.IcActerEvent;

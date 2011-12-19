@@ -1,4 +1,5 @@
-package game {
+package game.drawing {
+import game.*;
 	import com.greensock.TweenMax;
 	import flash.filters.BlurFilter;
 	import animation.IcSprite;
