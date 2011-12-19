@@ -1,5 +1,5 @@
-package {
-	import tilemap.TileMap;
+﻿package {
+	import game.map.tilemap.TileMap;
 	import flash.events.Event;
 	import game.GameScene;
 	import game.MenuScene;

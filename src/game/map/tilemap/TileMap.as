@@ -1,4 +1,4 @@
-package tilemap {
+package game.map.tilemap {
 	import flash.display.Sprite;
 	import flash.geom.Point;
 

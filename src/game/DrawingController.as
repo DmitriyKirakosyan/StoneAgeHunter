@@ -9,7 +9,7 @@ import game.gameActor.IcActor;
 
 import game.player.Hunter;
 	
-	import tilemap.TileMap;
+	import game.map.tilemap.TileMap;
 
 	public class DrawingController extends EventDispatcher{
 		private var _parentContainer:Sprite;

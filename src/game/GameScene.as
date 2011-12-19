@@ -1,8 +1,5 @@
 package game {
-	import animation.IcSprite;
-	
 	import com.greensock.TweenLite;
-	import com.greensock.easing.Back;
 	import com.greensock.easing.Linear;
 	
 	import flash.display.Sprite;
@@ -11,32 +8,24 @@ package game {
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
 	
-	import game.animals.AnimalEvent;
-	import game.animals.Duck;
-	import game.armor.Stone;
 	import game.debug.DebugConsole;
 	import game.debug.DebugPanel;
-	import game.gameActor.ActerKeyPointEvent;
-	import game.gameActor.IcActerEvent;
-	import game.gameActor.KeyPoint;
-	import game.gameActor.LinkToPoint;
 	import game.player.Hunter;
 	
 	import scene.IScene;
 	import scene.SceneEvent;
 	
-	import tilemap.TileMap;
+	import game.map.tilemap.TileMap;
 
 	public class GameScene extends EventDispatcher implements IScene {
-		private var _mapContainer:Sprite;
+
+
 		private var _gameContainer:Sprite;
 		private var _hunter:Hunter;
 		
 		private var _zSortingManager:ZSortingManager;
 		private var _parallaxManager:ParallaxManager;
 		private var _perspectiveManager:PerspectiveManager;
-		
-		private var _mobManager:MobManager;
 		
 		private var _backDecorations:BackDecorations;
 		
@@ -51,7 +40,6 @@ package game {
 		
 		public function GameScene(container:Sprite, tileMap:TileMap):void {
 			super();
-			_mapContainer = new Sprite();
 			_gameContainer = new Sprite();
 			_debugPanel = new DebugPanel(container, this);
 			_debugConsole = new DebugConsole(this);
@@ -60,7 +48,6 @@ package game {
 			_perspectiveManager = new PerspectiveManager(this);
 			backDecorations = new BackDecorations;
 			gameContainer.addChild(backDecorations);
-			container.addChild(_mapContainer);
 			container.addChild(_gameContainer);
 			_gameContainer.addEventListener(Event.ENTER_FRAME, onGameContainerEnterFrame);
 			container.addEventListener(MouseEvent.MOUSE_DOWN, onContainerMouseDown);
@@ -101,11 +88,6 @@ package game {
 			return _decoraativeObjects;
 		}
 
-		public function set decorativeObjects(value:Vector.<DecorativeObject>):void
-		{
-			_decoraativeObjects = value;
-		}
-
 		public function get backDecorations():BackDecorations
 		{
 			return _backDecorations;
@@ -119,10 +101,6 @@ package game {
 		public function get gameContainer():Sprite { return _gameContainer; }
 
 		public function get hunter():Hunter { return _hunter; }
-		
-		public function get mapContainer():Sprite {
-			return _mapContainer;
-		}
 		
 		public function dispatchAboutClose():void {
 			dispatchEvent(new SceneEvent(SceneEvent.SWITCH_ME, this));
@@ -182,7 +160,7 @@ package game {
 		}
 		
 		private function createHunter():void {
-			trace("createHunter")
+			trace("createHunter");
 			_hunter = new Hunter(false);
 			_hunter.realXpos = 350;
 			_hunter.y = 300;
