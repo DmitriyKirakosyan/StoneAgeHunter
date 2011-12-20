@@ -18,6 +18,15 @@ package game
 			//хз как на самом деле правильно было бы здесь слушать движения мышки;
 			_gameScene.gameContainer.addEventListener(Event.ADDED_TO_STAGE, onGameContainerAddedToStage);
 		}
+
+		public function deactivateIfNot():void {
+			if (!_gameScene.gameContainer.stage.hasEventListener(MouseEvent.MOUSE_MOVE)) {
+				_gameScene.gameContainer.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			}
+		}
+		public function activateIfNot():void {
+			_gameScene.gameContainer.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+		}
 		
 		protected function onGameContainerAddedToStage(event:Event):void
 		{

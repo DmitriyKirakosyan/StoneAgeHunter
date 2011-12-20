@@ -162,10 +162,22 @@ package game {
 		private function onGameContainerEnterFrame(event:Event):void {
 			_zSortingManager.checkZSorting();
 			if (!_hunter) { return; }
-			if (_gameContainer.x + _hunter.x < 200) { _gameContainer.x += 7; }
-			if (_gameContainer.x + _hunter.x > WINDOW_WIDTH-200) { _gameContainer.x-= 7; }
-			if (_gameContainer.y + _hunter.y < 200) { _gameContainer.y+= 7; }
-			if (_gameContainer.y + _hunter.y > WINDOW_HEIGHT-200) { _gameContainer.y-= 7; }
+			if (mouseAroundSide()) {
+				_parallaxManager.deactivateIfNot();
+				if (_gameContainer.x + _hunter.x < 200) { _gameContainer.x += 7; }
+				if (_gameContainer.x + _hunter.x > WINDOW_WIDTH-200) { _gameContainer.x-= 7; }
+				if (_gameContainer.y + _hunter.y < 200) { _gameContainer.y+= 7; }
+				if (_gameContainer.y + _hunter.y > WINDOW_HEIGHT-200) { _gameContainer.y-= 7; }
+			} else {
+				_parallaxManager.activateIfNot();
+			}
+		}
+
+		private function mouseAroundSide():Boolean {
+			return (_gameContainer.x + _hunter.x < 200) ||
+							(_gameContainer.x + _hunter.x > WINDOW_WIDTH-200) ||
+							(_gameContainer.y + _hunter.y < 200) ||
+							(_gameContainer.y + _hunter.y > WINDOW_HEIGHT-200);
 		}
 
 		private function onContainerMouseDown(event:MouseEvent):void {
