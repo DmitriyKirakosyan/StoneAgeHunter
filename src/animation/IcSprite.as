@@ -13,6 +13,7 @@ package animation {
 		private var _animations:Vector.<IcAnimation>;
 		private var _animating:Boolean;
 		private var _currentAnimation:IcAnimation;
+		private var _blockAnimation:Boolean;
 		
 		private var _underAll:Boolean;
 		
@@ -102,10 +103,10 @@ package animation {
 			}
 		}
 
-		public function playAndNext(animationName:String, nextAnimationName:String = "", back:Boolean = false):void {
+		public function playAndNext(animationName:String, blockOther:Boolean = true, nextAnimationName:String = ""):void {
 			const icAnimation:IcAnimation = getAnimationByName(animationName);
 			if (icAnimation && _currentAnimation != icAnimation) {
-				playAnimation(icAnimation, back);
+				playAnimation(icAnimation, false, true);
 			}
 		}
 		
@@ -123,7 +124,7 @@ package animation {
 		
 		/* Internal functions */
 		
-		private function playAnimation(icAnimation:IcAnimation, backAnimation:Boolean):void {
+		private function playAnimation(icAnimation:IcAnimation, backAnimation:Boolean, blockOther:Boolean = false):void {
 			if (_currentAnimation) {
 				var currentAnimationMC:MovieClip = getBackOrFrontAnimation(_currentAnimation, _isBackAnimation);
 				if (_animationContainer.contains(currentAnimationMC)) { _animationContainer.removeChild(currentAnimationMC); }
@@ -133,6 +134,7 @@ package animation {
 			_animationContainer.addEventListener(Event.COMPLETE, onAnimationComplete);
 			_animating = true;
 			_isBackAnimation = backAnimation;
+			_blockAnimation = blockOther;
 		}
 
 		private function onAnimationComplete(event:Event):void {

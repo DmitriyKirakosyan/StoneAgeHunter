@@ -72,7 +72,7 @@ public class Hunter extends IcActor {
 			//stone.x = this.width/5;
 			//stone.y = this.height/4;
 			//this.addChild(stone);
-			play(ANIMATION_THROW);
+			playAndNext(ANIMATION_THROW);
 
 		}
 		

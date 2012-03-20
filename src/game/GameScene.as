@@ -34,6 +34,8 @@ package game {
 		private var _perspectiveManager:PerspectiveManager;
 
 		private  const CONTAINER_MOVE_SPEED:int = 3;
+		private const HUNTER_THROW_PERIOD:int = 5;
+		private var _hunterThrowCounter:Number = 0;
 		
 		private var _backDecorations:BackDecorations;
 		
@@ -158,14 +160,20 @@ package game {
 			_zSortingManager.checkZSorting();
 			if (!_hunter) { return; }
 			if (mouseAroundSide()) {
-				//_parallaxManager.deactivateIfNot();
-				if (_gameContainer.x + _hunter.x < 200) { _gameContainer.x += CONTAINER_MOVE_SPEED; }
-				if (_gameContainer.x + _hunter.x > WINDOW_WIDTH-200) { _gameContainer.x-= CONTAINER_MOVE_SPEED; }
-				if (_gameContainer.y + _hunter.y < 200) { _gameContainer.y+= CONTAINER_MOVE_SPEED; }
-				if (_gameContainer.y + _hunter.y > WINDOW_HEIGHT-200) { _gameContainer.y-= CONTAINER_MOVE_SPEED; }
-			} else {
-				//_parallaxManager.activateIfNot();
+				scrollContainer();
 			}
+			_hunterThrowCounter += 1/Main.FRAME_RATE;
+			if (_hunterThrowCounter >= HUNTER_THROW_PERIOD) {
+				_hunterThrowCounter = 0;
+				_hunter.throwStone();
+			}
+		}
+
+		private function scrollContainer():void {
+			if (_gameContainer.x + _hunter.x < 200) { _gameContainer.x += CONTAINER_MOVE_SPEED; }
+			if (_gameContainer.x + _hunter.x > WINDOW_WIDTH-200) { _gameContainer.x-= CONTAINER_MOVE_SPEED; }
+			if (_gameContainer.y + _hunter.y < 200) { _gameContainer.y+= CONTAINER_MOVE_SPEED; }
+			if (_gameContainer.y + _hunter.y > WINDOW_HEIGHT-200) { _gameContainer.y-= CONTAINER_MOVE_SPEED; }
 		}
 
 		private function mouseAroundSide():Boolean {
