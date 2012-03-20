@@ -123,10 +123,10 @@ package game.gameActor {
 			} else { changeToFrontAnimation(); }
 			if (_isNormalRotation && this.x < targetPoint.x) {
 				_isNormalRotation = false;
-				this.scaleX = -this.scaleX; this.x += this.width;
+				this.scaleX = -this.scaleX;// this.x += this.width;
 			} else if (!_isNormalRotation && this.x > targetPoint.x) {
 				_isNormalRotation = true;
-				this.scaleX = -this.scaleX; this.x -= this.width;
+				this.scaleX = -this.scaleX;// this.x -= this.width;
 			}
 		}
 		

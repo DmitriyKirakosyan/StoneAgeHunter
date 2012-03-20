@@ -32,6 +32,8 @@ package game {
 		private var _zSortingManager:ZSortingManager;
 		private var _parallaxManager:ParallaxManager;
 		private var _perspectiveManager:PerspectiveManager;
+
+		private  const CONTAINER_MOVE_SPEED:int = 3;
 		
 		private var _backDecorations:BackDecorations;
 		
@@ -163,13 +165,13 @@ package game {
 			_zSortingManager.checkZSorting();
 			if (!_hunter) { return; }
 			if (mouseAroundSide()) {
-				_parallaxManager.deactivateIfNot();
-				if (_gameContainer.x + _hunter.x < 200) { _gameContainer.x += 7; }
-				if (_gameContainer.x + _hunter.x > WINDOW_WIDTH-200) { _gameContainer.x-= 7; }
-				if (_gameContainer.y + _hunter.y < 200) { _gameContainer.y+= 7; }
-				if (_gameContainer.y + _hunter.y > WINDOW_HEIGHT-200) { _gameContainer.y-= 7; }
+				//_parallaxManager.deactivateIfNot();
+				if (_gameContainer.x + _hunter.x < 200) { _gameContainer.x += CONTAINER_MOVE_SPEED; }
+				if (_gameContainer.x + _hunter.x > WINDOW_WIDTH-200) { _gameContainer.x-= CONTAINER_MOVE_SPEED; }
+				if (_gameContainer.y + _hunter.y < 200) { _gameContainer.y+= CONTAINER_MOVE_SPEED; }
+				if (_gameContainer.y + _hunter.y > WINDOW_HEIGHT-200) { _gameContainer.y-= CONTAINER_MOVE_SPEED; }
 			} else {
-				_parallaxManager.activateIfNot();
+				//_parallaxManager.activateIfNot();
 			}
 		}
 
@@ -190,8 +192,8 @@ package game {
 		private function createHunter():void {
 			trace("createHunter");
 			_hunter = new Hunter(false);
-			_hunter.realXpos = 350;
-			_hunter.y = 300;
+			//_hunter.realXpos = 350;
+			//_hunter.y = 300;
 			_gameContainer.addChild(_hunter);
 		}
 		
