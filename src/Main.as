@@ -9,6 +9,10 @@
 	[SWF(width=550, height=400, frameRate=25)]
 	public class Main extends Sprite {
 		private var _tileMap:TileMap;
+
+		public static const WIDTH:Number = 550;
+		public static const HEIGHT:Number = 400;
+		public static const FRAME_RATE:int = 25;
 		
 		public function Main() {
 			this.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);

@@ -1,51 +1,63 @@
 package game
 {
 	import animation.IcSprite;
-	
-	import flash.display.Stage;
+
+import flash.display.Sprite;
+
+import flash.display.Stage;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+import flash.geom.Point;
 
-	public class ParallaxManager
+public class ParallaxManager
 	{
 		private var _gameScene:GameScene;
+		private var _gameContainer:Sprite;
 		private var _screenCenterX:int;
 		private var _stage:Stage;
+		private var _active:Boolean;
+		private var _currentMousePosX:Number;
 		private var parallaxForce:Number = 0.2;
-		public function ParallaxManager(gameScene:GameScene)
-		{
+
+
+		public function ParallaxManager(gameScene:GameScene) {
 			_gameScene = gameScene;
-			//хз как на самом деле правильно было бы здесь слушать движения мышки;
-			_gameScene.gameContainer.addEventListener(Event.ADDED_TO_STAGE, onGameContainerAddedToStage);
+			_gameContainer = _gameScene.gameContainer;
+			_stage = _gameContainer.stage;
+			_screenCenterX = Main.WIDTH/2;
+		}
+
+		public function open():void {
+			_gameContainer.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			_gameContainer.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+			_active = true;
+		}
+		public function close():void {
+			_gameContainer.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			_gameContainer.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+			_active = false;
 		}
 
 		public function deactivateIfNot():void {
-			if (!_gameScene.gameContainer.stage.hasEventListener(MouseEvent.MOUSE_MOVE)) {
-				_gameScene.gameContainer.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-			}
+			_active = false;
 		}
 		public function activateIfNot():void {
-			_gameScene.gameContainer.stage.removeEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
+			_active = true;
 		}
-		
-		protected function onGameContainerAddedToStage(event:Event):void
-		{
-			_gameScene.gameContainer.removeEventListener(Event.ADDED_TO_STAGE, onGameContainerAddedToStage);
-			_stage = _gameScene.gameContainer.stage;
-			_screenCenterX = _gameScene.gameContainer.stage.stageWidth/2;
-			_gameScene.gameContainer.stage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-			
-		}
-		
-		protected function onMouseMove(event:MouseEvent):void
-		{
-			if(_gameScene.active){
-				updateObjectPositions(_screenCenterX - _stage.mouseX);
+
+		private function onMouseMove(event:MouseEvent):void {
+			if(_active){
+				_currentMousePosX = event.stageX;
 			}
 		}
-		
-		private function updateObjectPositions(param0:int):void
-		{
+
+		private function onEnterFrame(event:Event):void {
+			if (_active) {
+				updateObjectPositions(_screenCenterX - _currentMousePosX);
+			}
+		}
+
+		private function updateObjectPositions(param0:int):void {
 			//_gameScene.backDecorations.offsetX = param0;
 			if(_gameScene.hunter){
 				_gameScene.hunter.parallaxOffset = param0;

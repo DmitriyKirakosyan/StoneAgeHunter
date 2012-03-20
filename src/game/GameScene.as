@@ -91,22 +91,15 @@ package game {
 					onComplete : function():void {_hunter.stop();}});
 		}
 		
-		protected function onContainerMouseUp(event:MouseEvent):void
-		{
-			_mouseDown = false;
-		}
-		
 		/* functions for debug */
 		
-		public function get allObjects():Array
-		{
+		public function get allObjects():Array {
 			var newArray:Array = new Array();
 			
 			return newArray;
 		}
 
-		public function get decorativeObjects():Vector.<DecorativeObject>
-		{
+		public function get decorativeObjects():Vector.<DecorativeObject> {
 			return _decoraativeObjects;
 		}
 
@@ -131,10 +124,16 @@ package game {
 		public function open():void {
 			createHunter();
 			createDecorativeObjects();
+			_parallaxManager.open();
 			_debugPanel.open();
-			//_debugConsole.init();
 		}
-		
+		public function close():void {
+			_parallaxManager.close();
+			_debugPanel.close();
+			removeHunter();
+		}
+
+
 		//делаем всякие камушки - хуямушки
 		private function createDecorativeObjects():void {
 			var decorate:DecorativeObject;
@@ -151,12 +150,6 @@ package game {
 			decorate.realXpos = 200;
 			decorate.y= 200;
 			decorate.underAll = true;
-		}
-		
-		public function close():void {
-			//_debugConsole.remove();
-			_debugPanel.close();
-			removeHunter();
 		}
 		
 		/* Internal functions */
@@ -187,8 +180,14 @@ package game {
 			if(_hunter){
 				moveHunterToCurrentMousePoint();
 			}
+		//	_parallaxManager.deactivateIfNot();
 		}
-		
+		protected function onContainerMouseUp(event:MouseEvent):void {
+			_mouseDown = false;
+		//	_parallaxManager.activateIfNot();
+		}
+
+
 		private function createHunter():void {
 			trace("createHunter");
 			_hunter = new Hunter(false);
