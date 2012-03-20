@@ -139,8 +139,8 @@ package game {
 			var decorate:DecorativeObject;
 			for (var i:int = 0; i < 30; i++){
 				decorate = DecorativeObject.createLittleHill();
-				decorate.realXpos = Math.round(Math.random() * _gameContainer.stage.stageWidth);
-				decorate.y = Math.round(Math.random() * (HEIGHT-70)) +70;
+				decorate.realXpos = Math.random() * (WIDTH-100) + 50;
+				decorate.y = Math.random() * (HEIGHT-100) +50;
 				_gameContainer.addChild(decorate);
 				decorativeObjects.push(decorate);
 			}
