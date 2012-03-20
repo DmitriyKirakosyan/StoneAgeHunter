@@ -101,6 +101,13 @@ package animation {
 				}
 			}
 		}
+
+		public function playAndNext(animationName:String, nextAnimationName:String = "", back:Boolean = false):void {
+			const icAnimation:IcAnimation = getAnimationByName(animationName);
+			if (icAnimation && _currentAnimation != icAnimation) {
+				playAnimation(icAnimation, back);
+			}
+		}
 		
 		protected function changeToBackAnimation():void {
 			if (!_isBackAnimation) {
@@ -123,9 +130,15 @@ package animation {
 			}
 			_currentAnimation = icAnimation;
 			_animationContainer.addChild(getBackOrFrontAnimation(icAnimation, backAnimation));
+			_animationContainer.addEventListener(Event.COMPLETE, onAnimationComplete);
 			_animating = true;
 			_isBackAnimation = backAnimation;
 		}
+
+		private function onAnimationComplete(event:Event):void {
+			trace("animation complete [IcSprite.onAnimationComplete]");
+		}
+
 		
 		private function getBackOrFrontAnimation(icAnimation:IcAnimation, back:Boolean):MovieClip {
 			return back ? icAnimation.backAnimation : icAnimation.animation;

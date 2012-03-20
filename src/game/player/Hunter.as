@@ -25,6 +25,8 @@ public class Hunter extends IcActor {
 
 		/* point where hunter moving now */
 		private var _targetPoint:Point;
+
+		private const ANIMATION_THROW:String = "animation_throw";
 		
 		private var _debug:Boolean;
 		
@@ -42,9 +44,6 @@ public class Hunter extends IcActor {
 		
 		/* API */
 
-		public function set targetPoint(value:Point):void { _targetPoint = value; }
-		public function get targetPoint():Point { return _targetPoint; }
-		
 		// for debug
 		public function setScale(value:Number):void {
 			animationScale = value;
@@ -68,11 +67,13 @@ public class Hunter extends IcActor {
 			return _stone != null;
 		}
 		
-		public function putStone(stone:Stone):void {
-			_stone = stone;
-			stone.x = this.width/5;
-			stone.y = this.height/4;
-			this.addChild(stone);
+		public function throwStone():void {
+			//_stone = stone;
+			//stone.x = this.width/5;
+			//stone.y = this.height/4;
+			//this.addChild(stone);
+			play(ANIMATION_THROW);
+
 		}
 		
 		override public function getAlternativeCopy(copyName:String=""):IcSprite {
@@ -93,25 +94,6 @@ public class Hunter extends IcActor {
 		}
 
 		public function get pathParts():Vector.<Sprite> { return _pathParts; }
-
-		public function addPathPart(pathPart:Sprite):void {
-			if (!_pathParts) { _pathParts = new Vector.<Sprite>(); }
-			_pathParts.push(pathPart);
-			 super.addWayPoint(new Point(pathPart.x,  pathPart.y));
-		}
-
-
-		public function needDrawLine(x:Number,  y:Number):Boolean {
-			if (_pathParts && _pathParts.length > 0) {
-				if ( (_pathParts[_pathParts.length-1].x - x < 6 &&
-					_pathParts[_pathParts.length-1].x - x > -6) &&
-					(_pathParts[_pathParts.length-1].y - y < 6 &&
-						_pathParts[_pathParts.length-1].y - y > -6) ) {
-							return false;
-						}
-			}
-			return true;
-		}
 
 		override public function move():void {
 			super.move();
@@ -137,6 +119,7 @@ public class Hunter extends IcActor {
 		private function addAnimations():void {
 			addAnimation(ANIMATE_STAY, new ManStayD(), new ManStayU());
 			addAnimation(ANIMATE_MOVE, new ManRunD(), new ManRunU());
+			addAnimation(ANIMATION_THROW, new ManThrowD());
 		}
 		
 	}
