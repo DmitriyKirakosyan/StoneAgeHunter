@@ -72,7 +72,7 @@ public class Hunter extends IcActor {
 			//stone.x = this.width/5;
 			//stone.y = this.height/4;
 			//this.addChild(stone);
-			playAndNext(ANIMATION_THROW);
+			playOnce(ANIMATION_THROW, true);
 
 		}
 		
@@ -119,7 +119,7 @@ public class Hunter extends IcActor {
 		private function addAnimations():void {
 			addAnimation(ANIMATE_STAY, new ManStayD(), new ManStayU());
 			addAnimation(ANIMATE_MOVE, new ManRunD(), new ManRunU());
-			addAnimation(ANIMATION_THROW, new ManThrowD());
+			addAnimation(ANIMATION_THROW, new ManThrowD(), new ManThrowU());
 		}
 		
 	}

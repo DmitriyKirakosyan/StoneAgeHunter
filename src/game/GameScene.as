@@ -7,8 +7,10 @@ package game {
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
-	
-	import game.debug.DebugConsole;
+
+import game.armor.Stone;
+
+import game.debug.DebugConsole;
 	import game.debug.DebugPanel;
 	import game.player.Hunter;
 	
@@ -34,7 +36,7 @@ package game {
 		private var _perspectiveManager:PerspectiveManager;
 
 		private  const CONTAINER_MOVE_SPEED:int = 3;
-		private const HUNTER_THROW_PERIOD:int = 5;
+		private const HUNTER_THROW_PERIOD:int = 1;
 		private var _hunterThrowCounter:Number = 0;
 		
 		private var _backDecorations:BackDecorations;
@@ -162,10 +164,12 @@ package game {
 			if (mouseAroundSide()) {
 				scrollContainer();
 			}
+
 			_hunterThrowCounter += 1/Main.FRAME_RATE;
 			if (_hunterThrowCounter >= HUNTER_THROW_PERIOD) {
 				_hunterThrowCounter = 0;
 				_hunter.throwStone();
+				throwStoneToRandomPoint();
 			}
 		}
 
@@ -174,6 +178,15 @@ package game {
 			if (_gameContainer.x + _hunter.x > WINDOW_WIDTH-200) { _gameContainer.x-= CONTAINER_MOVE_SPEED; }
 			if (_gameContainer.y + _hunter.y < 200) { _gameContainer.y+= CONTAINER_MOVE_SPEED; }
 			if (_gameContainer.y + _hunter.y > WINDOW_HEIGHT-200) { _gameContainer.y-= CONTAINER_MOVE_SPEED; }
+		}
+
+		private function throwStoneToRandomPoint():void {
+			var stone:Stone = new Stone();
+			stone.x = _hunter.x;
+			stone.y = _hunter.y;
+			_gameContainer.addChild(stone);
+			var toPoint:Point = new Point(Math.random()*WIDTH, Math.random() * HEIGHT);
+			TweenLite.to(stone, _hunter.computeDuration(new Point(stone.x, stone.y), toPoint), {x : toPoint.x, y : toPoint.y});
 		}
 
 		private function mouseAroundSide():Boolean {
