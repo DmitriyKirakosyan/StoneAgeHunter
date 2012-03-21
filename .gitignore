@@ -1,9 +1,13 @@
+StoneAgeHunter.as3proj
 .actionScriptProperties
 .idea/
 StoneAgeHunter.iml
 bin-debug/
 bin/history/
 bin/swfobject.js
+bin/expressInstall.swf
+bin/js/
+bin/index.html
 .project
 .settings/
 .DS_Store
