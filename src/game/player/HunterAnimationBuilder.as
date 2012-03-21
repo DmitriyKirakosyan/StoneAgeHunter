@@ -6,7 +6,9 @@
 package game.player {
 import animation.IcAnimation;
 
-public class HunterAnimationBuilder {
+import game.gameActor.ActorAnimationBuilder;
+
+public class HunterAnimationBuilder extends ActorAnimationBuilder {
 
 	public static const ANIMATION_THROW:String = "animation_throw";
 	public static const ANIMATION_MOVE:String = "move";

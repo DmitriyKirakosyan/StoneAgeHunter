@@ -1,4 +1,4 @@
-package game.animals {
+package game.animal {
 	import animation.IcSprite;
 	import flash.events.Event;
 

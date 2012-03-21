@@ -12,7 +12,8 @@ import game.armor.Stone;
 
 import game.debug.DebugConsole;
 	import game.debug.DebugPanel;
-	import game.player.Hunter;
+import game.enemy.EnemyArmyController;
+import game.player.Hunter;
 	
 	import scene.IScene;
 	import scene.SceneEvent;
@@ -30,6 +31,7 @@ import game.debug.DebugConsole;
 
 		private var _gameContainer:Sprite;
 		private var _hunter:Hunter;
+		private var _enemyArmyController:EnemyArmyController;
 		
 		private var _zSortingManager:ZSortingManager;
 		private var _parallaxManager:ParallaxManager;
@@ -73,6 +75,21 @@ import game.debug.DebugConsole;
 			
 		}
 		
+		public function open():void {
+			createHunter();
+			createDecorativeObjects();
+			_enemyArmyController = new EnemyArmyController(_gameContainer, _hunter);
+			_enemyArmyController.open();
+			_parallaxManager.open();
+			_debugPanel.open();
+		}
+		public function close():void {
+			_enemyArmyController.close();
+			_parallaxManager.close();
+			_debugPanel.close();
+			removeHunter();
+		}
+
 		protected function onContainerMouseMove(event:MouseEvent):void
 		{
 			if (!_currentMousePoint) { _currentMousePoint = new Point(); }
@@ -125,18 +142,6 @@ import game.debug.DebugConsole;
 			dispatchEvent(new SceneEvent(SceneEvent.SWITCH_ME, this));
 		}
 		
-		public function open():void {
-			createHunter();
-			createDecorativeObjects();
-			_parallaxManager.open();
-			_debugPanel.open();
-		}
-		public function close():void {
-			_parallaxManager.close();
-			_debugPanel.close();
-			removeHunter();
-		}
-
 
 		//делаем всякие камушки - хуямушки
 		private function createDecorativeObjects():void {

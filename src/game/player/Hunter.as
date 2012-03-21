@@ -69,10 +69,6 @@ public class Hunter extends IcActor {
 		}
 		
 		public function throwStone():void {
-			//_stone = stone;
-			//stone.x = this.width/5;
-			//stone.y = this.height/4;
-			//this.addChild(stone);
 			play(HunterAnimationBuilder.ANIMATION_THROW, true);
 
 		}

@@ -1,6 +1,8 @@
-package game.animals {
+package game.animal {
 	import animation.IcSprite;
-	import com.greensock.TimelineMax;
+
+import com.adobe.serialization.json.JSON;
+import com.greensock.TimelineMax;
 	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Linear;
@@ -42,7 +44,8 @@ package game.animals {
 		}
 		
 		public function get mode():uint { return _mode; }
-		
+
+		/*
 		public function setJsonPath(json:String):void {
 			var jsonObject:Object = JSON.parse(json);
 			_patrolPath = new Vector.<Point>();
@@ -52,6 +55,7 @@ package game.animals {
 				}
 			}
 		}
+		*/
 		
 		public function goForPatrolPath():void {
 			if (_patrolPath && _patrolPath.length > 0) {
@@ -162,8 +166,9 @@ package game.animals {
 		}
 		
 		private function addAnimations():void {
-			addAnimation(ANIMATE_STAY, new DuckStayD(), new DuckStayU());
-			addAnimation(ANIMATE_MOVE, new DuckWalkD(), new DuckWalkU());
+			var animationBuilder:DuckAnimationBuilder = new DuckAnimationBuilder();
+			addAnimation(animationBuilder.createStayAnimation());
+			addAnimation(animationBuilder.createMoveAnimation());
 		}
 		
 		private function drawDuck():void {
