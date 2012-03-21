@@ -6,6 +6,8 @@
 package game.enemy {
 import flash.display.Sprite;
 import flash.events.Event;
+import flash.events.MouseEvent;
+import game.animal.AnimalEvent;
 
 import game.animal.Duck;
 import game.player.Hunter;
@@ -56,10 +58,14 @@ public class EnemyArmyController {
 		} else {
 			duck.y = Math.random() * Main.HEIGHT;
 		}
+		duck.addEventListener(AnimalEvent.FOLLOW_COMPLETE, onDuckFollowComplete);
 		duck.fasHunter(_hunter);
-		//duck.move();
 		_gameContainer.addChild(duck);
 		addDuck(duck);
+	}
+	
+	private function onDuckFollowComplete(event:AnimalEvent):void {
+		(event.target as Duck).fasHunter(_hunter);
 	}
 
 	private function addDuck(duck:Duck):void {

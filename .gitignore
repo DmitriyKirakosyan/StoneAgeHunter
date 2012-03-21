@@ -11,3 +11,4 @@ bin/index.html
 .project
 .settings/
 .DS_Store
+obj/

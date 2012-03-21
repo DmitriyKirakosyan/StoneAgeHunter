@@ -19,7 +19,9 @@ package animation {
 		public function IcAnimation(name:String, movieClip:MovieClip, movieClipBack:MovieClip = null, priority:uint = PRIORITY_LOW,  playOnce:Boolean = false):void {
 			_name = name;
 			_animation = movieClip;
+			_animation.stop();
 			_animationBack = movieClipBack;
+			if (_animationBack) { _animationBack.stop(); }
 			_priority = priority;
 			_playOnce = playOnce;
 		}
@@ -29,6 +31,11 @@ package animation {
 		public function get backAnimation():MovieClip { return _animationBack; }
 		public function get priority():uint { return _priority; }
 		public function get playOnce():Boolean { return _playOnce; }
+		
+		public function stop():void {
+			_animation.stop();
+			if (_animationBack) { _animationBack.stop(); }
+		}
 		
 		/* Internal functions */
 		

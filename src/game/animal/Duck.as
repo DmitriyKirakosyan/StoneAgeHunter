@@ -25,7 +25,7 @@ import com.greensock.TimelineMax;
 		
 		private var _timelineMax:TimelineMax;
 		
-		private var _hp:HpLine;
+//		private var _hp:HpLine;
 		
 		public static const MODE_PATROL:uint = 0;
 		public static const MODE_BLOODY:uint = 1;
@@ -38,7 +38,7 @@ import com.greensock.TimelineMax;
 			_paused = true;
 			speed = .5;
 			setScale(.3);
-			createHp();
+			//createHp();
 			addAnimations();
 			play(ANIMATE_STAY);
 		}
@@ -73,18 +73,18 @@ import com.greensock.TimelineMax;
 		public function setScale(value:Number):void {
 			animationScale = value;
 		}
-		
+		/*
 		public function createHp():void {
 			_hp = new HpLine(5);
 			_hp.y = -20;
 			_hp.x = -20;
 			this.addChild(_hp);
 		}
-		
-		public function get hp():Number { return _hp.value; }
-		public function set hp(value:Number):void {
-			_hp.value = value;
-		}
+		*/
+		//public function get hp():Number { return _hp.value; }
+		//public function set hp(value:Number):void {
+		//	_hp.value = value;
+		//}
 		
 		public function mouseOver():void {
 			filters = [new GlowFilter(0xffaa33)];

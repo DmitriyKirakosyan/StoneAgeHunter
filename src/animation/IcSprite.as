@@ -115,7 +115,7 @@ package animation {
 		/* Internal functions */
 		
 		private function playAnimation(icAnimation:IcAnimation, backAnimation:Boolean):void {
-			if (_currentAnimation.priority > icAnimation.priority) {
+			if (_currentAnimation && _currentAnimation.priority > icAnimation.priority) {
 				_nextAnimationName = icAnimation.name;
 				return;
 			}
@@ -124,6 +124,7 @@ package animation {
 				if (_currentAnimation.playOnce) {
 					currentAnimationMC.removeEventListener(Event.ENTER_FRAME, onAnimationEnterFrame);
 				}
+				_currentAnimation.stop();
 				if (_animationContainer.contains(currentAnimationMC)) { _animationContainer.removeChild(currentAnimationMC); }
 			}
 			_currentAnimation = icAnimation;
