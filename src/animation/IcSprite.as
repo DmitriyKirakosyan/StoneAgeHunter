@@ -14,8 +14,7 @@ package animation {
 		private var _animating:Boolean;
 		private var _currentAnimation:IcAnimation;
 		private var _nextAnimationName:String;
-		private var _blockAnimation:Boolean;
-		
+
 		private var _underAll:Boolean;
 		
 		protected var parallaxForce:Number = 0.0004;
@@ -38,40 +37,30 @@ package animation {
 
 		public function set underAll(value:Boolean):void { _underAll = value; }
 
-		public function get realXpos():int
-		{
-			return _realXpos;
-		}
-
-		public function set realXpos(value:int):void
-		{
+		public function get realXpos():int { return _realXpos; }
+		public function set realXpos(value:int):void {
 			_realXpos = value;
 			updatePosition();
 		}
-		
-		override public function set y(value:Number):void
-		{
-			// TODO Auto Generated method stub
+		private function updatePosition():void {
+			x = _realXpos + _parallaxOffset;
+		}
+
+
+		override public function set y(value:Number):void {
 			super.y = value;
 			dispatchEvent(new IcSpriteEvent(IcSpriteEvent.MOVE_BY_Y, this));
 		}
 		
 		
-		public function get parallaxOffset():int
-		{
+		public function get parallaxOffset():int {
 			return _parallaxOffset;
 		}
 
-		public function set parallaxOffset(value:int):void
-		{
+		public function set parallaxOffset(value:int):void {
 			_parallaxOffset = value;
 			_parallaxOffset *= parallaxForce * y;
 			updatePosition();
-		}
-		
-		private function updatePosition():void
-		{
-			x = _realXpos + _parallaxOffset;
 		}
 		
 		public function get isBackAnimation():Boolean { return _isBackAnimation; }
@@ -88,15 +77,22 @@ package animation {
 			return copyName == "" ? this : null;
 		}
 		
-		public function addAnimation(name:String, movieClip:MovieClip, movieClipBack:MovieClip = null):void {
+		public function addAnimation(icAniamtion:IcAnimation):void {
 			if (!_animations) { _animations = new Vector.<IcAnimation>(); }
-			_animations.push(new IcAnimation(name, movieClip, movieClipBack));
+			if (icAniamtion) {
+				_animations.push(icAniamtion);
+			}
 		}
 		
 		public function play(animationName:String = "", back:Boolean = false):void {
 			if (animationName != "") {
 				const icAnimation:IcAnimation = getAnimationByName(animationName);
-				if (icAnimation && _currentAnimation != icAnimation) { playAnimation(icAnimation, back); }
+				if (icAnimation && _currentAnimation != icAnimation) {
+					if (icAnimation.playOnce) {
+						_nextAnimationName = _currentAnimation.name;
+					}
+					playAnimation(icAnimation, back);
+				}
 			} else {
 				if (_animations && _animations.length > 0) {
 					playAnimation(_animations[0], back);
@@ -104,14 +100,6 @@ package animation {
 			}
 		}
 
-		public function playOnce(animationName:String, blockOther:Boolean = true):void {
-			const icAnimation:IcAnimation = getAnimationByName(animationName);
-			if (icAnimation && _currentAnimation != icAnimation) {
-				_nextAnimationName = _currentAnimation.name;
-				playAnimation(icAnimation, false, true);
-			}
-		}
-		
 		protected function changeToBackAnimation():void {
 			if (!_isBackAnimation) {
 				playAnimation(_currentAnimation, true);
@@ -126,10 +114,16 @@ package animation {
 		
 		/* Internal functions */
 		
-		private function playAnimation(icAnimation:IcAnimation, backAnimation:Boolean, blockOther:Boolean = false):void {
-			if (_blockAnimation && _currentAnimation != icAnimation) { return; }
+		private function playAnimation(icAnimation:IcAnimation, backAnimation:Boolean):void {
+			if (_currentAnimation.priority > icAnimation.priority) {
+				_nextAnimationName = icAnimation.name;
+				return;
+			}
 			if (_currentAnimation) {
 				var currentAnimationMC:MovieClip = getBackOrFrontAnimation(_currentAnimation, _isBackAnimation);
+				if (_currentAnimation.playOnce) {
+					currentAnimationMC.removeEventListener(Event.ENTER_FRAME, onAnimationEnterFrame);
+				}
 				if (_animationContainer.contains(currentAnimationMC)) { _animationContainer.removeChild(currentAnimationMC); }
 			}
 			_currentAnimation = icAnimation;
@@ -138,8 +132,7 @@ package animation {
 			_animationContainer.addChild(movieClipAnimation);
 			_animating = true;
 			_isBackAnimation = backAnimation;
-			if (blockOther || _blockAnimation) {
-				_blockAnimation = blockOther || _blockAnimation;
+			if (icAnimation.playOnce) {
 				movieClipAnimation.addEventListener(Event.ENTER_FRAME, onAnimationEnterFrame);
 			}
 		}
@@ -151,7 +144,6 @@ package animation {
 				if (movieClipAnimation.currentFrame == movieClipAnimation.totalFrames) {
 					movieClipAnimation.removeEventListener(Event.ENTER_FRAME, onAnimationEnterFrame);
 					if (_nextAnimationName) {
-						_blockAnimation = false;
 						play(_nextAnimationName);
 						_nextAnimationName = null;
 					}

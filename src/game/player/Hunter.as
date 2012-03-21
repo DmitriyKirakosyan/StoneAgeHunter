@@ -10,6 +10,8 @@ import flash.filters.GlowFilter;
 	import game.armor.Stone;
 	import game.gameActor.IcActor;
 import game.gameActor.IcActerEvent;
+import game.player.HunterAnimationBuilder;
+import game.player.HunterAnimationBuilder;
 
 public class Hunter extends IcActor {
 		private var _pathParts:Vector.<Sprite>;
@@ -26,8 +28,7 @@ public class Hunter extends IcActor {
 		/* point where hunter moving now */
 		private var _targetPoint:Point;
 
-		private const ANIMATION_THROW:String = "animation_throw";
-		
+
 		private var _debug:Boolean;
 		
 		public function Hunter(debug:Boolean) {
@@ -39,7 +40,7 @@ public class Hunter extends IcActor {
 			_hp = new HpLine(2);
 			_hp.y = -20;
 			addAnimations();
-			play(ANIMATE_STAY);
+			play(HunterAnimationBuilder.ANIMATION_STAY);
 		}
 		
 		/* API */
@@ -72,7 +73,7 @@ public class Hunter extends IcActor {
 			//stone.x = this.width/5;
 			//stone.y = this.height/4;
 			//this.addChild(stone);
-			playOnce(ANIMATION_THROW, true);
+			play(HunterAnimationBuilder.ANIMATION_THROW, true);
 
 		}
 		
@@ -97,29 +98,30 @@ public class Hunter extends IcActor {
 
 		override public function move():void {
 			super.move();
-			play(ANIMATE_MOVE);
+			play(HunterAnimationBuilder.ANIMATION_MOVE);
 		}
 		
 		override public function stop():void {
-			play(ANIMATE_STAY);
+			play(HunterAnimationBuilder.ANIMATION_STAY);
 		}
 
 		override protected function onStartTween(point:Point):void {
-			play(ANIMATE_MOVE);
+			play(HunterAnimationBuilder.ANIMATION_MOVE);
 			super.onStartTween(point);
 		}
 		
 		override public function pauseMove():void {
 			super.pauseMove();
-			if (pathTimeline) { play(ANIMATE_STAY); }
+			if (pathTimeline) { play(HunterAnimationBuilder.ANIMATION_STAY); }
 		}
 		
 		/* Internal functions */
 		
 		private function addAnimations():void {
-			addAnimation(ANIMATE_STAY, new ManStayD(), new ManStayU());
-			addAnimation(ANIMATE_MOVE, new ManRunD(), new ManRunU());
-			addAnimation(ANIMATION_THROW, new ManThrowD(), new ManThrowU());
+			var animationBuilder:HunterAnimationBuilder = new HunterAnimationBuilder();
+			addAnimation(animationBuilder.createStayAnimation());
+			addAnimation(animationBuilder.createMoveAnimation());
+			addAnimation(animationBuilder.createThrowAnimation());
 		}
 		
 	}
