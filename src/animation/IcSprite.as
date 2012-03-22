@@ -119,14 +119,7 @@ package animation {
 				_nextAnimationName = icAnimation.name;
 				return;
 			}
-			if (_currentAnimation) {
-				var currentAnimationMC:MovieClip = getBackOrFrontAnimation(_currentAnimation, _isBackAnimation);
-				if (_currentAnimation.playOnce) {
-					currentAnimationMC.removeEventListener(Event.ENTER_FRAME, onAnimationEnterFrame);
-				}
-				_currentAnimation.stop();
-				if (_animationContainer.contains(currentAnimationMC)) { _animationContainer.removeChild(currentAnimationMC); }
-			}
+			removeCurrentAnimation();
 			_currentAnimation = icAnimation;
 			var movieClipAnimation:MovieClip = getBackOrFrontAnimation(icAnimation, backAnimation);
 			movieClipAnimation.gotoAndPlay(1);
@@ -138,6 +131,18 @@ package animation {
 			}
 		}
 
+		private function removeCurrentAnimation():void {
+			if (_currentAnimation) {
+				var currentAnimationMC:MovieClip = getBackOrFrontAnimation(_currentAnimation, _isBackAnimation);
+				if (_currentAnimation.playOnce) {
+					currentAnimationMC.removeEventListener(Event.ENTER_FRAME, onAnimationEnterFrame);
+				}
+				_currentAnimation.stop();
+				if (_animationContainer.contains(currentAnimationMC)) { _animationContainer.removeChild(currentAnimationMC); }
+				_currentAnimation = null;
+			}
+		}
+
 		private function onAnimationEnterFrame(event:Event):void {
 			if (!_currentAnimation) { trace("current animation dont exists [IcSprite.onAnimationEnterFrame]"); }
 			var movieClipAnimation:MovieClip = event.target as MovieClip;
@@ -145,6 +150,7 @@ package animation {
 				if (movieClipAnimation.currentFrame == movieClipAnimation.totalFrames) {
 					movieClipAnimation.removeEventListener(Event.ENTER_FRAME, onAnimationEnterFrame);
 					if (_nextAnimationName) {
+						removeCurrentAnimation();
 						play(_nextAnimationName);
 						_nextAnimationName = null;
 					}

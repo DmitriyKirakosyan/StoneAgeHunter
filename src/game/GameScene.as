@@ -38,12 +38,11 @@ import game.player.Hunter;
 		private var _perspectiveManager:PerspectiveManager;
 
 		private  const CONTAINER_MOVE_SPEED:int = 3;
-		private const HUNTER_THROW_PERIOD:int = 1;
-		private var _hunterThrowCounter:Number = 0;
-		
+
 		private var _backDecorations:BackDecorations;
-		
-		private var _decoraativeObjects:Vector.<DecorativeObject> = new Vector.<DecorativeObject>;
+
+		private var _stones:Vector.<Stone>;
+		private var _decorativeObjects:Vector.<DecorativeObject> = new Vector.<DecorativeObject>;
 		
 		private var _debugPanel:DebugPanel;
 		//private var _debugConsole:DebugConsole;
@@ -79,7 +78,7 @@ import game.player.Hunter;
 			createHunter();
 			createDecorativeObjects();
 			_enemyArmyController = new EnemyArmyController(_gameContainer, _hunter);
-			_enemyArmyController.open();
+			//_enemyArmyController.open();
 			_parallaxManager.open();
 			_debugPanel.open();
 		}
@@ -105,7 +104,7 @@ import game.player.Hunter;
 			var toPoint:Point = new Point(_currentMousePoint.x - _gameContainer.x,
 							         							_currentMousePoint.y - _gameContainer.y);
 			TweenLite.killTweensOf(_hunter);
-			_hunter.changeAnimationAndRotation(toPoint)
+			_hunter.changeAnimationAndRotation(toPoint);
 			TweenLite.to(_hunter,
 				_hunter.computeDuration(new Point(_hunter.x, _hunter.y), toPoint),
 				{ease:Linear.easeNone, realXpos : toPoint.x, y : toPoint.y,
@@ -121,7 +120,7 @@ import game.player.Hunter;
 		}
 
 		public function get decorativeObjects():Vector.<DecorativeObject> {
-			return _decoraativeObjects;
+			return _decorativeObjects;
 		}
 
 		public function get backDecorations():BackDecorations
@@ -141,18 +140,22 @@ import game.player.Hunter;
 		public function dispatchAboutClose():void {
 			dispatchEvent(new SceneEvent(SceneEvent.SWITCH_ME, this));
 		}
-		
+
+		private function addStone():void {
+			var stone:Stone = new Stone();
+			stone.realXpos = Math.random() * (WIDTH-100) + 50;
+			stone.y = Math.random() * (HEIGHT-100) +50;
+			_gameContainer.addChild(stone);
+			if (!_stones) { _stones = new Vector.<Stone>(); }
+			_stones.push(stone);
+		}
 
 		//делаем всякие камушки - хуямушки
 		private function createDecorativeObjects():void {
-			var decorate:DecorativeObject;
 			for (var i:int = 0; i < 30; i++){
-				decorate = DecorativeObject.createLittleHill();
-				decorate.realXpos = Math.random() * (WIDTH-100) + 50;
-				decorate.y = Math.random() * (HEIGHT-100) +50;
-				_gameContainer.addChild(decorate);
-				decorativeObjects.push(decorate);
+				addStone();
 			}
+			var decorate:DecorativeObject;
 			decorate = DecorativeObject.createPaddle();
 			decorativeObjects.push(decorate)
 			_gameContainer.addChild(decorate);
@@ -170,11 +173,12 @@ import game.player.Hunter;
 				scrollContainer();
 			}
 
-			_hunterThrowCounter += 1/Main.FRAME_RATE;
-			if (_hunterThrowCounter >= HUNTER_THROW_PERIOD) {
-				_hunterThrowCounter = 0;
-				_hunter.throwStone();
-				throwStoneToRandomPoint();
+			for each (var stone:Stone in _stones) {
+				if (_hunter.hitTestObject(stone) && !stone.flying) {
+					_hunter.throwStone();
+					throwStoneToRandomPoint(stone);
+					break;
+				}
 			}
 		}
 
@@ -185,13 +189,17 @@ import game.player.Hunter;
 			if (_gameContainer.y + _hunter.y > WINDOW_HEIGHT-200) { _gameContainer.y-= CONTAINER_MOVE_SPEED; }
 		}
 
-		private function throwStoneToRandomPoint():void {
-			var stone:Stone = new Stone();
+		private function throwStoneToRandomPoint(stone:Stone):void {
+			var toPoint:Point = new Point(Math.random()*WIDTH, Math.random() * HEIGHT);
+			stone.fly();
 			stone.x = _hunter.x;
 			stone.y = _hunter.y;
-			_gameContainer.addChild(stone);
-			var toPoint:Point = new Point(Math.random()*WIDTH, Math.random() * HEIGHT);
-			TweenLite.to(stone, _hunter.computeDuration(new Point(stone.x, stone.y), toPoint), {x : toPoint.x, y : toPoint.y});
+			TweenLite.to(stone, (Point.distance(new Point(stone.x, stone.y), toPoint))/100,
+							{x : toPoint.x, y : toPoint.y, onComplete:onStoneFlyComplete, onCompleteParams:[stone]});
+		}
+
+		private function onStoneFlyComplete(stone:Stone):void {
+			stone.stopFly();
 		}
 
 		private function mouseAroundSide():Boolean {

@@ -121,10 +121,13 @@ import com.greensock.TimelineMax;
 				onComplete : onFollowHunterComplete}));
 			
 			_timelineMax.play();
+			play(DuckAnimationBuilder.ANIMATION_MOVE);
+			changeAnimationAndRotation(new Point(_targetHunter.x, _targetHunter.y));
 		}
 		
 		private function onFollowHunterComplete():void {
 			_mode = MODE_NOTHING;
+			play(DuckAnimationBuilder.ANIMATION_STAY);
 			dispatchEvent(new AnimalEvent(AnimalEvent.FOLLOW_COMPLETE, _targetHunter));
 		}
 		
