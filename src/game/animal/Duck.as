@@ -42,7 +42,7 @@ import com.greensock.TimelineMax;
 			addAnimations();
 			play(ANIMATE_STAY);
 		}
-		
+
 		public function get mode():uint { return _mode; }
 
 		/*
@@ -66,13 +66,21 @@ import com.greensock.TimelineMax;
 		public function fasHunter(hunter:Hunter):void {
 			_targetHunter = hunter;
 			_mode = MODE_BLOODY;
-			stopPathMoving();
+			stopMoving();
 			followHunter();
 		}
 		
 		public function setScale(value:Number):void {
 			animationScale = value;
 		}
+
+	public function stopMoving():void {
+		if (_timelineMax) {
+			_timelineMax.vars["onComplete"] = null;
+			_timelineMax.kill();
+		}
+	}
+
 		/*
 		public function createHp():void {
 			_hp = new HpLine(5);
@@ -131,13 +139,6 @@ import com.greensock.TimelineMax;
 			dispatchEvent(new AnimalEvent(AnimalEvent.FOLLOW_COMPLETE, _targetHunter));
 		}
 		
-		private function stopPathMoving():void {
-			if (_timelineMax) {
-				_timelineMax.vars["onComplete"] = null;
-				_timelineMax.kill();
-			}
-		}
-
 		private function tweenPatrolPath():void {
 			var prevPoint:Point;
 			

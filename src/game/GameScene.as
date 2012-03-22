@@ -1,12 +1,16 @@
 package game {
 	import com.greensock.TweenLite;
-	import com.greensock.easing.Linear;
+import com.greensock.TweenMax;
+import com.greensock.easing.Linear;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.MouseEvent;
-	import flash.geom.Point;
+import flash.filters.BlurFilter;
+import flash.geom.Point;
+
+import game.animal.Duck;
 
 import game.armor.Stone;
 
@@ -30,6 +34,7 @@ import game.player.Hunter;
 		private var _currentMousePoint:Point;
 
 		private var _gameContainer:Sprite;
+		private var _lineContainer:Sprite;
 		private var _hunter:Hunter;
 		private var _enemyArmyController:EnemyArmyController;
 		
@@ -37,7 +42,10 @@ import game.player.Hunter;
 		private var _parallaxManager:ParallaxManager;
 		private var _perspectiveManager:PerspectiveManager;
 
-		private  const CONTAINER_MOVE_SPEED:int = 3;
+		private  const CONTAINER_MOVE_SPEED:int = 4;
+
+		private const DUCK_HIT_TEST_TIMEOUT:int = .5;
+		private var _duckHitTestCounter:Number = 0;
 
 		private var _backDecorations:BackDecorations;
 
@@ -75,17 +83,20 @@ import game.player.Hunter;
 		}
 		
 		public function open():void {
+			_parallaxManager.open();
+			_lineContainer = new Sprite();
+			_gameContainer.addChild(_lineContainer);
 			createHunter();
 			createDecorativeObjects();
 			_enemyArmyController = new EnemyArmyController(_gameContainer, _hunter);
-			//_enemyArmyController.open();
-			_parallaxManager.open();
+			_enemyArmyController.open();
 			_debugPanel.open();
 		}
 		public function close():void {
 			_enemyArmyController.close();
 			_parallaxManager.close();
 			_debugPanel.close();
+			_gameContainer.removeChild(_lineContainer);
 			removeHunter();
 		}
 
@@ -115,13 +126,15 @@ import game.player.Hunter;
 		
 		public function get allObjects():Array {
 			var newArray:Array = new Array();
-			
+
 			return newArray;
 		}
 
 		public function get decorativeObjects():Vector.<DecorativeObject> {
 			return _decorativeObjects;
 		}
+
+		public function get stones():Vector.<Stone> { return _stones; }
 
 		public function get backDecorations():BackDecorations
 		{
@@ -144,15 +157,15 @@ import game.player.Hunter;
 		private function addStone():void {
 			var stone:Stone = new Stone();
 			stone.realXpos = Math.random() * (WIDTH-100) + 50;
-			stone.y = Math.random() * (HEIGHT-100) +50;
 			_gameContainer.addChild(stone);
+			stone.y = Math.random() * (HEIGHT-100) +50;
 			if (!_stones) { _stones = new Vector.<Stone>(); }
 			_stones.push(stone);
 		}
 
 		//делаем всякие камушки - хуямушки
 		private function createDecorativeObjects():void {
-			for (var i:int = 0; i < 30; i++){
+			for (var i:int = 0; i < 10; i++){
 				addStone();
 			}
 			var decorate:DecorativeObject;
@@ -180,6 +193,26 @@ import game.player.Hunter;
 					break;
 				}
 			}
+
+			hitTestDuck();
+
+			if (_mouseDown) { drawLineBetweenHunterAndMouse(); } else { _lineContainer.graphics.clear(); }
+		}
+
+		private function hitTestDuck():void {
+			_duckHitTestCounter+= 1/Main.FRAME_RATE;
+			if (_duckHitTestCounter >= DUCK_HIT_TEST_TIMEOUT) {
+				_duckHitTestCounter = 0;
+				_enemyArmyController.checkDamageDuck(_stones);
+			}
+		}
+
+		private function drawLineBetweenHunterAndMouse():void {
+			_lineContainer.graphics.clear();
+			_lineContainer.graphics.lineStyle(2);
+			_lineContainer.graphics.moveTo(_hunter.x,  _hunter.y);
+			_lineContainer.graphics.lineTo(_currentMousePoint.x - _gameContainer.x,
+																	 _currentMousePoint.y - _gameContainer.y);
 		}
 
 		private function scrollContainer():void {
@@ -190,12 +223,30 @@ import game.player.Hunter;
 		}
 
 		private function throwStoneToRandomPoint(stone:Stone):void {
-			var toPoint:Point = new Point(Math.random()*WIDTH, Math.random() * HEIGHT);
+			var duckForShoot:Duck = _enemyArmyController.getDuckForShoot();
+			var toPoint:Point;
+			if (duckForShoot) {
+				toPoint = new Point(duckForShoot.x, duckForShoot.y);
+			} else {
+				toPoint = new Point(Math.random()*WIDTH, Math.random() * HEIGHT);
+			}
 			stone.fly();
 			stone.x = _hunter.x;
 			stone.y = _hunter.y;
-			TweenLite.to(stone, (Point.distance(new Point(stone.x, stone.y), toPoint))/100,
-							{x : toPoint.x, y : toPoint.y, onComplete:onStoneFlyComplete, onCompleteParams:[stone]});
+			var distance:Number = Point.distance(new Point(stone.x, stone.y), toPoint);
+			TweenMax.to(stone, distance/100,
+							{bezier:[{x:stone.x + (toPoint.x-stone.x)/2, y:stone.y-(stone.y-toPoint.y)/2 - 200},
+								{x : toPoint.x, y : toPoint.y}], onComplete:onStoneFlyComplete, onCompleteParams:[stone]});
+
+			var shadow:Sprite = new Sprite();
+			shadow.graphics.beginFill(0x000000, .2);
+			shadow.graphics.drawCircle(0, 0, 6);
+			shadow.graphics.endFill();
+			shadow.filters = [new BlurFilter()];
+			shadow.x = stone.x;
+			shadow.y = stone.y;
+			_gameContainer.addChild(shadow);
+			TweenLite.to(shadow, distance/100, {x: toPoint.x,  y:toPoint.y});
 		}
 
 		private function onStoneFlyComplete(stone:Stone):void {

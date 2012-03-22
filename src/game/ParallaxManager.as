@@ -62,7 +62,7 @@ public class ParallaxManager
 			if(_gameScene.hunter){
 				_gameScene.hunter.parallaxOffset = param0;
 			}
-			for each (var object:IcSprite in _gameScene.allObjects){
+			for each (var object:IcSprite in _gameScene.stones){
 				object.parallaxOffset = param0;
 			}
 			for each (object in _gameScene.decorativeObjects){

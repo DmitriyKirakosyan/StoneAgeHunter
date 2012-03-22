@@ -7,9 +7,12 @@ package game.enemy {
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
+import flash.geom.Point;
+
 import game.animal.AnimalEvent;
 
 import game.animal.Duck;
+import game.armor.Stone;
 import game.player.Hunter;
 
 public class EnemyArmyController {
@@ -35,6 +38,34 @@ public class EnemyArmyController {
 		_gameContainer.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
 
+	public function getDuckForShoot():Duck {
+		if (!_duckList || _duckList.length == 0) { return null; }
+		var result:Duck = _duckList[0];
+		var currentMinDistance:Number = Point.distance(new Point(_hunter.x, _hunter.y), new Point(result.x, result.y));
+		var tempDistance:Number;
+		for each (var duck:Duck in _duckList) {
+			tempDistance = Point.distance(new Point(_hunter.x, _hunter.y), new Point(duck.x, duck.y));
+			if (tempDistance < currentMinDistance) {
+				currentMinDistance = tempDistance;
+				result = duck;
+			}
+		}
+		return result;
+	}
+
+	public function checkDamageDuck(stones:Vector.<Stone>):void {
+		for each (var duck:Duck in _duckList) {
+			for each (var stone:Stone in stones) {
+				if (stone.flying) {
+					if (stone.hitTestObject(duck)) {
+						killDuck(duck);
+						return;
+					}
+				}
+			}
+		}
+	}
+
 	/* Internal functions */
 
 	private function onEnterFrame(event:Event):void {
@@ -43,6 +74,13 @@ public class EnemyArmyController {
 			createDuck();
 			_enemyCreateCounter = 0;
 		}
+	}
+
+	private function killDuck(duck:Duck):void {
+		var index:int = _duckList.indexOf(duck);
+		if (_gameContainer.contains(duck)) { _gameContainer.removeChild(duck); }
+		duck.stopMoving();
+		if (index != -1) { _duckList.splice(index, 1); }
 	}
 
 	private function createDuck():void {
