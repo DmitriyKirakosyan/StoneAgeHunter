@@ -72,7 +72,7 @@ import game.player.Hunter;
 			//_debugConsole = new DebugConsole(this);
 			_zSortingManager = new ZSortingManager(this);
 			_parallaxManager = new ParallaxManager(this);
-			_perspectiveManager = new PerspectiveManager(this);
+			//_perspectiveManager = new PerspectiveManager(this);
 			//backDecorations = new BackDecorations;
 			//gameContainer.addChild(backDecorations);
 			container.addChild(_gameContainer);
@@ -84,7 +84,7 @@ import game.player.Hunter;
 		}
 		
 		public function open():void {
-			_parallaxManager.open();
+			//_parallaxManager.open();
 			_lineContainer = new Sprite();
 			_gameContainer.addChild(_lineContainer);
 			createHunter();
@@ -237,11 +237,12 @@ import game.player.Hunter;
 			var distance:Number = Point.distance(new Point(stone.x, stone.y), toPoint);
 			TweenMax.to(stone, distance/100,
 							{bezier:[{x:stone.x + (toPoint.x-stone.x)/2, y:stone.y-(stone.y-toPoint.y)/2 - 200},
-								{x : toPoint.x, y : toPoint.y}], onComplete:onStoneFlyComplete, onCompleteParams:[stone]});
+								{x : toPoint.x, y : toPoint.y } ], onComplete:onStoneFlyComplete, onCompleteParams:[stone],
+								ease:Linear.easeNone});
 			var shadow:Sprite = stone.shadow;
 			
 			_gameContainer.addChildAt(shadow, _gameContainer.getChildIndex(stone));
-			TweenLite.to(shadow, distance / 100, { x: toPoint.x,  y:toPoint.y } );
+			TweenLite.to(shadow, distance / 100, { x: toPoint.x,  y:toPoint.y, ease:Linear.easeNone } );
 			var timeline:TimelineMax = new TimelineMax;
 			timeline.append(new TweenLite(shadow, distance / 200, { scaleX:.6, scaleY:.6 } ));
 			timeline.append(new TweenLite(shadow, distance / 200, { scaleX:1, scaleY:1 } ));
