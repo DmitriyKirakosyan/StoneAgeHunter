@@ -103,7 +103,10 @@ public class EnemyArmyController {
 	}
 	
 	private function onDuckFollowComplete(event:AnimalEvent):void {
-		(event.target as Duck).fasHunter(_hunter);
+		var duck:Duck = event.target as Duck;
+		if (duck.x != _hunter.x && duck.y != _hunter.y) {
+			duck.fasHunter(_hunter);
+		}
 	}
 
 	private function addDuck(duck:Duck):void {
