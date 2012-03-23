@@ -1,4 +1,5 @@
 package game {
+	import com.greensock.TimelineMax;
 	import com.greensock.TweenLite;
 import com.greensock.TweenMax;
 import com.greensock.easing.Linear;
@@ -240,13 +241,17 @@ import game.player.Hunter;
 
 			var shadow:Sprite = new Sprite();
 			shadow.graphics.beginFill(0x000000, .2);
-			shadow.graphics.drawCircle(0, 0, 6);
+			shadow.graphics.drawEllipse(0, 0, 12, 9);
 			shadow.graphics.endFill();
-			shadow.filters = [new BlurFilter()];
+			//shadow.filters = [new BlurFilter()];
 			shadow.x = stone.x;
 			shadow.y = stone.y;
-			_gameContainer.addChild(shadow);
-			TweenLite.to(shadow, distance/100, {x: toPoint.x,  y:toPoint.y});
+			
+			_gameContainer.addChildAt(shadow, _gameContainer.getChildIndex(stone));
+			TweenLite.to(shadow, distance / 100, { x: toPoint.x,  y:toPoint.y } );
+			var timeline:TimelineMax = new TimelineMax;
+			timeline.append(new TweenLite(shadow, distance / 200, { scaleX:.6, scaleY:.6 } ));
+			timeline.append(new TweenLite(shadow, distance / 200, { scaleX:1, scaleY:1 } ));
 		}
 
 		private function onStoneFlyComplete(stone:Stone):void {
