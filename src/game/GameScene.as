@@ -238,14 +238,7 @@ import game.player.Hunter;
 			TweenMax.to(stone, distance/100,
 							{bezier:[{x:stone.x + (toPoint.x-stone.x)/2, y:stone.y-(stone.y-toPoint.y)/2 - 200},
 								{x : toPoint.x, y : toPoint.y}], onComplete:onStoneFlyComplete, onCompleteParams:[stone]});
-
-			var shadow:Sprite = new Sprite();
-			shadow.graphics.beginFill(0x000000, .2);
-			shadow.graphics.drawEllipse(0, 0, 12, 9);
-			shadow.graphics.endFill();
-			//shadow.filters = [new BlurFilter()];
-			shadow.x = stone.x;
-			shadow.y = stone.y;
+			var shadow:Sprite = stone.shadow;
 			
 			_gameContainer.addChildAt(shadow, _gameContainer.getChildIndex(stone));
 			TweenLite.to(shadow, distance / 100, { x: toPoint.x,  y:toPoint.y } );
@@ -255,7 +248,7 @@ import game.player.Hunter;
 		}
 
 		private function onStoneFlyComplete(stone:Stone):void {
-			stone.stopFly();
+			stone.stopFly(_gameContainer);
 		}
 
 		private function mouseAroundSide():Boolean {
