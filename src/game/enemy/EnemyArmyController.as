@@ -4,6 +4,8 @@
  * Time: 3:04 PM
  */
 package game.enemy {
+import com.greensock.TweenLite;
+
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.events.MouseEvent;
@@ -53,17 +55,19 @@ public class EnemyArmyController {
 		return result;
 	}
 
-	public function checkDamageDuck(stones:Vector.<Stone>):void {
+	public function checkDamageDuck(stones:Vector.<Stone>):Boolean {
 		for each (var duck:Duck in _duckList) {
 			for each (var stone:Stone in stones) {
 				if (stone.flying) {
-					if (stone.hitTestObject(duck)) {
+					if (duck.hitTestObject(stone)) {
 						killDuck(duck);
-						return;
+						stone.stopFly();
+						return true;
 					}
 				}
 			}
 		}
+		return false;
 	}
 
 	/* Internal functions */
@@ -78,9 +82,13 @@ public class EnemyArmyController {
 
 	private function killDuck(duck:Duck):void {
 		var index:int = _duckList.indexOf(duck);
-		if (_gameContainer.contains(duck)) { _gameContainer.removeChild(duck); }
-		duck.stopMoving();
 		if (index != -1) { _duckList.splice(index, 1); }
+		duck.dead();
+
+		TweenLite.to(duck, 1, {alpha:0, onComplete:function():void {
+			if (_gameContainer.contains(duck)) { _gameContainer.removeChild(duck);}
+		}
+		});
 	}
 
 	private function createDuck():void {

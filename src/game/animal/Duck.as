@@ -37,8 +37,7 @@ import com.greensock.TimelineMax;
 			_mode = MODE_PATROL;
 			_paused = true;
 			speed = .5;
-			setScale(.3);
-			//createHp();
+			setScale(.4);
 			addAnimations();
 			play(ANIMATE_STAY);
 		}
@@ -81,6 +80,11 @@ import com.greensock.TimelineMax;
 		}
 	}
 
+	public function dead():void {
+		stopMoving();
+		play(DuckAnimationBuilder.ANIMATION_HIT);
+	}
+
 		/*
 		public function createHp():void {
 			_hp = new HpLine(5);
@@ -93,18 +97,6 @@ import com.greensock.TimelineMax;
 		//public function set hp(value:Number):void {
 		//	_hp.value = value;
 		//}
-		
-		public function mouseOver():void {
-			filters = [new GlowFilter(0xffaa33)];
-		}
-		public function mouseOut():void {
-			filters = [];
-		}
-		
-		public function addEnemy(enemy:IcSprite):void {
-			if (!_enemies) { _enemies = new Vector.<IcSprite>(); }
-			_enemies.push(enemy);
-		}
 		
 		override public function move():void {
 			_paused = false;
@@ -173,6 +165,7 @@ import com.greensock.TimelineMax;
 			var animationBuilder:DuckAnimationBuilder = new DuckAnimationBuilder();
 			addAnimation(animationBuilder.createStayAnimation());
 			addAnimation(animationBuilder.createMoveAnimation());
+			addAnimation(animationBuilder.createHitAnimation());
 		}
 		
 		private function drawDuck():void {

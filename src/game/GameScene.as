@@ -45,7 +45,7 @@ import game.player.Hunter;
 
 		private  const CONTAINER_MOVE_SPEED:int = 4;
 
-		private const DUCK_HIT_TEST_TIMEOUT:int = .5;
+		private const DUCK_HIT_TEST_TIMEOUT:Number = .2;
 		private var _duckHitTestCounter:Number = 0;
 
 		private var _backDecorations:BackDecorations;
@@ -156,7 +156,7 @@ import game.player.Hunter;
 		}
 
 		private function addStone():void {
-			var stone:Stone = new Stone();
+			var stone:Stone = new Stone(_gameContainer);
 			stone.realXpos = Math.random() * (WIDTH-100) + 50;
 			_gameContainer.addChild(stone);
 			stone.y = Math.random() * (HEIGHT-100) +50;
@@ -190,7 +190,7 @@ import game.player.Hunter;
 			for each (var stone:Stone in _stones) {
 				if (_hunter.hitTestObject(stone) && !stone.flying) {
 					_hunter.throwStone();
-					throwStoneToRandomPoint(stone);
+					throwStoneToDuck(stone);
 					break;
 				}
 			}
@@ -223,33 +223,13 @@ import game.player.Hunter;
 			if (_gameContainer.y + _hunter.y > WINDOW_HEIGHT-200) { _gameContainer.y-= CONTAINER_MOVE_SPEED; }
 		}
 
-		private function throwStoneToRandomPoint(stone:Stone):void {
+		private function throwStoneToDuck(stone:Stone):void {
 			var duckForShoot:Duck = _enemyArmyController.getDuckForShoot();
-			var toPoint:Point;
-			if (duckForShoot) {
-				toPoint = new Point(duckForShoot.x, duckForShoot.y);
-			} else {
-				toPoint = new Point(Math.random()*WIDTH, Math.random() * HEIGHT);
-			}
-			stone.fly();
+			var toPoint = duckForShoot ? new Point(duckForShoot.x, duckForShoot.y)
+															 : new Point(Math.random()*WIDTH, Math.random() * HEIGHT);
 			stone.x = _hunter.x;
 			stone.y = _hunter.y;
-			var distance:Number = Point.distance(new Point(stone.x, stone.y), toPoint);
-			TweenMax.to(stone, distance/100,
-							{bezier:[{x:stone.x + (toPoint.x-stone.x)/2, y:stone.y-(stone.y-toPoint.y)/2 - 200},
-								{x : toPoint.x, y : toPoint.y } ], onComplete:onStoneFlyComplete, onCompleteParams:[stone],
-								ease:Linear.easeNone});
-			var shadow:Sprite = stone.shadow;
-			
-			_gameContainer.addChildAt(shadow, _gameContainer.getChildIndex(stone));
-			TweenLite.to(shadow, distance / 100, { x: toPoint.x,  y:toPoint.y, ease:Linear.easeNone } );
-			var timeline:TimelineMax = new TimelineMax;
-			timeline.append(new TweenLite(shadow, distance / 200, { scaleX:.6, scaleY:.6 } ));
-			timeline.append(new TweenLite(shadow, distance / 200, { scaleX:1, scaleY:1 } ));
-		}
-
-		private function onStoneFlyComplete(stone:Stone):void {
-			stone.stopFly(_gameContainer);
+			stone.fly(toPoint);
 		}
 
 		private function mouseAroundSide():Boolean {
