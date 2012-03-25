@@ -37,7 +37,7 @@ import com.greensock.TimelineMax;
 			_mode = MODE_PATROL;
 			_paused = true;
 			speed = .5;
-			setScale(.4);
+			setScale(.3);
 			addAnimations();
 			play(ANIMATE_STAY);
 		}

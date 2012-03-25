@@ -36,7 +36,7 @@ public class Hunter extends IcActor {
 			_debug = debug;
 			_baseColor = Math.random() * 0xffffff;
 			path.setLinksColor(_baseColor);
-			setScale(.3);
+			setScale(.18);
 			_hp = new HpLine(2);
 			_hp.y = -20;
 			addAnimations();
