@@ -6,7 +6,7 @@
 	import scene.SceneController;
 	import flash.display.Sprite;
 	
-	[SWF(width=550, height=400, frameRate=25)]
+	[SWF(width=550, height=400, frameRate=25, backgroundColor=0x404040)]
 	public class Main extends Sprite {
 		private var _tileMap:TileMap;
 

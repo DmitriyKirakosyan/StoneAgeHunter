@@ -26,8 +26,8 @@ import game.player.Hunter;
 	import game.map.tilemap.TileMap;
 
 	public class GameScene extends EventDispatcher implements IScene {
-		private const WIDTH:Number = 1000;
-		private const HEIGHT:Number = 1000;
+		private const WIDTH:Number = 1024;
+		private const HEIGHT:Number = 1024;
 
 		private const WINDOW_WIDTH:Number = 550;
 		private const WINDOW_HEIGHT:Number = 400;
@@ -38,10 +38,10 @@ import game.player.Hunter;
 		private var _lineContainer:Sprite;
 		private var _hunter:Hunter;
 		private var _enemyArmyController:EnemyArmyController;
-		
+
 		private var _zSortingManager:ZSortingManager;
-		private var _parallaxManager:ParallaxManager;
-		private var _perspectiveManager:PerspectiveManager;
+		//private var _parallaxManager:ParallaxManager;
+		//private var _perspectiveManager:PerspectiveManager;
 
 		private  const CONTAINER_MOVE_SPEED:int = 4;
 
@@ -49,6 +49,9 @@ import game.player.Hunter;
 		private var _duckHitTestCounter:Number = 0;
 
 		private var _backDecorations:BackDecorations;
+
+		private var _background:Sprite;
+		private var _shadowContainer:Sprite;
 
 		private var _stones:Vector.<Stone>;
 		private var _decorativeObjects:Vector.<DecorativeObject> = new Vector.<DecorativeObject>;
@@ -63,15 +66,17 @@ import game.player.Hunter;
 		public function GameScene(container:Sprite, tileMap:TileMap):void {
 			super();
 			_gameContainer = new Sprite();
-			_gameContainer.graphics.beginFill(0,.2);
-			_gameContainer.graphics.drawRect(0,0,WIDTH,HEIGHT);
-			_gameContainer.graphics.endFill();
+			_shadowContainer =  new Sprite();
+			createBackground();
+//			_gameContainer.graphics.beginFill(0,.2);
+//			_gameContainer.graphics.drawRect(0,0,WIDTH,HEIGHT);
+//			_gameContainer.graphics.endFill();
 			_gameContainer.x = -400;
 			_gameContainer.y = -200;
 			_debugPanel = new DebugPanel(container, this);
 			//_debugConsole = new DebugConsole(this);
 			_zSortingManager = new ZSortingManager(this);
-			_parallaxManager = new ParallaxManager(this);
+			//_parallaxManager = new ParallaxManager(this);
 			//_perspectiveManager = new PerspectiveManager(this);
 			//backDecorations = new BackDecorations;
 			//gameContainer.addChild(backDecorations);
@@ -84,6 +89,8 @@ import game.player.Hunter;
 		}
 		
 		public function open():void {
+			_gameContainer.addChild(_background);
+			_gameContainer.addChild(_shadowContainer);
 			//_parallaxManager.open();
 			_lineContainer = new Sprite();
 			_gameContainer.addChild(_lineContainer);
@@ -94,8 +101,10 @@ import game.player.Hunter;
 			_debugPanel.open();
 		}
 		public function close():void {
+			_gameContainer.removeChild(_background);
+			_gameContainer.removeChild(_shadowContainer);
 			_enemyArmyController.close();
-			_parallaxManager.close();
+			//_parallaxManager.close();
 			_debugPanel.close();
 			_gameContainer.removeChild(_lineContainer);
 			removeHunter();
@@ -108,6 +117,19 @@ import game.player.Hunter;
 			_currentMousePoint.y = event.stageY;
 			if(_hunter && _mouseDown){
 				moveHunterToCurrentMousePoint();
+			}
+		}
+
+		private function createBackground():void {
+			_background = new Sprite();
+			var groundM2:GroundM;
+			for (var i:int = 0; i < 16; ++i) {
+				for (var j:int = 0; j < 16; ++j) {
+					groundM2 = new GroundM();
+					groundM2.x = i * 64;
+					groundM2.y = j * 64;
+					_background.addChild(groundM2);
+				}
 			}
 		}
 
@@ -156,7 +178,7 @@ import game.player.Hunter;
 		}
 
 		private function addStone():void {
-			var stone:Stone = new Stone(_gameContainer);
+			var stone:Stone = new Stone(_shadowContainer);
 			stone.realXpos = Math.random() * (WIDTH-100) + 50;
 			_gameContainer.addChild(stone);
 			stone.y = Math.random() * (HEIGHT-100) +50;
