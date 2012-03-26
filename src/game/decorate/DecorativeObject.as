@@ -1,4 +1,4 @@
-package game {
+package game.decorate {
 	import animation.IcSprite;
 	
 	import flash.display.Sprite;

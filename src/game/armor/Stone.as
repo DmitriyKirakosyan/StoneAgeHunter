@@ -13,8 +13,6 @@ import com.greensock.easing.Linear;
 import flash.display.Sprite;
 import flash.geom.Point;
 
-import game.DecorativeObject;
-
 public class Stone extends IcSprite {
 	private var _flying:Boolean;
 	private var _shadow:Sprite;
@@ -24,7 +22,7 @@ public class Stone extends IcSprite {
 		super();
 		_flying = false;
 		_shadowContainer = shadowContainer;
-		this.addChild(DecorativeObject.createLittleHill());
+		this.addChild(new StoneView());
 		addListeners();
 	}
 	

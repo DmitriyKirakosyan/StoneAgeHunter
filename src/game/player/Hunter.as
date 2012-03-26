@@ -68,9 +68,12 @@ public class Hunter extends IcActor {
 			return _stone != null;
 		}
 		
+		public function get canThrowStone():Boolean {
+			return false;
+		}
+		
 		public function throwStone():void {
 			play(HunterAnimationBuilder.ANIMATION_THROW, true);
-
 		}
 		
 		override public function getAlternativeCopy(copyName:String=""):IcSprite {

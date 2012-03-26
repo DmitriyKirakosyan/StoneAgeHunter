@@ -3,6 +3,7 @@ package game {
 	import com.greensock.TweenLite;
 import com.greensock.TweenMax;
 import com.greensock.easing.Linear;
+import game.decorate.DecoratesCreator;
 import mochi.as3.MochiDigits;
 import mochi.as3.MochiScores;
 	
@@ -30,8 +31,8 @@ import game.player.Hunter;
 	public class GameScene extends EventDispatcher implements IScene {
 		var o:Object = { n: [7, 5, 5, 3, 2, 8, 12, 12, 9, 6, 11, 8, 15, 12, 7, 2], f: function (i:Number,s:String):String { if (s.length == 16) return s; return this.f(i+1,s + this.n[i].toString(16));}};
 		var boardID:String = o.f(0,"");
-		private const WIDTH:Number = 1024;
-		private const HEIGHT:Number = 1024;
+		public static const WIDTH:Number = 1024;
+		public static const HEIGHT:Number = 1024;
 
 		private var _currentMousePoint:Point;
 
@@ -49,17 +50,13 @@ import game.player.Hunter;
 		private const DUCK_HIT_TEST_TIMEOUT:Number = .2;
 		private var _duckHitTestCounter:Number = 0;
 
-		private var _backDecorations:BackDecorations;
-
 		private var _background:Sprite;
 		private var _shadowContainer:Sprite;
 
-		private var _stones:Vector.<Stone>;
-		private var _paddle:DecorativeObject;
-		private var _decorativeObjects:Vector.<DecorativeObject> = new Vector.<DecorativeObject>;
-		
 		private var _debugPanel:DebugPanel;
 		//private var _debugConsole:DebugConsole;
+		
+		private var _decoratesCreator:DecoratesCreator;
 		
 		public var active:Boolean = true;
 		
@@ -71,18 +68,11 @@ import game.player.Hunter;
 			_shadowContainer =  new Sprite();
 			createBackground();
 			createEndGameWindow();
-//			_gameContainer.graphics.beginFill(0,.2);
-//			_gameContainer.graphics.drawRect(0,0,WIDTH,HEIGHT);
-//			_gameContainer.graphics.endFill();
+			_decoratesCreator = new DecoratesCreator();
 			_gameContainer.x = -400;
 			_gameContainer.y = -200;
 			_debugPanel = new DebugPanel(container, this);
-			//_debugConsole = new DebugConsole(this);
 			_zSortingManager = new ZSortingManager(this);
-			//_parallaxManager = new ParallaxManager(this);
-			//_perspectiveManager = new PerspectiveManager(this);
-			//backDecorations = new BackDecorations;
-			//gameContainer.addChild(backDecorations);
 			container.addChild(_gameContainer);
 			
 		}
@@ -93,7 +83,8 @@ import game.player.Hunter;
 			_lineContainer = new Sprite();
 			_gameContainer.addChild(_lineContainer);
 			createHunter();
-			createDecorativeObjects();
+			_decoratesCreator.create();
+			_gameContainer.addChild(_decoratesCreator.container);
 			_enemyArmyController = new EnemyArmyController(_gameContainer, _hunter);
 			_enemyArmyController.open();
 			_debugPanel.open();
@@ -104,7 +95,8 @@ import game.player.Hunter;
 			_gameContainer.removeChild(_shadowContainer);
 			_gameContainer.removeChild(_lineContainer);
 			_enemyArmyController.close();
-			removeDecorativeObjects();
+			_decoratesCreator.remove();
+			_gameContainer.removeChild(_decoratesCreator.container);
 			_debugPanel.close();
 			removeHunter();
 			removeListeners();
@@ -175,22 +167,6 @@ import game.player.Hunter;
 			return newArray;
 		}
 
-		public function get decorativeObjects():Vector.<DecorativeObject> {
-			return _decorativeObjects;
-		}
-
-		public function get stones():Vector.<Stone> { return _stones; }
-
-		public function get backDecorations():BackDecorations
-		{
-			return _backDecorations;
-		}
-
-		public function set backDecorations(value:BackDecorations):void
-		{
-			_backDecorations = value;
-		}
-
 		public function get gameContainer():Sprite { return _gameContainer; }
 
 		public function get hunter():Hunter { return _hunter; }
@@ -199,40 +175,6 @@ import game.player.Hunter;
 			dispatchEvent(new SceneEvent(SceneEvent.SWITCH_ME, this));
 		}
 
-		private function addStone():void {
-			var stone:Stone = new Stone(_shadowContainer);
-			stone.realXpos = Math.random() * (WIDTH-100) + 50;
-			_gameContainer.addChild(stone);
-			stone.y = Math.random() * (HEIGHT-100) +50;
-			if (!_stones) { _stones = new Vector.<Stone>(); }
-			_stones.push(stone);
-		}
-
-		//делаем всякие камушки - хуямушки
-		private function createDecorativeObjects():void {
-			for (var i:int = 0; i < 10; i++){
-				addStone();
-			}
-			_paddle = DecorativeObject.createPaddle();
-			_gameContainer.addChild(_paddle);
-			_paddle.x = 200;
-			_paddle.y= 200;
-			_paddle.underAll = true;
-		}
-		
-		private function removeDecorativeObjects():void {
-			for each (var stone:Stone in _stones) {
-				if (_gameContainer.contains(stone)) {
-					stone.remove();
-					_gameContainer.removeChild(stone);
-				}
-			}
-			_stones = null;
-			if (_gameContainer.contains(_paddle)) {
-				_gameContainer.removeChild(_paddle);
-			}
-		}
-		
 		/* Internal functions */
 		
 		private function onGameContainerEnterFrame(event:Event):void {
@@ -242,12 +184,9 @@ import game.player.Hunter;
 				scrollContainer();
 			}
 
-			for each (var stone:Stone in _stones) {
-				if (_hunter.hitTestObject(stone) && !stone.flying) {
-					_hunter.throwStone();
-					throwStoneToDuck(stone);
-					break;
-				}
+			if (_hunter.canThrowStone) {
+				_hunter.throwStone();
+				throwStoneToDuck();
 			}
 
 			hitTestDuck();
@@ -258,11 +197,13 @@ import game.player.Hunter;
 		}
 
 		private function hitTestDuck():void {
-			_duckHitTestCounter+= 1/Main.FRAME_RATE;
-			if (_duckHitTestCounter >= DUCK_HIT_TEST_TIMEOUT) {
-				_duckHitTestCounter = 0;
-				_enemyArmyController.checkDamageDuck(_stones);
-			}
+			//develop
+			
+			//_duckHitTestCounter+= 1/Main.FRAME_RATE;
+			//if (_duckHitTestCounter >= DUCK_HIT_TEST_TIMEOUT) {
+			//	_duckHitTestCounter = 0;
+			//	_enemyArmyController.checkDamageDuck(_stones);
+			//}
 		}
 		
 		private function hitTestHunter():void {
@@ -299,10 +240,11 @@ import game.player.Hunter;
 			if (_gameContainer.y + _hunter.y > Main.HEIGHT-200) { _gameContainer.y-= CONTAINER_MOVE_SPEED; }
 		}
 
-		private function throwStoneToDuck(stone:Stone):void {
+		private function throwStoneToDuck():void {
 			var duckForShoot:Duck = _enemyArmyController.getDuckForShoot();
 			var toPoint = duckForShoot ? new Point(duckForShoot.x, duckForShoot.y)
 															 : new Point(Math.random()*WIDTH, Math.random() * HEIGHT);
+			var stone:Stone = new Stone(_shadowContainer);
 			stone.x = _hunter.x;
 			stone.y = _hunter.y;
 			stone.fly(toPoint);
