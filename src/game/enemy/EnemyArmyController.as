@@ -23,11 +23,14 @@ public class EnemyArmyController {
 	private var _hunter:Hunter;
 
 	private var _enemyCreateCounter:Number;
+	
+	private var _killedNum:int;
 
 	private const ENEMY_CREATE_TIMEOUT:int = 2;
 
 	public function EnemyArmyController(gameContainer:Sprite, hunter:Hunter) {
 		super();
+		_killedNum = 0; 
 		_gameContainer = gameContainer;
 		_hunter = hunter;
 	}
@@ -38,6 +41,12 @@ public class EnemyArmyController {
 	}
 	public function close():void {
 		_gameContainer.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+		for each (var duck:Duck in _duckList) {
+			if (_gameContainer.contains(duck)) {
+				_gameContainer.removeChild(duck);
+			}
+		}
+		_killedNum = 0;
 	}
 
 	public function getDuckForShoot():Duck {
@@ -69,6 +78,15 @@ public class EnemyArmyController {
 		}
 		return false;
 	}
+	
+	public function checkHitHunter():Boolean {
+		for each (var duck:Duck in _duckList) {
+			if (_hunter.hitTestObject(duck)) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	/* Internal functions */
 
@@ -89,6 +107,7 @@ public class EnemyArmyController {
 			if (_gameContainer.contains(duck)) { _gameContainer.removeChild(duck);}
 		}
 		});
+		_killedNum++;
 	}
 
 	private function createDuck():void {
