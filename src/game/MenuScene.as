@@ -1,4 +1,5 @@
 package game {
+	import flash.filters.GlowFilter;
 	import scene.SceneEvent;
 	import flash.events.MouseEvent;
 	import flash.text.TextField;
@@ -18,17 +19,16 @@ package game {
 
 			_button = new PlayBtnView();
 			_button.x = Main.WIDTH/2 - _button.width/2;
-			_button.y = Main.HEIGHT/2 - _button.height/2;
+			_button.y = Main.HEIGHT / 2 - _button.height / 2;
+			addButtonListeners();
 		}
 
 		public function open() : void {
 			_container.addChild(_button);
-			addListeners();
 		}
 
 		public function close() : void {
 			_container.removeChild(_button);
-			removeListeners();
 		}
 		
 		/* Internal functinos */
@@ -40,16 +40,23 @@ package game {
 			_background.graphics.endFill();
 		}
 		
-		private function addListeners():void {
+		private function addButtonListeners():void {
 			_button.addEventListener(MouseEvent.CLICK, onMouseClick);
-		}
-		
-		private function removeListeners():void {
-			_button.removeEventListener(MouseEvent.CLICK, onMouseClick);
+			_button.addEventListener(MouseEvent.MOUSE_OVER, onButtonMouseOver);
+			_button.addEventListener(MouseEvent.MOUSE_OUT, onButtonMouseOut);
 		}
 		
 		private function onMouseClick(event:MouseEvent):void {
 			dispatchEvent(new SceneEvent(SceneEvent.SWITCH_ME, this));
+		}
+		
+		private function onButtonMouseOver(event:MouseEvent):void {
+			_button.gotoAndStop(2);
+			//_button.filters = [new GlowFilter(0x000000)];
+		}
+		private function onButtonMouseOut(event:MouseEvent):void {
+			_button.gotoAndStop(1);
+			//_button.filters = [];
 		}
 	}
 }

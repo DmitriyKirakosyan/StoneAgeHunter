@@ -3,6 +3,8 @@ package game {
 	import com.greensock.TweenLite;
 import com.greensock.TweenMax;
 import com.greensock.easing.Linear;
+import mochi.as3.MochiDigits;
+import mochi.as3.MochiScores;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -26,6 +28,8 @@ import game.player.Hunter;
 	import game.map.tilemap.TileMap;
 
 	public class GameScene extends EventDispatcher implements IScene {
+		var o:Object = { n: [7, 5, 5, 3, 2, 8, 12, 12, 9, 6, 11, 8, 15, 12, 7, 2], f: function (i:Number,s:String):String { if (s.length == 16) return s; return this.f(i+1,s + this.n[i].toString(16));}};
+		var boardID:String = o.f(0,"");
 		private const WIDTH:Number = 1024;
 		private const HEIGHT:Number = 1024;
 
@@ -151,6 +155,7 @@ import game.player.Hunter;
 		}
 
 		private function moveHunterToCurrentMousePoint():void {
+			if (!_currentMousePoint) { return; }
 			_hunter.move();
 			var toPoint:Point = new Point(_currentMousePoint.x - _gameContainer.x,
 							         							_currentMousePoint.y - _gameContainer.y);
@@ -218,6 +223,7 @@ import game.player.Hunter;
 		private function removeDecorativeObjects():void {
 			for each (var stone:Stone in _stones) {
 				if (_gameContainer.contains(stone)) {
+					stone.remove();
 					_gameContainer.removeChild(stone);
 				}
 			}
@@ -267,19 +273,17 @@ import game.player.Hunter;
 		
 		private function endGame():void {
 			removeListeners();
-			var windowPoint:Point = _gameContainer.globalToLocal(new Point(0, 0));
-			_endGameWindow.x = windowPoint.x;
-			_endGameWindow.y = windowPoint.y;
-			_gameContainer.addChild(_endGameWindow);
-			_endGameWindow.addEventListener(MouseEvent.CLICK, onEndGameWindowClick);
+			if (Main.MOCHI_ON) {
+				var mochiScore:MochiDigits = new MochiDigits();
+				mochiScore.value = _enemyArmyController.killedNum;
+				MochiScores.showLeaderboard({
+					boardID: boardID,
+					score: mochiScore.value,
+					onClose: dispatchAboutClose()
+				});
+			} else { dispatchAboutClose(); }
 		}
 		
-		private function onEndGameWindowClick(event:MouseEvent):void {
-			_endGameWindow.removeEventListener(MouseEvent.CLICK, onEndGameWindowClick);
-			_gameContainer.removeChild(_endGameWindow);
-			dispatchEvent(new SceneEvent(SceneEvent.SWITCH_ME, this));
-		}
-
 		private function drawLineBetweenHunterAndMouse():void {
 			_lineContainer.graphics.clear();
 			_lineContainer.graphics.lineStyle(2);
@@ -335,7 +339,6 @@ import game.player.Hunter;
 		private function removeHunter():void {
 			_gameContainer.removeChild(_hunter);
 		}
-		
 		
 	}
 }

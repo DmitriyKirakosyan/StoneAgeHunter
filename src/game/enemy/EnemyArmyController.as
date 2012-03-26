@@ -48,6 +48,8 @@ public class EnemyArmyController {
 		}
 		_killedNum = 0;
 	}
+	
+	public function get killedNum():int { return _killedNum; }
 
 	public function getDuckForShoot():Duck {
 		if (!_duckList || _duckList.length == 0) { return null; }

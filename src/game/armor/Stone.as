@@ -1,5 +1,7 @@
 package game.armor {
 import animation.IcSprite;
+import flash.events.MouseEvent;
+import flash.filters.GlowFilter;
 
 import com.greensock.TimelineMax;
 
@@ -23,6 +25,11 @@ public class Stone extends IcSprite {
 		_flying = false;
 		_shadowContainer = shadowContainer;
 		this.addChild(DecorativeObject.createLittleHill());
+		addListeners();
+	}
+	
+	public function remove():void {
+		removeListeners();
 	}
 	
 	public function get shadow():Sprite { return _shadow; }
@@ -52,6 +59,16 @@ public class Stone extends IcSprite {
 		removeShadow(_shadowContainer);
 	}
 	
+	private function addListeners():void {
+		this.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+		this.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+	}
+	
+	private function removeListeners():void {
+		this.removeEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
+		this.removeEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+	}
+	
 	private function onStoneFlyComplete():void {
 		stopFly();
 	}
@@ -75,6 +92,15 @@ public class Stone extends IcSprite {
 		this.graphics.beginFill(0x0fafcd);
 		this.graphics.drawCircle(0, 0, 5);
 		this.graphics.endFill();
+	}
+	
+	private function onMouseOver(event:MouseEvent):void {
+		this.filters = [new GlowFilter(0x000000)];
+		trace("mouse over");
+	}
+	
+	private function onMouseOut(event:MouseEvent):void {
+		this.filters = [];
 	}
 
 }
