@@ -51,10 +51,10 @@ public class Stone extends IcSprite {
 		timeline.append(new TweenLite(_shadow, distance / 200, { scaleX:1, scaleY:1 } ));
 	}
 	public function stopFly():void {
-		trace("stop fly");
 		_flying = false;
 		TweenMax.killTweensOf(this);
 		removeShadow(_shadowContainer);
+		dispatchEvent(new StoneEvent(StoneEvent.STOP_FLY));
 	}
 	
 	private function addListeners():void {

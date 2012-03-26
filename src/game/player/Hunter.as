@@ -19,20 +19,19 @@ public class Hunter extends IcActor {
 		/* hitpoints line */
 		private var _hp:HpLine;
 		
-		/* stone, witch took the hunter */
-		private var _stone:Stone;
-
 		/* hunter's color of glow and path */
 		private var _baseColor:uint;
 
-		/* point where hunter moving now */
-		private var _targetPoint:Point;
-
+		private var _throwTimeoutCounter:Number;
+		private const THROW_TIMEOUT:int = 1;
+		private var _canThrow:Boolean;
 
 		private var _debug:Boolean;
 		
 		public function Hunter(debug:Boolean) {
 			super();
+			_throwTimeoutCounter = 0;
+			_canThrow = false;
 			_debug = debug;
 			_baseColor = Math.random() * 0xffffff;
 			path.setLinksColor(_baseColor);
@@ -44,6 +43,15 @@ public class Hunter extends IcActor {
 		}
 		
 		/* API */
+
+		public function tick():void {
+			if (_canThrow) { return; }
+			_throwTimeoutCounter += 1/Main.FRAME_RATE;
+			if (_throwTimeoutCounter >= THROW_TIMEOUT) {
+				_canThrow = true;
+				_throwTimeoutCounter = 0;
+			}
+		}
 
 		// for debug
 		public function setScale(value:Number):void {
@@ -64,16 +72,13 @@ public class Hunter extends IcActor {
 			_hp.damage(value);
 		}
 		
-		public function get hasStone():Boolean {
-			return _stone != null;
-		}
-		
 		public function get canThrowStone():Boolean {
-			return false;
+			return _canThrow;
 		}
 		
 		public function throwStone():void {
 			play(HunterAnimationBuilder.ANIMATION_THROW, true);
+			_canThrow = false;
 		}
 		
 		override public function getAlternativeCopy(copyName:String=""):IcSprite {

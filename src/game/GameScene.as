@@ -3,6 +3,8 @@ package game {
 	import com.greensock.TweenLite;
 import com.greensock.TweenMax;
 import com.greensock.easing.Linear;
+
+import game.armor.StonesCollector;
 import game.decorate.DecoratesCreator;
 import mochi.as3.MochiDigits;
 import mochi.as3.MochiScores;
@@ -53,6 +55,7 @@ import game.player.Hunter;
 		private var _background:Sprite;
 		private var _shadowContainer:Sprite;
 
+		private var _stonesCollector:StonesCollector;
 		private var _debugPanel:DebugPanel;
 		//private var _debugConsole:DebugConsole;
 		
@@ -66,6 +69,7 @@ import game.player.Hunter;
 			super();
 			_gameContainer = new Sprite();
 			_shadowContainer =  new Sprite();
+			_stonesCollector = new StonesCollector(_gameContainer);
 			createBackground();
 			createEndGameWindow();
 			_decoratesCreator = new DecoratesCreator();
@@ -184,6 +188,7 @@ import game.player.Hunter;
 				scrollContainer();
 			}
 
+			_hunter.tick();
 			if (_hunter.canThrowStone) {
 				_hunter.throwStone();
 				throwStoneToDuck();
@@ -245,6 +250,7 @@ import game.player.Hunter;
 			var toPoint = duckForShoot ? new Point(duckForShoot.x, duckForShoot.y)
 															 : new Point(Math.random()*WIDTH, Math.random() * HEIGHT);
 			var stone:Stone = new Stone(_shadowContainer);
+			_stonesCollector.addStone(stone);
 			stone.x = _hunter.x;
 			stone.y = _hunter.y;
 			stone.fly(toPoint);
