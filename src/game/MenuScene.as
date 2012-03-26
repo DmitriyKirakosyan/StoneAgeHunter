@@ -8,30 +8,26 @@ package game {
 
 	public class MenuScene extends EventDispatcher implements IScene {
 		private var _container:Sprite;
-		
-		private var _menuText:TextField;
 		private var _background:Sprite;
+		private var _button:PlayBtnView;
 
 		public function MenuScene(container:Sprite):void {
 			super();
 			_container = container;
 			createBackground();
-			_menuText = new TextField();
-			_menuText.text = "Menu";
-			_menuText.x = 150;
-			_menuText.y = 100;
-			_menuText.selectable = false;
+
+			_button = new PlayBtnView();
+			_button.x = Main.WIDTH/2 - _button.width/2;
+			_button.y = Main.HEIGHT/2 - _button.height/2;
 		}
-		
+
 		public function open() : void {
-			//_container.addChild(_background);
-			_container.addChild(_menuText);
+			_container.addChild(_button);
 			addListeners();
 		}
 
 		public function close() : void {
-			//_container.removeChild(_background);
-			_container.removeChild(_menuText);
+			_container.removeChild(_button);
 			removeListeners();
 		}
 		
@@ -45,11 +41,11 @@ package game {
 		}
 		
 		private function addListeners():void {
-			_container.stage.addEventListener(MouseEvent.CLICK, onMouseClick);
+			_button.addEventListener(MouseEvent.CLICK, onMouseClick);
 		}
 		
 		private function removeListeners():void {
-			_container.stage.removeEventListener(MouseEvent.CLICK, onMouseClick);
+			_button.removeEventListener(MouseEvent.CLICK, onMouseClick);
 		}
 		
 		private function onMouseClick(event:MouseEvent):void {
