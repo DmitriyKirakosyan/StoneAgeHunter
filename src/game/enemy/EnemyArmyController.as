@@ -5,6 +5,10 @@
  */
 package game.enemy {
 import com.greensock.TweenLite;
+
+import flash.text.TextField;
+import flash.text.TextFormat;
+
 import game.GameScene;
 
 import flash.display.Sprite;
@@ -17,6 +21,8 @@ import game.animal.AnimalEvent;
 import game.animal.Duck;
 import game.armor.Stone;
 import game.player.Hunter;
+
+import utils.BeenzaBouncer;
 
 public class EnemyArmyController {
 	private var _duckList:Vector.<Duck>;
@@ -38,10 +44,12 @@ public class EnemyArmyController {
 
 	public function open():void {
 		_enemyCreateCounter = 0;
+		_gameContainer.addChild(BeenzaBouncer.instance);
 		_gameContainer.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
 	public function close():void {
 		_gameContainer.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+		_gameContainer.removeChild(BeenzaBouncer.instance);
 		for each (var duck:Duck in _duckList) {
 			if (_gameContainer.contains(duck)) {
 				_gameContainer.removeChild(duck);
@@ -110,6 +118,15 @@ public class EnemyArmyController {
 			if (_gameContainer.contains(duck)) { _gameContainer.removeChild(duck);}
 		}
 		});
+
+		trace("try shot +1");
+		//shot +1
+		const txtFormat:TextFormat = new TextFormat("PFAgoraSlabPro-Black", 16,
+													0x78B449, null, null, null, "", "", "center", 0, 0, 0, 0);
+		const txt:TextField = BeenzaBouncer.instance.createBounceTextField("+1", txtFormat);
+
+		BeenzaBouncer.instance.bounceTxtAtPoint(txt, new Point(duck.x-(txt.width/2), duck.y-10));
+
 		_killedNum++;
 	}
 
