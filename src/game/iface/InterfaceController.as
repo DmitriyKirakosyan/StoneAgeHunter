@@ -11,10 +11,14 @@ package game.iface {
 		
 		public function InterfaceController(container:Sprite) {
 			_container = container;
+			_scoreComponent = new ScoreComponent();
 		}
+
+		public function get scoreComponent():ScoreComponent { return _scoreComponent; }
 		
 		public function open():void {
 			_container.addChild(_scoreComponent);
+			_scoreComponent.setScore(0);
 		}
 		
 		public function close():void {

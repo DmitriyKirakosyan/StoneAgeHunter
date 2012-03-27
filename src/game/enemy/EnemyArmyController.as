@@ -6,6 +6,8 @@
 package game.enemy {
 import com.greensock.TweenLite;
 
+import flash.events.EventDispatcher;
+
 import flash.text.TextField;
 import flash.text.TextFormat;
 
@@ -24,7 +26,7 @@ import game.player.Hunter;
 
 import utils.BeenzaBouncer;
 
-public class EnemyArmyController {
+public class EnemyArmyController extends EventDispatcher {
 	private var _duckList:Vector.<Duck>;
 	private var _gameContainer:Sprite;
 	private var _hunter:Hunter;
@@ -119,7 +121,6 @@ public class EnemyArmyController {
 		}
 		});
 
-		trace("try shot +1");
 		//shot +1
 		const txtFormat:TextFormat = new TextFormat("PFAgoraSlabPro-Black", 16,
 													0x78B449, null, null, null, "", "", "center", 0, 0, 0, 0);
@@ -128,6 +129,8 @@ public class EnemyArmyController {
 		BeenzaBouncer.instance.bounceTxtAtPoint(txt, new Point(duck.x-(txt.width/2), duck.y-10));
 
 		_killedNum++;
+
+		dispatchEvent(new EnemyArmyEvent(EnemyArmyEvent.ENEMY_KILLED));
 	}
 
 	private function createDuck():void {

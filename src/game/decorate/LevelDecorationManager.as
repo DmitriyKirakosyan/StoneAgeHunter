@@ -48,9 +48,9 @@ package game.decorate
 				case "background":
 					return new BackgroundView();
 					break;
-				case "stone":
-					return new StoneView();
-					break;
+//				case "stone":
+//					return new StoneView();
+//					break;
 				case "littleHill":
 					return new LittleHillView();
 					break;

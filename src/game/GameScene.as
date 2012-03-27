@@ -6,6 +6,9 @@ import com.greensock.easing.Linear;
 
 import game.armor.StonesCollector;
 import game.decorate.DecoratesCreator;
+import game.enemy.EnemyArmyEvent;
+import game.iface.InterfaceController;
+
 import mochi.as3.MochiDigits;
 import mochi.as3.MochiScores;
 	
@@ -39,6 +42,8 @@ import game.player.Hunter;
 		private var _currentMousePoint:Point;
 
 		private var _gameContainer:Sprite;
+		private var _ifaceContainer:Sprite;
+		private var _interface:InterfaceController;
 		private var _lineContainer:Sprite;
 		private var _hunter:Hunter;
 		private var _enemyArmyController:EnemyArmyController;
@@ -68,8 +73,10 @@ import game.player.Hunter;
 		public function GameScene(container:Sprite, tileMap:TileMap):void {
 			super();
 			_gameContainer = new Sprite();
+			_ifaceContainer = new Sprite();
 			_shadowContainer =  new Sprite();
 			_stonesCollector = new StonesCollector(_gameContainer);
+			_interface = new InterfaceController(_ifaceContainer);
 			createBackground();
 			createEndGameWindow();
 			_decoratesCreator = new DecoratesCreator();
@@ -78,12 +85,14 @@ import game.player.Hunter;
 			_debugPanel = new DebugPanel(container, this);
 			_zSortingManager = new ZSortingManager(this);
 			container.addChild(_gameContainer);
+			container.addChild(_ifaceContainer);
 			
 		}
 		
 		public function open():void {
 			_gameContainer.addChild(_background);
 			_gameContainer.addChild(_shadowContainer);
+			_interface.open();
 			_lineContainer = new Sprite();
 			_gameContainer.addChild(_lineContainer);
 			createHunter();
@@ -98,6 +107,7 @@ import game.player.Hunter;
 			_gameContainer.removeChild(_background);
 			_gameContainer.removeChild(_shadowContainer);
 			_gameContainer.removeChild(_lineContainer);
+			_interface.close();
 			_enemyArmyController.close();
 			_decoratesCreator.remove();
 			_gameContainer.removeChild(_decoratesCreator.container);
@@ -112,6 +122,7 @@ import game.player.Hunter;
 			_gameContainer.addEventListener(MouseEvent.MOUSE_DOWN, onContainerMouseDown);
 			_gameContainer.addEventListener(MouseEvent.MOUSE_UP, onContainerMouseUp);
 			_gameContainer.addEventListener(MouseEvent.MOUSE_MOVE, onContainerMouseMove);
+			_enemyArmyController.addEventListener(EnemyArmyEvent.ENEMY_KILLED, onEnemyKilled);
 		}
 
 		private function removeListeners():void {
@@ -119,6 +130,7 @@ import game.player.Hunter;
 			_gameContainer.removeEventListener(MouseEvent.MOUSE_DOWN, onContainerMouseDown);
 			_gameContainer.removeEventListener(MouseEvent.MOUSE_UP, onContainerMouseUp);
 			_gameContainer.removeEventListener(MouseEvent.MOUSE_MOVE, onContainerMouseMove);
+			_enemyArmyController.removeEventListener(EnemyArmyEvent.ENEMY_KILLED, onEnemyKilled);
 		}
 
 		protected function onContainerMouseMove(event:MouseEvent):void
@@ -129,6 +141,10 @@ import game.player.Hunter;
 			if(_hunter && _mouseDown){
 				moveHunterToCurrentMousePoint();
 			}
+		}
+
+		private function onEnemyKilled(event:EnemyArmyEvent):void {
+			_interface.scoreComponent.setScore(_enemyArmyController.killedNum);
 		}
 
 		private function createBackground():void {
