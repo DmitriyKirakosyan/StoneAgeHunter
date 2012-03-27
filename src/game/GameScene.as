@@ -231,6 +231,7 @@ import game.player.Hunter;
 		}
 		
 		private function drawLineBetweenHunterAndMouse():void {
+			if (!_currentMousePoint) { return; }
 			_lineContainer.graphics.clear();
 			_lineContainer.graphics.lineStyle(2);
 			_lineContainer.graphics.moveTo(_hunter.x,  _hunter.y);

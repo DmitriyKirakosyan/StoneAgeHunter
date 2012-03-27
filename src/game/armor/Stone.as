@@ -1,5 +1,6 @@
 package game.armor {
 import animation.IcSprite;
+import com.greensock.TimelineLite;
 import flash.events.MouseEvent;
 import flash.filters.GlowFilter;
 
@@ -14,6 +15,7 @@ import flash.display.Sprite;
 import flash.geom.Point;
 
 public class Stone extends IcSprite {
+	private var _stoneView:StoneView;
 	private var _flying:Boolean;
 	private var _shadow:Sprite;
 	private var _shadowContainer:Sprite;
@@ -22,12 +24,8 @@ public class Stone extends IcSprite {
 		super();
 		_flying = false;
 		_shadowContainer = shadowContainer;
-		this.addChild(new StoneView());
-		addListeners();
-	}
-	
-	public function remove():void {
-		removeListeners();
+		_stoneView = new StoneView();
+		this.addChild(_stoneView);
 	}
 	
 	public function get shadow():Sprite { return _shadow; }
@@ -57,14 +55,31 @@ public class Stone extends IcSprite {
 		dispatchEvent(new StoneEvent(StoneEvent.STOP_FLY));
 	}
 	
-	private function addListeners():void {
-		this.addEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-		this.addEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+	public function breakOnStones():void {
+		if (this.contains(_stoneView)) { this.removeChild(_stoneView); }
+		var stoneParts:Vector.<StoneView> = createStoneParts();
+		for each (var stoneView:StoneView in stoneParts) {
+			this.addChild(stoneView);
+		}
+		var timeline:TimelineLite = new TimelineLite( { onComplete: onStonePartsFlyComplete,
+													onCompleteParams: [stoneParts] } );
+		var angle:Number;
+		for (var i:int = 0; i < stoneParts.length; ++i ) {
+			angle = (i+1) / stoneParts.length * 3.14/180;
+			timeline.insert(new TweenLite(stoneView, .3, { x:Math.cos(angle)*40, y:Math.sin(angle)*40 } ));
+		}
 	}
 	
-	private function removeListeners():void {
-		this.removeEventListener(MouseEvent.MOUSE_OVER, onMouseOver);
-		this.removeEventListener(MouseEvent.MOUSE_OUT, onMouseOut);
+	private function onStonePartsFlyComplete(stoneParts:Vector.<StoneView>) {
+		
+	}
+	
+	private function createStoneParts():Vector.<StoneView> {
+		var result:Vector.<StoneView> = new Vector.<StoneView>();
+		for (var i:int = 0; i < 4; ++i) {
+			result.push(new StoneView());
+		}
+		return result;
 	}
 	
 	private function onStoneFlyComplete():void {
@@ -92,14 +107,5 @@ public class Stone extends IcSprite {
 		this.graphics.endFill();
 	}
 	
-	private function onMouseOver(event:MouseEvent):void {
-		this.filters = [new GlowFilter(0x000000)];
-		trace("mouse over");
-	}
-	
-	private function onMouseOut(event:MouseEvent):void {
-		this.filters = [];
-	}
-
 }
 }

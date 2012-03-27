@@ -5,6 +5,7 @@
  */
 package game.enemy {
 import com.greensock.TweenLite;
+import game.GameScene;
 
 import flash.display.Sprite;
 import flash.events.Event;
@@ -116,15 +117,16 @@ public class EnemyArmyController {
 		var duck:Duck = new Duck();
 		var side:uint = Math.random() * 4;
 		if (side == 0 || side == 2) {
-			duck.x = (side/2) * Main.HEIGHT;
+			duck.x = (side/2) * GameScene.HEIGHT;
 		} else {
-			duck.x = Math.random() * Main.WIDTH;
+			duck.x = Math.random() * GameScene.WIDTH;
 		}
 		if (side == 1 || side == 3) {
-			duck.y = (side-1)/2 * Main.WIDTH;
+			duck.y = (side-1)/2 * GameScene.WIDTH;
 		} else {
-			duck.y = Math.random() * Main.HEIGHT;
+			duck.y = Math.random() * GameScene.HEIGHT;
 		}
+		trace("duck x : " + duck.x + ", duck y : " + duck.y + " [EnemyArmyController.createDuck]");
 		duck.addEventListener(AnimalEvent.FOLLOW_COMPLETE, onDuckFollowComplete);
 		duck.fasHunter(_hunter);
 		_gameContainer.addChild(duck);

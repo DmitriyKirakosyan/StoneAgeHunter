@@ -37,7 +37,8 @@ public class StonesCollector {
 	private function onStoneStopFly(event:StoneEvent):void {
 		var stone:Stone = event.target as Stone;
 		stone.removeEventListener(StoneEvent.STOP_FLY, onStoneStopFly);
-		removeStone(stone);
+		stone.breakOnStones();
+		//removeStone(stone);
 	}
 }
 }
