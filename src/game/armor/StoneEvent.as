@@ -9,6 +9,7 @@ import flash.events.Event;
 public class StoneEvent extends Event {
 
 	public static const STOP_FLY:String = "stopFly";
+	public static const REMOVE_ME:String = "removeMe";
 	public function StoneEvent(type:String) {
 		super(type);
 	}

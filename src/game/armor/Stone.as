@@ -19,12 +19,13 @@ public class Stone extends IcSprite {
 	private var _flying:Boolean;
 	private var _shadow:Sprite;
 	private var _shadowContainer:Sprite;
-
+	
 	public function Stone(shadowContainer:Sprite):void {
 		super();
 		_flying = false;
 		_shadowContainer = shadowContainer;
 		_stoneView = new StoneView();
+		_stoneView.scaleY = _stoneView.scaleX = .8;
 		this.addChild(_stoneView);
 	}
 	
@@ -64,20 +65,28 @@ public class Stone extends IcSprite {
 		var timeline:TimelineLite = new TimelineLite( { onComplete: onStonePartsFlyComplete,
 													onCompleteParams: [stoneParts] } );
 		var angle:Number;
+		var offset:Number;
 		for (var i:int = 0; i < stoneParts.length; ++i ) {
-			angle = (i+1) / stoneParts.length * 3.14/180;
-			timeline.insert(new TweenLite(stoneView, .3, { x:Math.cos(angle)*40, y:Math.sin(angle)*40 } ));
+			angle = (i + 1) / stoneParts.length * 2 * 3.14;
+			offset = Math.random() * 10 + 15;
+			timeline.insert(new TweenLite(stoneParts[i], .3, { x:Math.cos(angle)*offset, y:Math.sin(angle)*offset } ));
 		}
 	}
 	
-	private function onStonePartsFlyComplete(stoneParts:Vector.<StoneView>) {
-		
+	private function onStonePartsFlyComplete(stoneParts:Vector.<StoneView>):void {
+		for each (var stoneView:StoneView in stoneParts) {
+			this.removeChild(stoneView);
+		}
+		dispatchEvent(new StoneEvent(StoneEvent.REMOVE_ME));
 	}
 	
 	private function createStoneParts():Vector.<StoneView> {
 		var result:Vector.<StoneView> = new Vector.<StoneView>();
+		var stoneView:StoneView;
 		for (var i:int = 0; i < 4; ++i) {
-			result.push(new StoneView());
+			stoneView = new StoneView();
+			stoneView.scaleX = stoneView.scaleY = .4;
+			result.push(stoneView);
 		}
 		return result;
 	}

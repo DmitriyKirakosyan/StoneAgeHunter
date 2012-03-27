@@ -18,6 +18,7 @@ public class StonesCollector {
 
 	public function addStone(stone:Stone):void {
 		stone.addEventListener(StoneEvent.STOP_FLY, onStoneStopFly);
+		stone.addEventListener(StoneEvent.REMOVE_ME, onStoneRemoveRequest);
 		_container.addChild(stone);
 		if (!_stones) { _stones = new Vector.<Stone>(); }
 		_stones.push(stone);
@@ -38,7 +39,15 @@ public class StonesCollector {
 		var stone:Stone = event.target as Stone;
 		stone.removeEventListener(StoneEvent.STOP_FLY, onStoneStopFly);
 		stone.breakOnStones();
-		//removeStone(stone);
+	}
+	
+	private function onStoneRemoveRequest(event:StoneEvent):void {
+		var stone:Stone = event.target as Stone;
+		if (stone.hasEventListener(StoneEvent.STOP_FLY)) {
+			stone.removeEventListener(StoneEvent.STOP_FLY, onStoneStopFly);
+		}
+		stone.removeEventListener(StoneEvent.REMOVE_ME, onStoneRemoveRequest);
+		removeStone(stone);
 	}
 }
 }

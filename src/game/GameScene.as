@@ -202,13 +202,11 @@ import game.player.Hunter;
 		}
 
 		private function hitTestDuck():void {
-			//develop
-			
-			//_duckHitTestCounter+= 1/Main.FRAME_RATE;
-			//if (_duckHitTestCounter >= DUCK_HIT_TEST_TIMEOUT) {
-			//	_duckHitTestCounter = 0;
-			//	_enemyArmyController.checkDamageDuck(_stones);
-			//}
+			_duckHitTestCounter+= 1/Main.FRAME_RATE;
+			if (_duckHitTestCounter >= DUCK_HIT_TEST_TIMEOUT) {
+				_duckHitTestCounter = 0;
+				_enemyArmyController.checkDamageDuck(_stonesCollector.stones);
+			}
 		}
 		
 		private function hitTestHunter():void {
@@ -269,11 +267,9 @@ import game.player.Hunter;
 			if(_hunter){
 				moveHunterToCurrentMousePoint();
 			}
-		//	_parallaxManager.deactivateIfNot();
 		}
 		protected function onContainerMouseUp(event:MouseEvent):void {
 			_mouseDown = false;
-		//	_parallaxManager.activateIfNot();
 		}
 
 
