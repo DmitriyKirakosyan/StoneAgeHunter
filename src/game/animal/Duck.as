@@ -16,7 +16,6 @@ import com.greensock.TimelineMax;
 	import game.player.Hunter;
 
 	public class Duck extends IcActor {
-		private var _enemies:Vector.<IcSprite>;
 		private var _patrolPath:Vector.<Point>;
 		private var _mode:uint;
 		private var _paused:Boolean;
@@ -32,11 +31,11 @@ import com.greensock.TimelineMax;
 		public static const MODE_STALS:uint = 2;
 		public static const MODE_NOTHING:uint = 3;
 		
-		public function Duck() {
+		public function Duck(speed:Number) {
 			super();
 			_mode = MODE_PATROL;
 			_paused = true;
-			speed = .5;
+			super.speed = speed;
 			setScale(.3);
 			addAnimations();
 			play(ANIMATE_STAY);

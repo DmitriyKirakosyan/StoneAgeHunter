@@ -35,7 +35,11 @@ public class EnemyArmyController extends EventDispatcher {
 	
 	private var _killedNum:int;
 
-	private const ENEMY_CREATE_TIMEOUT:int = 2;
+	private var _enemyCreateTimeout:Number;
+	private var _enemySpeed:Number;
+
+	private const ENEMY_SPEED_MIN:Number = .2;
+	private const ENEMY_CREATE_TIMEOUT_MIN:Number = .5;
 
 	public function EnemyArmyController(gameContainer:Sprite, hunter:Hunter) {
 		super();
@@ -45,6 +49,8 @@ public class EnemyArmyController extends EventDispatcher {
 	}
 
 	public function open():void {
+		_enemyCreateTimeout = 2;
+		_enemySpeed = .5;
 		_enemyCreateCounter = 0;
 		_gameContainer.addChild(BeenzaBouncer.instance);
 		_gameContainer.addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -105,7 +111,7 @@ public class EnemyArmyController extends EventDispatcher {
 
 	private function onEnterFrame(event:Event):void {
 		_enemyCreateCounter += 1/Main.FRAME_RATE;
-		if (_enemyCreateCounter >= ENEMY_CREATE_TIMEOUT) {
+		if (_enemyCreateCounter >= _enemyCreateTimeout) {
 			createDuck();
 			_enemyCreateCounter = 0;
 		}
@@ -130,11 +136,23 @@ public class EnemyArmyController extends EventDispatcher {
 
 		_killedNum++;
 
+		updateDifficult();
+
 		dispatchEvent(new EnemyArmyEvent(EnemyArmyEvent.ENEMY_KILLED));
 	}
 
+	private function updateDifficult():void {
+		trace("udpate difficult [EnemyArmyController.updateDifficult]");
+		if (_enemyCreateTimeout > ENEMY_CREATE_TIMEOUT_MIN) {
+			_enemyCreateTimeout -= .002;
+		}
+		if (_enemySpeed > ENEMY_SPEED_MIN) {
+			_enemySpeed -= .001;
+		}
+	}
+
 	private function createDuck():void {
-		var duck:Duck = new Duck();
+		var duck:Duck = new Duck(_enemySpeed);
 		var side:uint = Math.random() * 4;
 		if (side == 0 || side == 2) {
 			duck.x = (side/2) * GameScene.HEIGHT;
