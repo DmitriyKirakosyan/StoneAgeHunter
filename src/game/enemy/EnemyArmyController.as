@@ -38,7 +38,7 @@ public class EnemyArmyController extends EventDispatcher {
 	private var _enemyCreateTimeout:Number;
 	private var _enemySpeed:Number;
 
-	private const ENEMY_SPEED_MIN:Number = .2;
+	private const ENEMY_SPEED_MAX:Number = 2;
 	private const ENEMY_CREATE_TIMEOUT_MIN:Number = .5;
 
 	public function EnemyArmyController(gameContainer:Sprite, hunter:Hunter) {
@@ -144,10 +144,10 @@ public class EnemyArmyController extends EventDispatcher {
 	private function updateDifficult():void {
 		trace("udpate difficult [EnemyArmyController.updateDifficult]");
 		if (_enemyCreateTimeout > ENEMY_CREATE_TIMEOUT_MIN) {
-			_enemyCreateTimeout -= .002;
+			_enemyCreateTimeout -= .01;
 		}
-		if (_enemySpeed > ENEMY_SPEED_MIN) {
-			_enemySpeed -= .001;
+		if (_enemySpeed < ENEMY_SPEED_MAX) {
+			_enemySpeed += .01;
 		}
 	}
 
