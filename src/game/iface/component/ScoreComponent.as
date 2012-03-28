@@ -51,6 +51,7 @@ public class ScoreComponent extends Sprite {
 		const txtFormat:TextFormat = new TextFormat("PFAgoraSlabPro-Black", 18,
 													0x78B449, null, null, null, "", "", "center", 0, 0, 0, 0);
 		_scoreText.defaultTextFormat = txtFormat;
+		_scoreText.filters = [new GlowFilter(0x000000, 1, 5, 5, .5)]
 	}
 
 }

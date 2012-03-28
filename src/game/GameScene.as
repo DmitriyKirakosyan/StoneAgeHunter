@@ -43,6 +43,7 @@ import game.player.Hunter;
 
 		private var _gameContainer:Sprite;
 		private var _ifaceContainer:Sprite;
+//		private var _arrowContainer:Sprite;
 		private var _interface:InterfaceController;
 		private var _lineContainer:Sprite;
 		private var _hunter:Hunter;
@@ -60,6 +61,8 @@ import game.player.Hunter;
 		private var _background:Sprite;
 		private var _shadowContainer:Sprite;
 
+		//private var _arrow:Sprite;
+
 		private var _stonesCollector:StonesCollector;
 		private var _debugPanel:DebugPanel;
 		//private var _debugConsole:DebugConsole;
@@ -72,8 +75,12 @@ import game.player.Hunter;
 		
 		public function GameScene(container:Sprite, tileMap:TileMap):void {
 			super();
+			//_arrow = new Arrow2();
+			//_arrow.scaleX = _arrow.scaleY = 3;
 			_gameContainer = new Sprite();
 			_ifaceContainer = new Sprite();
+//			_arrowContainer = new Sprite();
+
 			_shadowContainer =  new Sprite();
 			_stonesCollector = new StonesCollector(_gameContainer);
 			_interface = new InterfaceController(_ifaceContainer);
@@ -86,6 +93,7 @@ import game.player.Hunter;
 			_zSortingManager = new ZSortingManager(this);
 			container.addChild(_gameContainer);
 			container.addChild(_ifaceContainer);
+//			container.addChild(_arrowContainer);
 			
 		}
 		
@@ -211,8 +219,11 @@ import game.player.Hunter;
 			}
 
 			hitTestDuck();
-			
-			if (_mouseDown) { drawLineBetweenHunterAndMouse(); } else { _lineContainer.graphics.clear(); }
+
+			if (_mouseDown) {
+				drawLineBetweenHunterAndMouse();
+				//correctArrow();
+			} else { _lineContainer.graphics.clear(); }
 
 			hitTestHunter();
 		}
@@ -233,7 +244,7 @@ import game.player.Hunter;
 		
 		private function endGame():void {
 			removeListeners();
-			if (Main.MOCHI_ON) {
+			if (Main.MOCHI_ON && _enemyArmyController.killedNum > 0) {
 				var mochiScore:MochiDigits = new MochiDigits();
 				mochiScore.value = _enemyArmyController.killedNum;
 				MochiScores.showLeaderboard({
@@ -243,6 +254,17 @@ import game.player.Hunter;
 				});
 			} else { dispatchAboutClose(); }
 		}
+
+//		private function correctArrow():void {
+//			if (!_currentMousePoint) { return; }
+//			_arrow.x = _currentMousePoint.x;
+//			_arrow.y = _currentMousePoint.y;
+
+//			var distance:Number = Point.distance(new Point(_hunter.x, _hunter.y), _gameContainer.globalToLocal(_currentMousePoint));
+//			var angle:Number = Math.acos(_hunter.x/distance) / 3.14 * 180;
+//			trace("angle for arrow : " + angle + ", distance : " + distance + " [GameScene.correctArrow]");
+//			_arrow.rotation = angle;
+//		}
 		
 		private function drawLineBetweenHunterAndMouse():void {
 			if (!_currentMousePoint) { return; }
@@ -280,12 +302,16 @@ import game.player.Hunter;
 
 		private function onContainerMouseDown(event:MouseEvent):void {
 			_mouseDown = true;
+//			_arrow.x = event.stageX;
+//			_arrow.y = event.stageY;
+//			_arrowContainer.addChild(_arrow);
 			if(_hunter){
 				moveHunterToCurrentMousePoint();
 			}
 		}
 		protected function onContainerMouseUp(event:MouseEvent):void {
 			_mouseDown = false;
+//			_arrowContainer.removeChild(_arrow);
 		}
 
 
