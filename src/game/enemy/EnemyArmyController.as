@@ -100,7 +100,7 @@ public class EnemyArmyController extends EventDispatcher {
 	
 	public function checkHitHunter():Boolean {
 		for each (var duck:Duck in _duckList) {
-			if (_hunter.hitTestObject(duck)) {
+			if (Math.abs(duck.x - _hunter.x) < 10 && Math.abs(duck.y - _hunter.y) < 10) {
 				return true;
 			}
 		}
