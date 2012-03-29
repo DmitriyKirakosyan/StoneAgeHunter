@@ -119,6 +119,9 @@ package animation {
 				_nextAnimationName = icAnimation.name;
 				return;
 			}
+			if (_currentAnimation == icAnimation && _currentAnimation.playOnce) {
+				return;
+			}
 			removeCurrentAnimation();
 			_currentAnimation = icAnimation;
 			var movieClipAnimation:MovieClip = getBackOrFrontAnimation(icAnimation, backAnimation);

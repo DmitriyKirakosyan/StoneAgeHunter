@@ -76,8 +76,8 @@ public class Hunter extends IcActor {
 			return _canThrow;
 		}
 		
-		public function throwStone():void {
-			play(HunterAnimationBuilder.ANIMATION_THROW, true);
+		public function throwStone(throwUpSide:Boolean):void {
+			play(HunterAnimationBuilder.ANIMATION_THROW, throwUpSide);
 			_canThrow = false;
 		}
 		

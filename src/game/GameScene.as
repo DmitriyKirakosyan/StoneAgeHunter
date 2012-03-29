@@ -214,8 +214,12 @@ import game.player.Hunter;
 
 			_hunter.tick();
 			if (_hunter.canThrowStone) {
-				_hunter.throwStone();
-				throwStoneToDuck();
+
+				var duck:Duck = _enemyArmyController.getDuckForShoot();
+				if (duck) {
+					throwStoneToDuck(duck);
+					_hunter.throwStone(duck.y < _hunter.y);
+				}
 			}
 
 			hitTestDuck();
@@ -282,15 +286,20 @@ import game.player.Hunter;
 			if (_gameContainer.y + _hunter.y > Main.HEIGHT-200) { _gameContainer.y-= CONTAINER_MOVE_SPEED; }
 		}
 
-		private function throwStoneToDuck():void {
-			var duckForShoot:Duck = _enemyArmyController.getDuckForShoot();
-			var toPoint = duckForShoot ? new Point(duckForShoot.x, duckForShoot.y)
-															 : new Point(Math.random()*WIDTH, Math.random() * HEIGHT);
-			var stone:Stone = new Stone(_shadowContainer);
-			_stonesCollector.addStone(stone);
-			stone.x = _hunter.x;
-			stone.y = _hunter.y;
-			stone.fly(toPoint);
+		private function throwStoneToDuck(duckForShoot:Duck):void {
+			throwStoneTo(new Point(duckForShoot.x, duckForShoot.y));
+		}
+
+	private function throwStoneToRandomPoint():void {
+		throwStoneTo(new Point(Math.random()*WIDTH, Math.random() * HEIGHT));
+	}
+
+	private function throwStoneTo(point:Point):void {
+		var stone:Stone = new Stone(_shadowContainer);
+		_stonesCollector.addStone(stone);
+		stone.x = _hunter.x;
+		stone.y = _hunter.y;
+		stone.fly(point);
 		}
 
 		private function mouseAroundSide():Boolean {
