@@ -6,12 +6,16 @@ import com.greensock.TimelineMax;
 	import com.greensock.TweenLite;
 	import com.greensock.TweenMax;
 	import com.greensock.easing.Linear;
-	
-	import flash.events.Event;
+
+import flash.display.Sprite;
+
+import flash.events.Event;
 	import flash.filters.GlowFilter;
 	import flash.geom.Point;
-	
-	import game.player.HpLine;
+
+import game.enemy.EnemyDirectionPointer;
+
+import game.player.HpLine;
 	import game.gameActor.IcActor;
 	import game.player.Hunter;
 
@@ -23,25 +27,28 @@ import com.greensock.TimelineMax;
 		private var _targetHunter:Hunter;
 		
 		private var _timelineMax:TimelineMax;
-		
-//		private var _hp:HpLine;
+
+		private var _directionPointer:EnemyDirectionPointer;
 		
 		public static const MODE_PATROL:uint = 0;
 		public static const MODE_BLOODY:uint = 1;
-		public static const MODE_STALS:uint = 2;
 		public static const MODE_NOTHING:uint = 3;
 		
 		public function Duck(speed:Number) {
 			super();
-			_mode = MODE_PATROL;
-			_paused = true;
 			super.speed = speed;
+			_paused = true;
+			//_directionPointer = new EnemyDirectionPointer(Main.WIDTH, Main.HEIGHT);
 			setScale(.3);
 			addAnimations();
 			play(ANIMATE_STAY);
 		}
 
-		public function get mode():uint { return _mode; }
+		public function get directionPointer():Sprite { return _directionPointer; }
+		public function updateDirectionPointer():void {
+			var side:uint = 0;
+			_directionPointer.updatePosition(side);
+		}
 
 		/*
 		public function setJsonPath(json:String):void {
@@ -84,19 +91,6 @@ import com.greensock.TimelineMax;
 		play(DuckAnimationBuilder.ANIMATION_HIT);
 	}
 
-		/*
-		public function createHp():void {
-			_hp = new HpLine(5);
-			_hp.y = -20;
-			_hp.x = -20;
-			this.addChild(_hp);
-		}
-		*/
-		//public function get hp():Number { return _hp.value; }
-		//public function set hp(value:Number):void {
-		//	_hp.value = value;
-		//}
-		
 		override public function move():void {
 			_paused = false;
 			play(ANIMATE_MOVE);
@@ -167,8 +161,5 @@ import com.greensock.TimelineMax;
 			addAnimation(animationBuilder.createHitAnimation());
 		}
 		
-		private function drawDuck():void {
-			addChild(new DuckStayD());
-		}
 	}
 }

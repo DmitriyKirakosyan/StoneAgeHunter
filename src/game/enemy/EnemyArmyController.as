@@ -115,6 +115,8 @@ public class EnemyArmyController extends EventDispatcher {
 			createDuck();
 			_enemyCreateCounter = 0;
 		}
+
+		updateOfflineDuckPointers();
 	}
 
 	private function killDuck(duck:Duck):void {
@@ -139,6 +141,15 @@ public class EnemyArmyController extends EventDispatcher {
 		updateDifficult();
 
 		dispatchEvent(new EnemyArmyEvent(EnemyArmyEvent.ENEMY_KILLED));
+	}
+
+	private function updateOfflineDuckPointers():void {
+		for each (var duck:Duck in _duckList) {
+			if (duck.x + _gameContainer.x < 0 || duck.y + _gameContainer.y < 0 ||
+					duck.x + _gameContainer.x > Main.WIDTH || duck.y + _gameContainer.y > Main.HEIGHT) {
+
+			}
+		}
 	}
 
 	private function updateDifficult():void {
