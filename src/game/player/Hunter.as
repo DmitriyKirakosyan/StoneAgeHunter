@@ -23,7 +23,7 @@ public class Hunter extends IcActor {
 		private var _baseColor:uint;
 
 		private var _throwTimeoutCounter:Number;
-		private const THROW_TIMEOUT:int = 1;
+		private const THROW_TIMEOUT:int = 2;
 		private var _canThrow:Boolean;
 
 		private var _debug:Boolean;
