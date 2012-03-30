@@ -1,8 +1,9 @@
 package game {
-	import com.greensock.TimelineMax;
-	import com.greensock.TweenLite;
+import com.greensock.TimelineMax;
+import com.greensock.TweenLite;
 import com.greensock.TweenMax;
 import com.greensock.easing.Linear;
+import flash.geom.Point;
 
 import game.armor.StonesCollector;
 import game.decorate.DecoratesCreator;
@@ -12,19 +13,18 @@ import game.iface.InterfaceController;
 import mochi.as3.MochiDigits;
 import mochi.as3.MochiScores;
 	
-	import flash.display.Sprite;
-	import flash.events.Event;
-	import flash.events.EventDispatcher;
-	import flash.events.MouseEvent;
+import flash.display.Sprite;
+import flash.events.Event;
+import flash.events.EventDispatcher;
+import flash.events.MouseEvent;
 import flash.filters.BlurFilter;
-import flash.geom.Point;
 
 import game.animal.Duck;
 
 import game.armor.Stone;
 
 import game.debug.DebugConsole;
-	import game.debug.DebugPanel;
+import game.debug.DebugPanel;
 import game.enemy.EnemyArmyController;
 import game.player.Hunter;
 	
@@ -325,10 +325,9 @@ import game.player.Hunter;
 
 
 		private function createHunter():void {
-			trace("createHunter");
 			_hunter = new Hunter(false);
-			//_hunter.realXpos = 350;
-			//_hunter.y = 300;
+			_hunter.x = WIDTH / 2;
+			_hunter.y = HEIGHT / 2;
 			_gameContainer.addChild(_hunter);
 		}
 		
