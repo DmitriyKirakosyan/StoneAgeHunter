@@ -46,8 +46,7 @@ import game.player.HpLine;
 
 		public function get directionPointer():EnemyDirectionPointer { return _directionPointer; }
 		public function set directionPointer(value:EnemyDirectionPointer):void { _directionPointer = value; }
-		public function updateDirectionPointer():void {
-			var side:uint = 0;
+		public function updateDirectionPointer(side:uint):void {
 			_directionPointer.updatePosition(side);
 		}
 

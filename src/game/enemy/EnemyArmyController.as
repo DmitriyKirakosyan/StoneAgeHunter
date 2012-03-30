@@ -116,7 +116,7 @@ public class EnemyArmyController extends EventDispatcher {
 			_enemyCreateCounter = 0;
 		}
 
-		//updateOfflineDuckPointers();
+		updateOfflineDuckPointers();
 	}
 
 	private function killDuck(duck:Duck):void {
@@ -147,14 +147,52 @@ public class EnemyArmyController extends EventDispatcher {
 		for each (var duck:Duck in _duckList) {
 			if (duck.x + _gameContainer.x < 0 || duck.y + _gameContainer.y < 0 ||
 					duck.x + _gameContainer.x > Main.WIDTH || duck.y + _gameContainer.y > Main.HEIGHT) {
-				duck.updateDirectionPointer();
-				duck.directionPointer.x += _gameContainer.x;
-				duck.directionPointer.y += _gameContainer.y;
+				trace("duck offline [EnemyArmyController.updateOfflineDuckPointers]");
+
+				duck.updateDirectionPointer(getSideForOfflineDuckPointer(duck));
+				duck.directionPointer.x -= _gameContainer.x;
+				duck.directionPointer.y -= _gameContainer.y;
 				if (!_gameContainer.contains(duck.directionPointer)) { _gameContainer.addChild(duck.directionPointer); }
 			} else {
+				trace("duck online [EnemyArmyController.updateOfflineDuckPointers]");
 				if (_gameContainer.contains(duck.directionPointer)) { _gameContainer.removeChild(duck.directionPointer); }
 			}
 		}
+	}
+
+	private function getSideForOfflineDuckPointer(duck:Duck):uint {
+		var result:uint;
+		if (duck.x + _gameContainer.x < 0) {
+			result = EnemyDirectionPointer.LEFT_SIDE;
+		}
+		if (duck.y + _gameContainer.y < 0) {
+			if (result == EnemyDirectionPointer.LEFT_SIDE) {
+				if (duck.y + _gameContainer.y < duck.x + _gameContainer.x) {
+					result = EnemyDirectionPointer.TOP_SIDE;
+				}
+			} else {
+				result = EnemyDirectionPointer.TOP_SIDE;
+			}
+		}
+		if (duck.x + _gameContainer.x > Main.WIDTH) {
+			if (result == EnemyDirectionPointer.TOP_SIDE) {
+				if ((duck.x + _gameContainer.x) - Main.WIDTH > -duck.y - _gameContainer.y ) {
+					result = EnemyDirectionPointer.RIGHT_SIDE;
+				}
+			} else { result = EnemyDirectionPointer.RIGHT_SIDE; }
+		}
+		if (duck.y + _gameContainer.y > Main.HEIGHT) {
+			if (result == EnemyDirectionPointer.LEFT_SIDE) {
+				if ((duck.y + _gameContainer.y)-Main.HEIGHT > -duck.x - _gameContainer.x) {
+					result = EnemyDirectionPointer.BOTTOM_SIDE;
+				}
+			} else if (result == EnemyDirectionPointer.RIGHT_SIDE) {
+				if ((duck.y + _gameContainer.y)-Main.HEIGHT > (duck.x + _gameContainer.x)-Main.WIDTH) {
+					result = EnemyDirectionPointer.BOTTOM_SIDE;
+				}
+			} else { result = EnemyDirectionPointer.BOTTOM_SIDE; }
+		}
+		return result
 	}
 
 	private function updateDifficult():void {
