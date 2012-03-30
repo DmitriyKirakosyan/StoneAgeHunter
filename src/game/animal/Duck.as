@@ -44,7 +44,8 @@ import game.player.HpLine;
 			play(ANIMATE_STAY);
 		}
 
-		public function get directionPointer():Sprite { return _directionPointer; }
+		public function get directionPointer():EnemyDirectionPointer { return _directionPointer; }
+		public function set directionPointer(value:EnemyDirectionPointer):void { _directionPointer = value; }
 		public function updateDirectionPointer():void {
 			var side:uint = 0;
 			_directionPointer.updatePosition(side);

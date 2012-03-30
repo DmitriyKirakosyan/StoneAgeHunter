@@ -31,15 +31,13 @@ public class EnemyDirectionPointer extends Sprite {
 		create();
 	}
 
-	public function get side():uint { return _side; }
-	public function set side(value:uint):void { _side = value; }
-
 	public function updatePosition(side:uint):void {
 		if (side == RIGHT_SIDE || side == LEFT_SIDE) {
-			//this.x = (side == RIGHT_SIDE) ? _sceneWidth - this.width : 0;
-			//this.y = (_movingContainer.x + _mainSprite.x)/(-(_movingContainer.x + _hidedSprite.x))
+			this.x = (side == RIGHT_SIDE) ? _sceneWidth - this.width : 0;
+			this.y = _movingContainer.y + _mainSprite.y + (_hidedSprite.y - _mainSprite.y)/ (1 + ((-(_movingContainer.x + _hidedSprite.x))/(_movingContainer.x + _mainSprite.x)) );
 		} else {
-
+			this.y = (side == TOP_SIDE) ? 0 : _sceneHeight - this.height;
+			this.x = _movingContainer.x + _mainSprite.x + (_hidedSprite.x - _mainSprite.x)/ (1 + ((-(_movingContainer.y + _hidedSprite.y))/(_movingContainer.y + _mainSprite.y)) );
 		}
 	}
 

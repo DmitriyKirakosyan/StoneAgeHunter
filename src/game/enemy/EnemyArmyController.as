@@ -116,7 +116,7 @@ public class EnemyArmyController extends EventDispatcher {
 			_enemyCreateCounter = 0;
 		}
 
-		updateOfflineDuckPointers();
+		//updateOfflineDuckPointers();
 	}
 
 	private function killDuck(duck:Duck):void {
@@ -147,7 +147,12 @@ public class EnemyArmyController extends EventDispatcher {
 		for each (var duck:Duck in _duckList) {
 			if (duck.x + _gameContainer.x < 0 || duck.y + _gameContainer.y < 0 ||
 					duck.x + _gameContainer.x > Main.WIDTH || duck.y + _gameContainer.y > Main.HEIGHT) {
-
+				duck.updateDirectionPointer();
+				duck.directionPointer.x += _gameContainer.x;
+				duck.directionPointer.y += _gameContainer.y;
+				if (!_gameContainer.contains(duck.directionPointer)) { _gameContainer.addChild(duck.directionPointer); }
+			} else {
+				if (_gameContainer.contains(duck.directionPointer)) { _gameContainer.removeChild(duck.directionPointer); }
 			}
 		}
 	}
@@ -164,6 +169,7 @@ public class EnemyArmyController extends EventDispatcher {
 
 	private function createDuck():void {
 		var duck:Duck = new Duck(_enemySpeed);
+		duck.directionPointer = new EnemyDirectionPointer(Main.WIDTH, Main.HEIGHT, duck, _hunter, _gameContainer);
 		var side:uint = Math.random() * 4;
 		if (side == 0 || side == 2) {
 			duck.x = (side/2) * GameScene.HEIGHT;

@@ -183,7 +183,7 @@ import game.player.Hunter;
 			_hunter.changeAnimationAndRotation(toPoint);
 			TweenLite.to(_hunter,
 				_hunter.computeDuration(new Point(_hunter.x, _hunter.y), toPoint),
-				{ease:Linear.easeNone, realXpos : toPoint.x, y : toPoint.y,
+				{ease:Linear.easeNone, x : toPoint.x, y : toPoint.y,
 					onComplete : function():void {_hunter.stop();}});
 		}
 		
