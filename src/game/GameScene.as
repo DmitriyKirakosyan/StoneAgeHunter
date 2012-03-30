@@ -94,7 +94,6 @@ import game.player.Hunter;
 			container.addChild(_gameContainer);
 			container.addChild(_ifaceContainer);
 //			container.addChild(_arrowContainer);
-			
 		}
 		
 		public function open():void {
