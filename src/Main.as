@@ -28,7 +28,7 @@
 		private function onAddedToStage(event:Event):void {
 			MochiServices.connect(_mochiads_game_id, root, onMochiConnectError);
 			_tileMap = new TileMap();
-			this.alpha = .2;
+			//this.alpha = .2;
 			start();
 		}
 		

@@ -23,7 +23,8 @@ public class Hunter extends IcActor {
 		private var _baseColor:uint;
 
 		private var _throwTimeoutCounter:Number;
-		private const THROW_TIMEOUT:int = 2;
+		private var _throwSpeed:Number = .5; //times in sec
+		private const MAX_THROW_SPEED:Number = 2;
 		private var _canThrow:Boolean;
 
 		private var _debug:Boolean;
@@ -44,10 +45,23 @@ public class Hunter extends IcActor {
 		
 		/* API */
 
+		public function getMaxThrowSpeed():Number { return MAX_THROW_SPEED; }
+		public function get throwSpeed():Number { return _throwSpeed; }
+
+		public function incThrowSpeedOn(value:Number):void {
+			_throwSpeed = value;
+			if (_throwSpeed > MAX_THROW_SPEED) { _throwSpeed = MAX_THROW_SPEED; }
+		}
+
+		public function decThrowSpeedOn(value:Number):void {
+			_throwSpeed -= value;
+			if (_throwSpeed < 0) { _throwSpeed = 0; }
+		}
+
 		public function tick():void {
 			if (_canThrow) { return; }
 			_throwTimeoutCounter += 1/Main.FRAME_RATE;
-			if (_throwTimeoutCounter >= THROW_TIMEOUT) {
+			if (_throwTimeoutCounter >= _throwSpeed) {
 				_canThrow = true;
 				_throwTimeoutCounter = 0;
 			}
