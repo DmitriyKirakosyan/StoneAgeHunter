@@ -35,7 +35,6 @@ public class EnemyDirectionPointer extends Sprite {
 		var divOn:Number;
 		if (side == RIGHT_SIDE || side == LEFT_SIDE) {
 			this.x = (side == RIGHT_SIDE) ? _sceneWidth - this.width : 0;
-			trace("y distance : " + (_hidedSprite.y - _mainSprite.y) + "div on : " + (1 + ((-(_movingContainer.x + _hidedSprite.x))/(_movingContainer.x + _mainSprite.x))));
 			divOn = (side == RIGHT_SIDE) ?
 							           (1 + ((-(_movingContainer.x + _hidedSprite.x))/(_movingContainer.x + _mainSprite.x)) ) :
 												 (1 + (((_movingContainer.x + _hidedSprite.x) - _sceneWidth)/(_sceneWidth - (_movingContainer.x + _mainSprite.x))) );
@@ -45,7 +44,6 @@ public class EnemyDirectionPointer extends Sprite {
 			divOn = (side == TOP_SIDE) ?
 							(1 + ((-(_movingContainer.y + _hidedSprite.y))/(_movingContainer.y + _mainSprite.y)) ) :
 							(1 + (((_movingContainer.y + _hidedSprite.y) - _sceneHeight)/(_sceneHeight - (_movingContainer.y + _mainSprite.y))) );
-			trace("x distance : " + (_hidedSprite.x - _mainSprite.x) + "div on : " + (1 + ((-(_movingContainer.y + _hidedSprite.y))/(_movingContainer.y + _mainSprite.y))));
 			this.x = _movingContainer.x + _mainSprite.x + (_hidedSprite.x - _mainSprite.x)/ divOn;
 		}
 	}

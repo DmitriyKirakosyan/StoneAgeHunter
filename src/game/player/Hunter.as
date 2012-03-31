@@ -60,8 +60,8 @@ public class Hunter extends IcActor {
 
 		public function tick():void {
 			if (_canThrow) { return; }
-			_throwTimeoutCounter += 1/Main.FRAME_RATE;
-			if (_throwTimeoutCounter >= _throwSpeed) {
+			_throwTimeoutCounter += 1 / Main.FRAME_RATE;
+			if (_throwTimeoutCounter >= 1 / _throwSpeed) {
 				_canThrow = true;
 				_throwTimeoutCounter = 0;
 			}
@@ -117,10 +117,12 @@ public class Hunter extends IcActor {
 		override public function move():void {
 			super.move();
 			play(HunterAnimationBuilder.ANIMATION_MOVE);
+			_moving = true;
 		}
 		
 		override public function stop():void {
 			play(HunterAnimationBuilder.ANIMATION_STAY);
+			_moving = false;
 		}
 
 		override protected function onStartTween(point:Point):void {

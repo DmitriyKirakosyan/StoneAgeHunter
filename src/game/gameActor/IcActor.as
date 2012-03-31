@@ -12,8 +12,8 @@ package game.gameActor {
 		private var _speed:Number;
 		private var _path:Path;
 		private var _pathTimeline:TimelineMax;
-		private var _moving:Boolean;
-		
+		protected var _moving:Boolean;
+
 		//странно, что нет такого логичного параметра как direction
 		
 		private var _isNormalRotation:Boolean;
@@ -27,6 +27,8 @@ package game.gameActor {
 			_speed = 1;
 			_moving = false;
 		}
+
+		public function get moving():Boolean { return _moving; }
 		
 		public function get pathTimeline():TimelineMax {
 			return _pathTimeline;

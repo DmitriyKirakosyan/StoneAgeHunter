@@ -49,11 +49,11 @@ import game.player.Hunter;
 		private var _hunter:Hunter;
 		private var _enemyArmyController:EnemyArmyController;
 
+		private const CONTAINER_MAX_SPEED = 7;
+
 		private var _zSortingManager:ZSortingManager;
 		
 		private var _endGameWindow:Sprite;
-
-		private  const CONTAINER_MOVE_SPEED:int = 4;
 
 		private const DUCK_HIT_TEST_TIMEOUT:Number = .2;
 		private var _duckHitTestCounter:Number = 0;
@@ -87,28 +87,26 @@ import game.player.Hunter;
 			createBackground();
 			createEndGameWindow();
 			_decoratesCreator = new DecoratesCreator();
-			_gameContainer.x = -400;
-			_gameContainer.y = -200;
 			_debugPanel = new DebugPanel(container, this);
 			_zSortingManager = new ZSortingManager(this);
 			container.addChild(_gameContainer);
 			container.addChild(_ifaceContainer);
 //			container.addChild(_arrowContainer);
 		}
-		
-		public function open():void {
-			_gameContainer.addChild(_background);
-			_gameContainer.addChild(_shadowContainer);
-			_interface.open();
-			_lineContainer = new Sprite();
-			_gameContainer.addChild(_lineContainer);
-			createHunter();
-			_decoratesCreator.create();
-			_gameContainer.addChild(_decoratesCreator.container);
-			_enemyArmyController = new EnemyArmyController(_gameContainer, _hunter);
-			_enemyArmyController.open();
-			_debugPanel.open();
-			addListeners();
+
+	public function open():void {
+		_gameContainer.addChild(_background);
+		_gameContainer.addChild(_shadowContainer);
+		_interface.open();
+		_lineContainer = new Sprite();
+		_gameContainer.addChild(_lineContainer);
+		createHunter();
+		_decoratesCreator.create();
+		_gameContainer.addChild(_decoratesCreator.container);
+		_enemyArmyController = new EnemyArmyController(_gameContainer, _hunter);
+		_enemyArmyController.open();
+		_debugPanel.open();
+		addListeners();
 		}
 		public function close():void {
 			_gameContainer.removeChild(_background);
@@ -183,9 +181,24 @@ import game.player.Hunter;
 			TweenLite.to(_hunter,
 				_hunter.computeDuration(new Point(_hunter.x, _hunter.y), toPoint),
 				{ease:Linear.easeNone, x : toPoint.x, y : toPoint.y,
-					onComplete : function():void {_hunter.stop();}});
+					onUpdate:onHunterMoveUpdate,
+					onComplete : onHunterMoveComplete});
 		}
-		
+
+		private function onHunterMoveUpdate():void {
+			_gameContainer.x  = Main.WIDTH/2 - _hunter.x;
+			_gameContainer.y  = Main.HEIGHT/2 - _hunter.y;
+		}
+
+		private function onHunterMoveComplete():void {
+			if (_mouseDown && (_currentMousePoint.x - _gameContainer.x != _hunter.x ||
+													_currentMousePoint.y - _gameContainer.y != _hunter.y)) {
+				moveHunterToCurrentMousePoint();
+			} else {
+				_hunter.stop();
+			}
+		}
+
 		/* functions for debug */
 		
 		public function get allObjects():Array {
@@ -207,9 +220,6 @@ import game.player.Hunter;
 		private function onGameContainerEnterFrame(event:Event):void {
 			_zSortingManager.checkZSorting();
 			if (!_hunter) { return; }
-			if (mouseAroundSide()) {
-				scrollContainer();
-			}
 
 			_hunter.tick();
 			if (_hunter.canThrowStone) {
@@ -278,13 +288,6 @@ import game.player.Hunter;
 																	 _currentMousePoint.y - _gameContainer.y);
 		}
 
-		private function scrollContainer():void {
-			if (_gameContainer.x + _hunter.x < 200) { _gameContainer.x += CONTAINER_MOVE_SPEED; }
-			if (_gameContainer.x + _hunter.x > Main.WIDTH-200) { _gameContainer.x-= CONTAINER_MOVE_SPEED; }
-			if (_gameContainer.y + _hunter.y < 200) { _gameContainer.y+= CONTAINER_MOVE_SPEED; }
-			if (_gameContainer.y + _hunter.y > Main.HEIGHT-200) { _gameContainer.y-= CONTAINER_MOVE_SPEED; }
-		}
-
 		private function throwStoneToDuck(duckForShoot:Duck):void {
 			throwStoneTo(new Point(duckForShoot.x, duckForShoot.y));
 		}
@@ -301,12 +304,14 @@ import game.player.Hunter;
 		stone.fly(point);
 		}
 
+	/*
 		private function mouseAroundSide():Boolean {
 			return (_gameContainer.x + _hunter.x < 200) ||
 							(_gameContainer.x + _hunter.x > Main.WIDTH-200) ||
 							(_gameContainer.y + _hunter.y < 200) ||
 							(_gameContainer.y + _hunter.y > Main.HEIGHT-200);
 		}
+		*/
 
 		private function onContainerMouseDown(event:MouseEvent):void {
 			_mouseDown = true;
@@ -328,6 +333,8 @@ import game.player.Hunter;
 			_hunter.x = WIDTH / 2;
 			_hunter.y = HEIGHT / 2;
 			_gameContainer.addChild(_hunter);
+			_gameContainer.x  = Main.WIDTH/2 - _hunter.x;
+			_gameContainer.y = Main.HEIGHT/2 - _hunter.y;
 		}
 		
 		private function removeHunter():void {

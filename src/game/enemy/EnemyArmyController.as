@@ -116,25 +116,27 @@ public class EnemyArmyController extends EventDispatcher {
 			_enemyCreateCounter = 0;
 		}
 
-		updateOfflineDuckPointers();
+		//updateOfflineDuckPointers();
 	}
 
 	private function killDuck(duck:Duck):void {
 		var index:int = _duckList.indexOf(duck);
 		if (index != -1) { _duckList.splice(index, 1); }
 		duck.dead();
-
-		TweenLite.to(duck, 1, {alpha:0, onComplete:function():void {
-			if (_gameContainer.contains(duck)) { _gameContainer.removeChild(duck);}
+		if (_gameContainer.contains(duck.directionPointer)) {
+			_gameContainer.removeChild(duck.directionPointer);
+			if (_gameContainer.contains(duck)) { _gameContainer.removeChild(duck); }
+		} else {
+			TweenLite.to(duck, 1, {alpha:0, onComplete:function():void {
+				if (_gameContainer.contains(duck)) { _gameContainer.removeChild(duck); }
+			}
+			});
+			//shot +1
+			const txtFormat:TextFormat = new TextFormat("PFAgoraSlabPro-Black", 16,
+														0x78B449, null, null, null, "", "", "center", 0, 0, 0, 0);
+			const txt:TextField = BeenzaBouncer.instance.createBounceTextField("+1", txtFormat);
+			BeenzaBouncer.instance.bounceTxtAtPoint(txt, new Point(duck.x-(txt.width/2), duck.y-10));
 		}
-		});
-
-		//shot +1
-		const txtFormat:TextFormat = new TextFormat("PFAgoraSlabPro-Black", 16,
-													0x78B449, null, null, null, "", "", "center", 0, 0, 0, 0);
-		const txt:TextField = BeenzaBouncer.instance.createBounceTextField("+1", txtFormat);
-
-		BeenzaBouncer.instance.bounceTxtAtPoint(txt, new Point(duck.x-(txt.width/2), duck.y-10));
 
 		_killedNum++;
 
@@ -147,14 +149,12 @@ public class EnemyArmyController extends EventDispatcher {
 		for each (var duck:Duck in _duckList) {
 			if (duck.x + _gameContainer.x < 0 || duck.y + _gameContainer.y < 0 ||
 					duck.x + _gameContainer.x > Main.WIDTH || duck.y + _gameContainer.y > Main.HEIGHT) {
-				trace("duck offline [EnemyArmyController.updateOfflineDuckPointers]");
 
 				duck.updateDirectionPointer(getSideForOfflineDuckPointer(duck));
 				duck.directionPointer.x -= _gameContainer.x;
 				duck.directionPointer.y -= _gameContainer.y;
 				if (!_gameContainer.contains(duck.directionPointer)) { _gameContainer.addChild(duck.directionPointer); }
 			} else {
-				trace("duck online [EnemyArmyController.updateOfflineDuckPointers]");
 				if (_gameContainer.contains(duck.directionPointer)) { _gameContainer.removeChild(duck.directionPointer); }
 			}
 		}
@@ -196,7 +196,6 @@ public class EnemyArmyController extends EventDispatcher {
 	}
 
 	private function updateDifficult():void {
-		trace("udpate difficult [EnemyArmyController.updateDifficult]");
 		if (_enemyCreateTimeout > ENEMY_CREATE_TIMEOUT_MIN) {
 			_enemyCreateTimeout -= .01;
 		}
@@ -219,7 +218,6 @@ public class EnemyArmyController extends EventDispatcher {
 		} else {
 			duck.y = Math.random() * GameScene.HEIGHT;
 		}
-		trace("duck x : " + duck.x + ", duck y : " + duck.y + " [EnemyArmyController.createDuck]");
 		duck.addEventListener(AnimalEvent.FOLLOW_COMPLETE, onDuckFollowComplete);
 		duck.fasHunter(_hunter);
 		_gameContainer.addChild(duck);
