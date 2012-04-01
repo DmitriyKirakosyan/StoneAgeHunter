@@ -6,7 +6,8 @@
 package game.enemy {
 import flash.display.Sprite;
 
-public class EnemyDirectionPointer extends RedArrowView {
+public class EnemyDirectionPointer extends Sprite {
+	private var _redArrow:RedArrowView;
 
 	private var _side:uint;
 
@@ -28,6 +29,8 @@ public class EnemyDirectionPointer extends RedArrowView {
 		_hidedSprite = hidedSprite;
 		_mainSprite = mainSprite;
 		_movingContainer = movingContainer;
+		_redArrow = new RedArrowView();
+		this.addChild(_redArrow);
 	}
 
 	public function updatePosition(side:uint):void {
@@ -50,7 +53,20 @@ public class EnemyDirectionPointer extends RedArrowView {
 	}
 
 	private function updateRotation(side:uint):void {
-		rotation = (side == RIGHT_SIDE) ? 90 : (side == BOTTOM_SIDE) ? 180 : (side == LEFT_SIDE) ? -90 : 0;
+		if (side == RIGHT_SIDE) {
+			_redArrow.y = -_redArrow.height/2;
+			_redArrow.x = _redArrow.width - 10;
+		} else if (side == BOTTOM_SIDE) {
+			_redArrow.y = _redArrow.height - 10;
+			_redArrow.x = _redArrow.width/2;
+		} else if (side == LEFT_SIDE) {
+			_redArrow.y = _redArrow.height/2;
+			_redArrow.x = 10;
+		} else {
+			_redArrow.y = 10;
+			_redArrow.x = _redArrow.width/2;
+		}
+		_redArrow.rotation = (side == RIGHT_SIDE) ? 90 : (side == BOTTOM_SIDE) ? 180 : (side == LEFT_SIDE) ? -90 : 0;
 	}
 
 }
