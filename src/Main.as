@@ -12,7 +12,7 @@ import flash.system.Security;
 	[SWF(width=550, height=400, frameRate=25, backgroundColor=0x404040)]
 	public class Main extends Sprite {
 		var _mochiads_game_id:String = "21924b38e846a31e";
-		public static var MOCHI_ON:Boolean = true;
+		public static var MOCHI_ON:Boolean = false;
 		private var _tileMap:TileMap;
 
 		public static const WIDTH:Number = 550;
@@ -27,7 +27,7 @@ import flash.system.Security;
 		}
 		
 		private function onAddedToStage(event:Event):void {
-			MochiServices.connect(_mochiads_game_id, root, onMochiConnectError);
+			//MochiServices.connect(_mochiads_game_id, root, onMochiConnectError);
 			_tileMap = new TileMap();
 			//this.alpha = .2;
 			start();

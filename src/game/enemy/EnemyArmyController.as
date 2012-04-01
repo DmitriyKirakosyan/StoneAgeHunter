@@ -57,6 +57,7 @@ public class EnemyArmyController extends EventDispatcher {
 		_gameContainer.addChild(BeenzaBouncer.instance);
 		_gameContainer.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
+
 	public function close():void {
 		_gameContainer.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 		_gameContainer.removeChild(BeenzaBouncer.instance);
@@ -64,7 +65,11 @@ public class EnemyArmyController extends EventDispatcher {
 			if (_gameContainer.contains(duck)) {
 				_gameContainer.removeChild(duck);
 			}
+			if (_pointersContainer.contains(duck.directionPointer)) {
+				_pointersContainer.removeChild(duck.directionPointer);
+			}
 		}
+		_duckList = null;
 		_killedNum = 0;
 	}
 	
