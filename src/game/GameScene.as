@@ -191,8 +191,12 @@ public class GameScene extends EventDispatcher implements IScene {
 	}
 
 	private function onHunterMoveUpdate():void {
-		_gameContainer.x  = Main.WIDTH/2 - _hunter.x;
-		_gameContainer.y  = Main.HEIGHT/2 - _hunter.y;
+		if (_hunter.x > Main.WIDTH/2 && _hunter.x < WIDTH - Main.WIDTH/2) {
+			_gameContainer.x  = Main.WIDTH/2 - _hunter.x;
+		}
+		if (_hunter.y > Main.HEIGHT/2 && _hunter.y < HEIGHT - Main.HEIGHT/2) {
+			_gameContainer.y  = Main.HEIGHT/2 - _hunter.y;
+		}
 	}
 
 	private function onHunterMoveComplete():void {
