@@ -1,5 +1,6 @@
 ﻿package {
-	import flash.system.Security;
+import flash.events.MouseEvent;
+import flash.system.Security;
 	import game.map.tilemap.TileMap;
 	import flash.events.Event;
 	import game.GameScene;
@@ -11,7 +12,7 @@
 	[SWF(width=550, height=400, frameRate=25, backgroundColor=0x404040)]
 	public class Main extends Sprite {
 		var _mochiads_game_id:String = "21924b38e846a31e";
-		public static var MOCHI_ON:Boolean = true;
+		public static var MOCHI_ON:Boolean = false;
 		private var _tileMap:TileMap;
 
 		public static const WIDTH:Number = 550;
@@ -26,7 +27,7 @@
 		}
 		
 		private function onAddedToStage(event:Event):void {
-			MochiServices.connect(_mochiads_game_id, root, onMochiConnectError);
+			//MochiServices.connect(_mochiads_game_id, root, onMochiConnectError);
 			_tileMap = new TileMap();
 			//this.alpha = .2;
 			start();
@@ -35,12 +36,12 @@
 		private function start():void {
 			const sceneController:SceneController = new SceneController();
 			const menuScene:MenuScene = new MenuScene(this);
-			const gameScene:GameScene = new GameScene(this, _tileMap);
+			const gameScene:GameScene = new GameScene(this);
 			sceneController.addScene(menuScene, true);
 			sceneController.addScene(gameScene);
 			sceneController.addSceneDependence(menuScene, gameScene, true);
 		}
-		
+
 		private function onMochiConnectError():void {
 			trace("mochi connect fails");
 			MOCHI_ON = false;
