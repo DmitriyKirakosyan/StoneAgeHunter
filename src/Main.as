@@ -1,5 +1,6 @@
 ﻿package {
-	import flash.system.Security;
+import flash.events.MouseEvent;
+import flash.system.Security;
 	import game.map.tilemap.TileMap;
 	import flash.events.Event;
 	import game.GameScene;
@@ -35,12 +36,12 @@
 		private function start():void {
 			const sceneController:SceneController = new SceneController();
 			const menuScene:MenuScene = new MenuScene(this);
-			const gameScene:GameScene = new GameScene(this, _tileMap);
+			const gameScene:GameScene = new GameScene(this);
 			sceneController.addScene(menuScene, true);
 			sceneController.addScene(gameScene);
 			sceneController.addSceneDependence(menuScene, gameScene, true);
 		}
-		
+
 		private function onMochiConnectError():void {
 			trace("mochi connect fails");
 			MOCHI_ON = false;
