@@ -11,7 +11,7 @@ package game.iface {
 		
 		public function InterfaceController(container:Sprite) {
 			_container = container;
-			_scoreComponent = new ScoreComponent();
+			createScoreComponent();
 		}
 
 		public function get scoreComponent():ScoreComponent { return _scoreComponent; }
@@ -23,6 +23,14 @@ package game.iface {
 		
 		public function close():void {
 			_container.removeChild(_scoreComponent);
+		}
+
+		/* Internal functions */
+
+		private function createScoreComponent():void {
+			_scoreComponent = new ScoreComponent();
+			_scoreComponent.x = Main.WIDTH - _scoreComponent.width - 10;
+			_scoreComponent.y = 10;
 		}
 		
 	}

@@ -1,8 +1,6 @@
 package game {
-	import flash.filters.GlowFilter;
 	import scene.SceneEvent;
 	import flash.events.MouseEvent;
-	import flash.text.TextField;
 	import flash.display.Sprite;
 	import flash.events.EventDispatcher;
 	import scene.IScene;

@@ -43,6 +43,7 @@ import game.player.Hunter;
 
 		private var _gameContainer:Sprite;
 		private var _ifaceContainer:Sprite;
+		private var _pointersContainer:Sprite;
 //		private var _arrowContainer:Sprite;
 		private var _interface:InterfaceController;
 		private var _lineContainer:Sprite;
@@ -79,6 +80,7 @@ import game.player.Hunter;
 			//_arrow.scaleX = _arrow.scaleY = 3;
 			_gameContainer = new Sprite();
 			_ifaceContainer = new Sprite();
+			_pointersContainer = new Sprite();
 //			_arrowContainer = new Sprite();
 
 			_shadowContainer =  new Sprite();
@@ -91,6 +93,7 @@ import game.player.Hunter;
 			_zSortingManager = new ZSortingManager(this);
 			container.addChild(_gameContainer);
 			container.addChild(_ifaceContainer);
+			container.addChild(_pointersContainer);
 //			container.addChild(_arrowContainer);
 		}
 
@@ -103,7 +106,7 @@ import game.player.Hunter;
 		createHunter();
 		_decoratesCreator.create();
 		_gameContainer.addChild(_decoratesCreator.container);
-		_enemyArmyController = new EnemyArmyController(_gameContainer, _hunter);
+		_enemyArmyController = new EnemyArmyController(_gameContainer, _pointersContainer, _hunter);
 		_enemyArmyController.open();
 		_debugPanel.open();
 		addListeners();

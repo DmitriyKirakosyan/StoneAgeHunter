@@ -29,6 +29,7 @@ import utils.BeenzaBouncer;
 public class EnemyArmyController extends EventDispatcher {
 	private var _duckList:Vector.<Duck>;
 	private var _gameContainer:Sprite;
+	private var _pointersContainer:Sprite;
 	private var _hunter:Hunter;
 
 	private var _enemyCreateCounter:Number;
@@ -41,10 +42,11 @@ public class EnemyArmyController extends EventDispatcher {
 	private const ENEMY_SPEED_MAX:Number = 2;
 	private const ENEMY_CREATE_TIMEOUT_MIN:Number = .5;
 
-	public function EnemyArmyController(gameContainer:Sprite, hunter:Hunter) {
+	public function EnemyArmyController(gameContainer:Sprite, pointersContainer:Sprite,  hunter:Hunter) {
 		super();
 		_killedNum = 0; 
 		_gameContainer = gameContainer;
+		_pointersContainer = pointersContainer;
 		_hunter = hunter;
 	}
 
@@ -116,15 +118,15 @@ public class EnemyArmyController extends EventDispatcher {
 			_enemyCreateCounter = 0;
 		}
 
-		//updateOfflineDuckPointers();
+		updateOfflineDuckPointers();
 	}
 
 	private function killDuck(duck:Duck):void {
 		var index:int = _duckList.indexOf(duck);
 		if (index != -1) { _duckList.splice(index, 1); }
 		duck.dead();
-		if (_gameContainer.contains(duck.directionPointer)) {
-			_gameContainer.removeChild(duck.directionPointer);
+		if (_pointersContainer.contains(duck.directionPointer)) {
+			_pointersContainer.removeChild(duck.directionPointer);
 			if (_gameContainer.contains(duck)) { _gameContainer.removeChild(duck); }
 		} else {
 			TweenLite.to(duck, 1, {alpha:0, onComplete:function():void {
@@ -151,11 +153,11 @@ public class EnemyArmyController extends EventDispatcher {
 					duck.x + _gameContainer.x > Main.WIDTH || duck.y + _gameContainer.y > Main.HEIGHT) {
 
 				duck.updateDirectionPointer(getSideForOfflineDuckPointer(duck));
-				duck.directionPointer.x -= _gameContainer.x;
-				duck.directionPointer.y -= _gameContainer.y;
-				if (!_gameContainer.contains(duck.directionPointer)) { _gameContainer.addChild(duck.directionPointer); }
+				//duck.directionPointer.x -= _gameContainer.x;
+				//duck.directionPointer.y -= _gameContainer.y;
+				if (!_pointersContainer.contains(duck.directionPointer)) { _pointersContainer.addChild(duck.directionPointer); }
 			} else {
-				if (_gameContainer.contains(duck.directionPointer)) { _gameContainer.removeChild(duck.directionPointer); }
+				if (_pointersContainer.contains(duck.directionPointer)) { _pointersContainer.removeChild(duck.directionPointer); }
 			}
 		}
 	}
