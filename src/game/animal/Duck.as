@@ -18,8 +18,9 @@ import game.enemy.EnemyDirectionPointer;
 import game.player.HpLine;
 	import game.gameActor.IcActor;
 	import game.player.Hunter;
+import game.pointer.HiddenObjectPointer;
 
-	public class Duck extends IcActor {
+public class Duck extends IcActor {
 		private var _patrolPath:Vector.<Point>;
 		private var _mode:uint;
 		private var _paused:Boolean;
@@ -28,7 +29,7 @@ import game.player.HpLine;
 		
 		private var _timelineMax:TimelineMax;
 
-		private var _directionPointer:EnemyDirectionPointer;
+		private var _directionPointer:HiddenObjectPointer;
 		
 		public static const MODE_PATROL:uint = 0;
 		public static const MODE_BLOODY:uint = 1;
@@ -44,10 +45,10 @@ import game.player.HpLine;
 			play(ANIMATE_STAY);
 		}
 
-		public function get directionPointer():EnemyDirectionPointer { return _directionPointer; }
-		public function set directionPointer(value:EnemyDirectionPointer):void { _directionPointer = value; }
-		public function updateDirectionPointer(side:uint):void {
-			_directionPointer.updatePosition(side);
+		public function get directionPointer():HiddenObjectPointer { return _directionPointer; }
+		public function set directionPointer(value:HiddenObjectPointer):void { _directionPointer = value; }
+		public function updateDirectionPointer():void {
+			_directionPointer.updatePosition();
 		}
 
 		/*

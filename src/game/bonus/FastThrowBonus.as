@@ -10,7 +10,7 @@ import game.player.Hunter;
 
 public class FastThrowBonus extends Bonus {
 	private var _hunter:Hunter;
-	private var _throwSpeed:int = 1;
+	private var _throwSpeed:int = 1.5;
 	private var _decSpeedValue:Number;
 
 	public function FastThrowBonus(hunter:Hunter) {
@@ -26,22 +26,23 @@ public class FastThrowBonus extends Bonus {
 		} else {
 			_decSpeedValue = 0;
 		}
+		trace("dec speed value : " + _decSpeedValue + " [FastThrowBonus.makeEffect]");
 	}
 
 	override protected function removeEffect():void {
+		trace("remove effect [FastThrowBonus.makeEffect]");
 		_hunter.decThrowSpeedOn(_decSpeedValue);
 	}
 
 	override public function tick():void {
 		super.tick();
-
 	}
 
 	override protected function init():void {
 
 	}
 	override protected function createSprite():void {
-
+		this.addChild(new BonusFireRateView());
 	}
 }
 }

@@ -23,6 +23,8 @@ public class EnemyDirectionPointer extends Sprite {
 	public static const TOP_SIDE:uint = 2;
 	public static const BOTTOM_SIDE:uint = 3;
 
+	private static const ARROW_SIDE_MARGIN:Number = 2;
+
 	public function EnemyDirectionPointer(sceneWidth:int, sceneHeight:int, hidedSprite:Sprite, mainSprite:Sprite, movingContainer:Sprite):void {
 		_sceneHeight = sceneHeight;
 		_sceneWidth = sceneWidth;
@@ -55,15 +57,15 @@ public class EnemyDirectionPointer extends Sprite {
 	private function updateRotation(side:uint):void {
 		if (side == RIGHT_SIDE) {
 			_redArrow.y = -_redArrow.height/2;
-			_redArrow.x = _redArrow.width - 10;
+			_redArrow.x = _redArrow.width - ARROW_SIDE_MARGIN;
 		} else if (side == BOTTOM_SIDE) {
-			_redArrow.y = _redArrow.height - 10;
+			_redArrow.y = _redArrow.height - ARROW_SIDE_MARGIN;
 			_redArrow.x = _redArrow.width/2;
 		} else if (side == LEFT_SIDE) {
 			_redArrow.y = _redArrow.height/2;
-			_redArrow.x = 10;
+			_redArrow.x = ARROW_SIDE_MARGIN;
 		} else {
-			_redArrow.y = 10;
+			_redArrow.y = ARROW_SIDE_MARGIN;
 			_redArrow.x = _redArrow.width/2;
 		}
 		_redArrow.rotation = (side == RIGHT_SIDE) ? 90 : (side == BOTTOM_SIDE) ? 180 : (side == LEFT_SIDE) ? -90 : 0;

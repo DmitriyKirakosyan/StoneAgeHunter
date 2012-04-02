@@ -8,6 +8,9 @@
 package game.bonus {
 import flash.display.Sprite;
 
+import game.player.Hunter;
+import game.pointer.HiddenObjectPointer;
+
 public class Bonus extends Sprite {
 
 	public static var STOP_WORLD:uint = 0;
@@ -20,32 +23,50 @@ public class Bonus extends Sprite {
 	private var _waitTime:Number;
 	private var _waitTimeCounter:Number;
 	private var _active:Boolean;
+	private var _removed:Boolean;
 
-	public static function createRandomBonus():Bonus {
-		var result:Bonus = new Bonus(Math.random() * 3);
+	private var _directionPointer:HiddenObjectPointer;
+
+	public static function createFastThrowBonus(hunter:Hunter):Bonus {
+		var result:Bonus = new FastThrowBonus(hunter);
 		return result;
 	}
 
 	public function Bonus(type:uint) {
 		_type = type;
-		_waitTime = 5;
+		_waitTime = 15;
+		_waitTimeCounter = 0;
+		_effectTime = 10;
+		_effectTimeCounter = 0;
 		_active = false;
+		_removed = false;
 		init();
 		createSprite();
 	}
+
+	public function addPointer(value:HiddenObjectPointer):void {
+		_directionPointer = value;
+	}
+
+	public function get directionPointer():HiddenObjectPointer { return _directionPointer; }
+	public function get removed():Boolean { return _removed; }
 
 	public function tick():void {
 		if (!_active) {
 			_waitTimeCounter += 1/Main.FRAME_RATE;
 			if (_waitTimeCounter >= _waitTime) {
-				dispatchEvent(new BonusEvent(BonusEvent.REMOVE_ME));
+				_removed = true;
+				//dispatchEvent(new BonusEvent(BonusEvent.REMOVE_ME));
 			}
 		} else {
 			_effectTimeCounter += 1/Main.FRAME_RATE;
 			if (_effectTimeCounter >= _effectTime) {
-				dispatchEvent(new BonusEvent(BonusEvent.REMOVE_ME));
+				deactivate();
+				_removed = true;
+				//dispatchEvent(new BonusEvent(BonusEvent.REMOVE_ME));
 			}
 		}
+
 	}
 
 	protected function makeEffect():void {}
@@ -53,12 +74,16 @@ public class Bonus extends Sprite {
 	protected function removeEffect():void {}
 
 	public function activate():void {
-		_active = true;
-		makeEffect();
+		if (!_active) {
+			_active = true;
+			makeEffect();
+		}
 	}
 	public function deactivate():void {
-		_active = false;
-		removeEffect();
+		if (_active) {
+			removeEffect();
+			_active = false;
+		}
 	}
 	public function get type():uint { return _type; }
 	public function get effectTime():Number { return _effectTime}

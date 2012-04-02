@@ -1,10 +1,6 @@
 package game.iface.component {
-import flash.display.Sprite;
-import flash.filters.GlowFilter;
-import flash.text.TextField;
-import flash.text.TextFieldAutoSize;
-import flash.text.TextFormat;
-
+import com.greensock.TweenMax;
+import com.greensock.easing.Linear;
 
 /**
 	 * ...
@@ -21,6 +17,18 @@ public class ScoreComponent extends ScoreView {
 
 	public function setScore(value:int):void {
 		this.scoreText.text = value.toString();
+		if (value != 0) {
+			pulseSkull();
+		}
+	}
+
+	private function pulseSkull():void {
+		TweenMax.to(this.skull, .1, {scaleX:1.2, scaleY:1.2, ease:Linear.easeNone, onComplete:onScaleUpSkullComplete
+		});
+	}
+
+	private function onScaleUpSkullComplete():void {
+		TweenMax.to(this.skull, .1, {scaleX:1, scaleY:1, ease:Linear.easeNone});
 	}
 
 }

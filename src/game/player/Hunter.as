@@ -49,7 +49,7 @@ public class Hunter extends IcActor {
 		public function get throwSpeed():Number { return _throwSpeed; }
 
 		public function incThrowSpeedOn(value:Number):void {
-			_throwSpeed = value;
+			_throwSpeed += value;
 			if (_throwSpeed > MAX_THROW_SPEED) { _throwSpeed = MAX_THROW_SPEED; }
 		}
 

@@ -6,6 +6,7 @@ import com.greensock.easing.Linear;
 import flash.geom.Point;
 
 import game.armor.StonesCollector;
+import game.bonus.BonusController;
 import game.decorate.DecoratesCreator;
 import game.enemy.EnemyArmyEvent;
 import game.iface.InterfaceController;
@@ -29,8 +30,6 @@ import game.player.Hunter;
 import scene.IScene;
 import scene.SceneEvent;
 
-import game.map.tilemap.TileMap;
-
 public class GameScene extends EventDispatcher implements IScene {
 	var o:Object = { n: [7, 5, 5, 3, 2, 8, 12, 12, 9, 6, 11, 8, 15, 12, 7, 2], f: function (i:Number,s:String):String { if (s.length == 16) return s; return this.f(i+1,s + this.n[i].toString(16));}};
 	var boardID:String = o.f(0,"");
@@ -47,6 +46,7 @@ public class GameScene extends EventDispatcher implements IScene {
 	private var _lineContainer:Sprite;
 	private var _hunter:Hunter;
 	private var _enemyArmyController:EnemyArmyController;
+	private var _bonusController:BonusController;
 
 	private const CONTAINER_MAX_SPEED = 7;
 
@@ -101,6 +101,8 @@ public class GameScene extends EventDispatcher implements IScene {
 		_lineContainer = new Sprite();
 		_gameContainer.addChild(_lineContainer);
 		createHunter();
+		_bonusController = new BonusController(_hunter,  this, _enemyArmyController);
+		_bonusController.open();
 		_decoratesCreator.create();
 		_gameContainer.addChild(_decoratesCreator.container);
 		_enemyArmyController = new EnemyArmyController(_gameContainer, _pointersContainer, _hunter);
@@ -117,6 +119,7 @@ public class GameScene extends EventDispatcher implements IScene {
 		_enemyArmyController.close();
 		_decoratesCreator.remove();
 		_gameContainer.removeChild(_decoratesCreator.container);
+		_bonusController.close();
 		_debugPanel.close();
 		removeHunter();
 		removeListeners();
@@ -217,6 +220,7 @@ public class GameScene extends EventDispatcher implements IScene {
 	}
 
 	public function get gameContainer():Sprite { return _gameContainer; }
+	public function get pointersContainer():Sprite { return _pointersContainer; }
 
 	public function get hunter():Hunter { return _hunter; }
 
@@ -231,6 +235,7 @@ public class GameScene extends EventDispatcher implements IScene {
 		if (!_hunter) { return; }
 
 		_hunter.tick();
+		_bonusController.tick();
 		if (_hunter.canThrowStone) {
 
 			var duck:Duck = _enemyArmyController.getDuckForShoot();
